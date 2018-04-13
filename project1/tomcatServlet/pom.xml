@@ -19,7 +19,7 @@
   </dependencies>
   
   <build>
-    <finalName>project1-star-example</finalName>
+    <finalName>project</finalName>
     <sourceDirectory>src</sourceDirectory>
     <plugins>
       <plugin>
