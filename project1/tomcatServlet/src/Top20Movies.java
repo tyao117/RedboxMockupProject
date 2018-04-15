@@ -17,13 +17,13 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet implementation class MovieServlet
  */
 @WebServlet("/top20movies")
-public class MovieServlet extends HttpServlet {
+public class Top20Movies extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MovieServlet() {
+    public Top20Movies() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -35,8 +35,6 @@ public class MovieServlet extends HttpServlet {
 		// change this to your own mysql username and password
         String loginUser = "mytestuser";
         String loginPasswd = "mypassword";
-		//String loginUser = "blazer";
-		//String loginPasswd = "";
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
 		
         // set response mime type
