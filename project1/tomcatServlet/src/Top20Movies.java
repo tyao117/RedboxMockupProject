@@ -17,13 +17,13 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet implementation class MovieServlet
  */
 @WebServlet("/top20movies")
-public class MovieServlet extends HttpServlet {
+public class Top20Movies extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MovieServlet() {
+    public Top20Movies() {
         super();
         // TODO Auto-generated constructor stub
     }

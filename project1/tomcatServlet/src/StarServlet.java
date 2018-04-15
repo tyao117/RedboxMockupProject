@@ -36,7 +36,7 @@ public class StarServlet extends HttpServlet {
 
         out.println("<html>");
         out.println("<head><title>Fabflix</title></head>");
-        
+        out.print("<link rel=\"stylesheet\" text=\"text/css\" href=\"" + request.getContextPath() + "/css/style.css\"/></head>");
         
         try {
         		Class.forName("com.mysql.jdbc.Driver").newInstance();
