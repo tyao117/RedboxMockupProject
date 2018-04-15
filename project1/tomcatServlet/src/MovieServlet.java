@@ -33,8 +33,10 @@ public class MovieServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// change this to your own mysql username and password
-        String loginUser = "mytestuser";
-        String loginPasswd = "mypassword";
+        //String loginUser = "mytestuser";
+        //String loginPasswd = "mypassword";
+		String loginUser = "blazer";
+		String loginPasswd = "";
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
 		
         // set response mime type
@@ -45,6 +47,7 @@ public class MovieServlet extends HttpServlet {
 
         out.println("<html>");
         out.println("<head><title>Fabflix</title></head>");
+        out.print("<link rel=\"stylesheet\" text=\"text/css\" href=\"" + request.getContextPath() + "/css/style.css\"/></head>");
         
         
         try {
