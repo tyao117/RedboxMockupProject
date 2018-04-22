@@ -35,12 +35,6 @@ public class Login extends HttpServlet {
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
 
-        // Building page head with title
-        out.println("<html><head><title>MovieDB: Found Records</title></head>");
-
-        // Building page body
-        out.println("<body><h1>MovieDB: Found Records</h1>");
-
 
         try {
 
@@ -70,16 +64,14 @@ public class Login extends HttpServlet {
 
             // Give a result status
             if (name.equals(dbName) && password.equals(dbPassword)) {
+            	// Building page head with title
+                out.println("<html><head><title>MovieDB: Found Records</title></head>");
             	out.println("You have successfully logged in!");
             } else {
-            	out.println("Try Again");
-            	out.println(name);
-            	out.println(password);
-            	out.println(query);
-            	out.println("dbName =" + dbName);
-            	out.println("dbPassword = " + dbPassword);
-            	//RequestDispatcher rd = request.getRequestDispatcher("index.html");
-            	//rd.include(request, response);
+            	out.println("<html><head><title>Login</title></head>");
+            	out.println("<body><h1>MovieDB: Found Records</h1>");
+            	RequestDispatcher rd = request.getRequestDispatcher("index.html");
+            	rd.include(request, response);
             }
 
             // Close all structures
