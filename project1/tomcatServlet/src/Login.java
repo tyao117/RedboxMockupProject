@@ -57,7 +57,7 @@ public class Login extends HttpServlet {
             String dbName = null;
             String dbPassword = null;
             // Generate a SQL query
-            String query = String.format("SELECT email, password from customers where email='%s' and password='%s limit 20", name, password);
+            String query = String.format("SELECT email, password from customers where email='%s' and password='%s' limit 20", name, password);
 
             // Perform the query
             ResultSet rs = statement.executeQuery(query);
@@ -65,15 +65,21 @@ public class Login extends HttpServlet {
             //Check if you have a login
             while(rs.next()) {
             	dbName = rs.getString("email");
-            	dbName = rs.getString("password");
+            	dbPassword = rs.getString("password");
             }
 
             // Give a result status
             if (name.equals(dbName) && password.equals(dbPassword)) {
             	out.println("You have successfully logged in!");
             } else {
-            	RequestDispatcher rd = request.getRequestDispatcher("index.html");
-            	rd.include(request, response);
+            	out.println("Try Again");
+            	out.println(name);
+            	out.println(password);
+            	out.println(query);
+            	out.println("dbName =" + dbName);
+            	out.println("dbPassword = " + dbPassword);
+            	//RequestDispatcher rd = request.getRequestDispatcher("index.html");
+            	//rd.include(request, response);
             }
 
             // Close all structures
@@ -84,9 +90,8 @@ public class Login extends HttpServlet {
         } catch (Exception ex) {
         	
             // Output Error Massage to html
-            out.println(String.format("<html><head><title>MovieDB: Error</title></head>\n<body><p>SQL error in doGet: %s</p></body></html>", ex.getMessage()));
-            out.println("name");
-            out.println("password");
+            out.println("name = " +  request.getParameter("email"));
+            out.println("password = " + request.getParameter("password"));
             return;
         }
         out.close();
