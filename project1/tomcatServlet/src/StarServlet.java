@@ -7,11 +7,13 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 // this annotation maps this Java Servlet Class to a URL
 @WebServlet("/stars")
@@ -21,7 +23,13 @@ public class StarServlet extends HttpServlet {
     public StarServlet() {
         super();
     }
-
+    
+    
+ // Create a dataSource which registered in web.xml
+    @Resource(name = "jdbc/moviedb")
+    private DataSource dataSource;
+    
+    
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // change this to your own mysql username and password
 		String loginUser = "mytestuser";
@@ -45,7 +53,7 @@ public class StarServlet extends HttpServlet {
         		// declare statement
         		Statement statement = connection.createStatement();
         		// prepare query
-        		String query = "SELECT * from stars limit 20";
+        		String query = "SELECT * from customers limit 20";
         		// execute query
         		ResultSet resultSet = statement.executeQuery(query);
 
