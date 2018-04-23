@@ -65,8 +65,8 @@ public class Login extends HttpServlet {
             // Give a result status
             if (name.equals(dbName) && password.equals(dbPassword)) {
             	// Building page head with title
-                out.println("<html><head><title>MovieDB: Found Records</title></head>");
-            	out.println("You have successfully logged in!");
+            	RequestDispatcher rd = request.getRequestDispatcher("main.html");
+            	rd.include(request, response);
             } else {
             	out.println("<html><head><title>Login</title></head>");
             	out.println("<body><h1>MovieDB: Found Records</h1>");
