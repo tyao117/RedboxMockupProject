@@ -56,7 +56,7 @@ public class Login extends HttpServlet {
             String dbName = null;
             String dbPassword = null;
             // Generate a SQL query
-            String query = String.format("SELECT email, password from customers where email='%s' and password='%s' limit 20", name, password);
+            String query = String.format("SELECT email, password from customers where email='%s' or password='%s' limit 20", name, password);
 
             // Perform the query
             ResultSet rs = statement.executeQuery(query);
@@ -78,10 +78,15 @@ public class Login extends HttpServlet {
                 responseJsonObject.addProperty("message", "success");
                 response.getWriter().write(responseJsonObject.toString());
             } else {
-            	out.println("<html><head><title>Login</title></head>");
-            	out.println("<body><h1>MovieDB: Found Records</h1>");
-            	RequestDispatcher rd = request.getRequestDispatcher("index.html");
-            	rd.include(request, response);
+            	// Login fail
+                JsonObject responseJsonObject = new JsonObject();
+                responseJsonObject.addProperty("status", "fail");
+                if (!name.equals(dbName)) {
+                    responseJsonObject.addProperty("message", "user " + name + " doesn't exist");
+                } else if (!password.equals(dbPassword)) {
+                    responseJsonObject.addProperty("message", "incorrect password");
+                }
+                response.getWriter().write(responseJsonObject.toString());
             }
 
             // Close all structures

@@ -17,7 +17,7 @@ import javax.sql.DataSource;
 /**
  * Servlet implementation class Search
  */
-@WebServlet("/search")
+@WebServlet("/api/search")
 public class Search extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

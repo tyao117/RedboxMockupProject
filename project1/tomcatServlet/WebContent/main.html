@@ -7,11 +7,17 @@
 <body>
 
 <h1 ALIGN="CENTER">Main Page</h1>
-			<form ACTION="search" METHOD="GET">
-    			<input TYPE="SUBMIT" VALUE="Search">
-    		</form>
-    		<form ACTION="browse" METHOD="GET">
-    			<input TYPE="SUBMIT" VALUE="Browse">
-    		</form>
+			<button id="Search" class="float-left submit-button" >Search</button>
+			<button id="Browse" class="float-left submit-button" >Browse</button>
+
+<script type="text/javascript">
+    document.getElementById("Search").onclick = function () {
+        location.href = "search.html";
+    };
+    document.getElementById("Browse").onclick = function () {
+        location.href = "browse.html";
+    };
+</script>
+
 </body>
 </html>

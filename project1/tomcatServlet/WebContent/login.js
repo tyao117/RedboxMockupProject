@@ -10,6 +10,7 @@ function handleLoginResult(resultDataString) {
 
     // If login success, redirect to index.html page
     if (resultDataJson["status"] === "success") {
+    	console.log("success")
         window.location.replace("main.html");
     }
     // If login fail, display error message on <div> with id "login_error_message"
