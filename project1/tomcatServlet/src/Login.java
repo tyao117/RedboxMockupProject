@@ -6,6 +6,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+
+import com.google.gson.JsonObject;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -17,10 +20,12 @@ import java.sql.Statement;
  * generates output as a html <table>
  */
 
-// Declaring a WebServlet called FormServlet, which maps to url "/form"
-@WebServlet(name = "FormServlet", urlPatterns = "/login")
-public class Login extends HttpServlet {
 
+// Declaring a WebServlet called FormServlet, which maps to url "/form"
+@WebServlet(name = "FormServlet", urlPatterns = "/api/login")
+public class Login extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+	
     // Create a dataSource which registered in web.xml
     @Resource(name = "jdbc/moviedb")
     private DataSource dataSource;
@@ -37,7 +42,7 @@ public class Login extends HttpServlet {
 
 
         try {
-
+        	
             // Create a new connection to database
             Connection dbCon = dataSource.getConnection();
 
@@ -64,9 +69,14 @@ public class Login extends HttpServlet {
 
             // Give a result status
             if (name.equals(dbName) && password.equals(dbPassword)) {
-            	// Building page head with title
-            	RequestDispatcher rd = request.getRequestDispatcher("main.html");
-            	rd.include(request, response);
+            	// Login success:
+
+                // set this user into the session
+                request.getSession().setAttribute("user", new User(name));
+                JsonObject responseJsonObject = new JsonObject();
+                responseJsonObject.addProperty("status", "success");
+                responseJsonObject.addProperty("message", "success");
+                response.getWriter().write(responseJsonObject.toString());
             } else {
             	out.println("<html><head><title>Login</title></head>");
             	out.println("<body><h1>MovieDB: Found Records</h1>");

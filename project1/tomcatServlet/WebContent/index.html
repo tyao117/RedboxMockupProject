@@ -14,12 +14,14 @@
 <body>
     <body BGCOLOR="#FDF5E6">
 		<h1 ALIGN="CENTER">Form Example</h1>
-			<form ACTION="login" METHOD="POST">
+			<form id="login_form" method="post" action="#">
     		Email: <input TYPE="TEXT" name="email"> Please enter your email and password<br>
     		Password: <input TYPE="PASSWORD" NAME="password"><br>
     		<input TYPE="SUBMIT" VALUE="Submit Order">
 			</form>
+<!-- include jQuery-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- include our own JS file -->
+<script src="./login.js"></script>
 </body>
-</body>
-
 </html>
