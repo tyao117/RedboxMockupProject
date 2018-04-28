@@ -34,7 +34,7 @@ function handleStarResult(resultData) {
             + resultData[i]["star_name"] +     // display star_name for the link text
             '</a>' +
             "</th>";
-        rowHTML += "<th>" + resultData[i]["star_dob"] + "</th>";
+        rowHTML += "<th>" + resultData[i]["star_id"] + "</th>";
         rowHTML += "</tr>";
 
         // Append the row created to the table body, which will refresh the page

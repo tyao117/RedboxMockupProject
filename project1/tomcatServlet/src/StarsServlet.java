@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -30,21 +31,32 @@ public class StarsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         response.setContentType("application/json"); // Response mime type
-
+        
+        // Retrieve parameter id from url request.
+     	String id = request.getParameter("id");
+     		
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
+        
+
 
         try {
             // Get a connection from dataSource
-            Connection dbcon = dataSource.getConnection();
+        	Connection dbcon = dataSource.getConnection();
 
-            // Declare our statement
-            Statement statement = dbcon.createStatement();
+			// Construct a query with parameter represented by "?"
+            String query = "select s.name, s.id \n" + 
+            		"from stars as s, stars_in_movies as sm\n" + 
+            		"where sm.starId=s.id and sm.movieId=?";
+			// Declare our statement
+			PreparedStatement statement = dbcon.prepareStatement(query);
 
-            String query = "SELECT * from stars";
+			// Set the parameter represented by "?" in the query to the id we get from url,
+			// num 1 indicates the first "?" in the query
+			statement.setString(1, id);
 
-            // Perform the query
-            ResultSet rs = statement.executeQuery(query);
+			// Perform the query
+			ResultSet rs = statement.executeQuery();
 
             JsonArray jsonArray = new JsonArray();
 
@@ -52,13 +64,13 @@ public class StarsServlet extends HttpServlet {
             while (rs.next()) {
                 String star_id = rs.getString("id");
                 String star_name = rs.getString("name");
-                String star_dob = rs.getString("birthYear");
+
 
                 // Create a JsonObject based on the data we retrieve from rs
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("star_id", star_id);
                 jsonObject.addProperty("star_name", star_name);
-                jsonObject.addProperty("star_dob", star_dob);
+
                 jsonArray.add(jsonObject);
             }
             
