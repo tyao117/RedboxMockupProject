@@ -5,13 +5,14 @@
  * @param resultDataString jsonObject
  */
 function handleSearchResult(resultDataString) {
-    resultDataJson = JSON.parse(resultDataString);
-    console.log("handle search response");
+	console.log("handle search response");
+	console.log(resultDataString)
+	resultDataJson = resultDataString;
+    //resultDataJson = JSON.parse(resultDataString); // Don't need this, jQuery does this for you. 
     console.log(resultDataJson);
-    console.log(resultDataJson["status"]);
 
     // If login success, redirect to index.html page
-    if (resultDataJson["status"] === "success") {
+    //if (resultDataJson["status"] === "success") {
     	console.log("success")
     	let string = "movieList.html";
     	string += "?movie_title=" + resultData["movie_title"];
@@ -19,14 +20,13 @@ function handleSearchResult(resultDataString) {
     	string += "&director=" + resultData["director"];
     	string += "&star_name=" + resultData["star_name"];
     	window.location.replace(string);
-    }
+    //}
     // If login fail, display error message on <div> with id "login_error_message"
-    else {
-
-        console.log("show error message");
-        console.log(resultDataJson["message"]);
-        jQuery("#login_error_message").text(resultDataJson["message"]);
-    }
+    //else {
+        //console.log("show error message");
+        //console.log(resultDataJson["message"]);
+        //jQuery("#login_error_message").text(resultDataJson["message"]);
+    //}
 }
 
 /**

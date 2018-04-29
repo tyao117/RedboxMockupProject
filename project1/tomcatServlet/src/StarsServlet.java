@@ -70,7 +70,6 @@ public class StarsServlet extends HttpServlet {
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("star_id", star_id);
                 jsonObject.addProperty("star_name", star_name);
-
                 jsonArray.add(jsonObject);
             }
             

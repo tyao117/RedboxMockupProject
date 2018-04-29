@@ -37,50 +37,29 @@ public class SearchServlet extends HttpServlet {
 		String year = request.getParameter("year");
 		String director = request.getParameter("director");
 		String star_name = request.getParameter("star");
-		System.out.println("Going to search success");
+		System.out.println(title);
+		System.out.println(year);
+		System.out.println(director);
+		System.out.println(star_name);
 		
 		// Output stream to STDOUT
 		PrintWriter out = response.getWriter();
 
-//		try {
-//			// Get a connection from dataSource
-//			Connection dbcon = dataSource.getConnection();
-//
-//			// Construct a query with parameter represented by "?"
-//			String query = "SELECT * from movies";
-//
-//			// Declare our statement
-//			PreparedStatement statement = dbcon.prepareStatement(query);
-//
-//			// Set the parameter represented by "?" in the query to the id we get from url,
-//			// num 1 indicates the first "?" in the query
-//			//statement.setString(1, id);
-//
-//			// Perform the query
-//			ResultSet rs = statement.executeQuery();
-//
-//			JsonArray jsonArray = new JsonArray();
-//
-//			// Iterate through each row of rs
-//			while (rs.next()) {
-//			
-//			}
-//		rs.close();
-//		statement.close();
-//		dbcon.close();
-//		}
 		try {
+			JsonArray jsonArray = new JsonArray();
 				// Create a JsonObject based on the data we retrieve from rs
-
 				JsonObject jsonObject = new JsonObject();
-				jsonObject.addProperty("status", "success");
-				jsonObject.addProperty("movie_title", title);
-				jsonObject.addProperty("movie_year", year);
-				jsonObject.addProperty("director", director);
-				jsonObject.addProperty("star_name", star_name);
-			
+				//if (!title.isEmpty())
+					jsonObject.addProperty("movie_title", title);
+				//if (!year.isEmpty())
+					jsonObject.addProperty("movie_year", year);
+				//if (!director.isEmpty())
+					jsonObject.addProperty("director", director);
+				//if (!star_name.isEmpty())
+					jsonObject.addProperty("star_name", star_name);
+			jsonArray.add(jsonObject);
             // write JSON string to output
-            out.write(jsonObject.toString());
+            out.write(jsonArray.toString());
             System.out.println("sending it out");
             // set response status to 200 (OK)
             response.setStatus(200);
