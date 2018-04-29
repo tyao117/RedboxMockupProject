@@ -46,7 +46,7 @@ function handleStarResult(rData) {
 }
 
 function handleMovieResult(resultData) {
-	console.log("")
+
     console.log("handleStarResult: populating star table from resultData");
 
     // Populate the star table
@@ -89,6 +89,8 @@ let movie_title = getParameterByName("movie_title");
 let movie_year= getParameterByName("movie_year");
 let director= getParameterByName("director");
 let star_name= getParameterByName("star_name");
+let genre = getParameterByName("genre");
+console.log(movie_title + " " + movie_year + " " + director + " " + star_name);
 
 /**
  * Once this .js is loaded, following scripts will be executed by the browser
@@ -97,6 +99,6 @@ let star_name= getParameterByName("star_name");
 jQuery.ajax({
     dataType: "json", // Setting return data type
     method: "GET", // Setting request method
-    url: "api/movielist?movie_title=" + movie_title + "&movie_year=" + "&director=" + "&star_name= " + star_name, // Setting request url, which is mapped by StarsServlet in Stars.java
+    url: "api/movielist?movie_title=" + movie_title + "&movie_year="+ movie_year + "&director=" + director + "&star_name= " + star_name, // Setting request url, which is mapped by StarsServlet in Stars.java
     success: (resultData) => handleMovieResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
 });

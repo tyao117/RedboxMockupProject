@@ -34,14 +34,9 @@ public class MovieListServlet extends HttpServlet {
 		//response.setContentType("text/html");
 		// Retrieve parameter id from url request.
 		String title = request.getParameter("movie_title");
-		
 		String year = request.getParameter("movie_year");
-		
 		String director = request.getParameter("director");
-		
 		String star_name = request.getParameter("star_name");
-		
-		
 		
 		System.out.println("movie_title=" + title);
 		System.out.println("movie_year=" + year);
