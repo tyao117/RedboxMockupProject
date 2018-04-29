@@ -14,8 +14,8 @@ function handleSearchResult(resultDataString) {
     // If login success, redirect to index.html page
     if (resultDataJson["status"] === "success") {
     	console.log("success")
-    	let string = "movieList.html";
-    	string += "?movie_title=" + resultDataJson["movie_title"];
+    	let string = "movieList.html?";
+    	string += "movie_title=" + resultDataJson["movie_title"];
     	string += "&movie_year=" + resultDataJson["movie_year"];
     	string += "&director=" + resultDataJson["director"];
     	string += "&star_name=" + resultDataJson["star_name"];

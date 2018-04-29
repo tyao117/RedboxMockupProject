@@ -31,12 +31,22 @@ public class MovieListServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		response.setContentType("application/json"); // Response mime type
-
+		//response.setContentType("text/html");
 		// Retrieve parameter id from url request.
 		String title = request.getParameter("movie_title");
+		
 		String year = request.getParameter("movie_year");
+		
 		String director = request.getParameter("director");
+		
 		String star_name = request.getParameter("star_name");
+		
+		
+		
+		System.out.println("movie_title=" + title);
+		System.out.println("movie_year=" + year);
+		System.out.println("director="+ director);
+		System.out.println("star_name=" + star_name);
 		System.out.println("going to movieServlet");
 		
 		// Output stream to STDOUT

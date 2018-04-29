@@ -37,10 +37,6 @@ public class SearchServlet extends HttpServlet {
 		String year = request.getParameter("year");
 		String director = request.getParameter("director");
 		String star_name = request.getParameter("star");
-		System.out.println(title);
-		System.out.println(year);
-		System.out.println(director);
-		System.out.println(star_name);
 		
 		// Output stream to STDOUT
 		PrintWriter out = response.getWriter();

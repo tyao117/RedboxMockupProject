@@ -13,6 +13,22 @@
  * Handles the data returned by the API, read the jsonObject and populate data into html elements
  * @param resultData jsonObject
  */
+function getParameterByName(target) {
+    // Get request URL
+    let url = window.location.href;
+    // Encode target parameter name to url encoding
+    target = target.replace(/[\[\]]/g, "\\$&");
+
+    // Ues regular expression to find matched parameter value
+    let regex = new RegExp("[?&]" + target + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+
+    // Return the decoded parameter value
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
 function handleStarResult(rData) {
 	let movieTableBodyElement = jQuery("#movie_table_body");
 	console.log("Going through this");
@@ -36,7 +52,7 @@ function handleMovieResult(resultData) {
     // Populate the star table
     // Find the empty table body by id "star_table_body"
     let movieTableBodyElement = jQuery("#movie_table_body");
-
+    
     // Iterate through resultData, no more than 10 entries
     for (let i = 0; i < Math.min(10, resultData.length); i++) {
 
@@ -69,6 +85,10 @@ function handleMovieResult(resultData) {
     }
 }
 
+let movie_title = getParameterByName("movie_title");
+let movie_year= getParameterByName("movie_year");
+let director= getParameterByName("director");
+let star_name= getParameterByName("star_name");
 
 /**
  * Once this .js is loaded, following scripts will be executed by the browser
@@ -77,6 +97,6 @@ function handleMovieResult(resultData) {
 jQuery.ajax({
     dataType: "json", // Setting return data type
     method: "GET", // Setting request method
-    url: "api/movielist", // Setting request url, which is mapped by StarsServlet in Stars.java
+    url: "api/movielist?movie_title=" + movie_title + "&movie_year=" + "&director=" + "&star_name= " + star_name, // Setting request url, which is mapped by StarsServlet in Stars.java
     success: (resultData) => handleMovieResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
 });
