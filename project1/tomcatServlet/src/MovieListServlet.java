@@ -33,8 +33,12 @@ public class MovieListServlet extends HttpServlet {
 		response.setContentType("application/json"); // Response mime type
 
 		// Retrieve parameter id from url request.
-		//String id = request.getParameter("id");
-
+		String title = request.getParameter("movie_title");
+		String year = request.getParameter("movie_year");
+		String director = request.getParameter("director");
+		String star_name = request.getParameter("star_name");
+		System.out.println("going to movieServlet");
+		
 		// Output stream to STDOUT
 		PrintWriter out = response.getWriter();
 
@@ -43,14 +47,16 @@ public class MovieListServlet extends HttpServlet {
 			Connection dbcon = dataSource.getConnection();
 
 			// Construct a query with parameter represented by "?"
-			String query = "select ml.id, ml.title, ml.year, ml.director, ml.rating, group_concat(distinct g.name separator', ') as genre\n" + 
+			String query = "select distinct movies.*\n" + 
+					"from (select ml.id, ml.title, ml.year, ml.director, ml.rating, group_concat(distinct g.name separator', ') as genre\n" + 
 					"from (SELECT distinct m.id, title, year, director, rating\n" + 
 					"	from movies m, ratings r\n" + 
-					"	where m.id=r.movieId \n" + 
-					"	order by r.rating desc\n" + 
+					"	where m.id=r.movieId and m.title like '%%' and m.year like '%%' and m.director like '%%'\n" + 
+					"	order by m.id\n" + 
 					") ml, genres g, genres_in_movies gm\n" + 
 					"where g.id=gm.genreId and gm.movieId=ml.id \n" + 
-					"group by ml.id, ml.title, ml.year, ml.director, ml.rating";
+					"group by ml.id, ml.title, ml.year, ml.director, ml.rating) as movies, stars as s, stars_in_movies as sm\n" + 
+					"where s.name like '%%' and s.id=sm.starId and sm.movieId=movies.id";
 
 			// Declare our statement
 			PreparedStatement statement = dbcon.prepareStatement(query);

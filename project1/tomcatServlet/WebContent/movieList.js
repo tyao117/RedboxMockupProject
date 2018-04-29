@@ -53,6 +53,7 @@ function handleMovieResult(resultData) {
         rowHTML += "<th>" + resultData[i]["movie_year"] + "</th>";
         rowHTML += "<th>" + resultData[i]["movie_director"] + "</th>";
         rowHTML += "<th>" + resultData[i]["movie_rating"] + "</th>";
+        rowHTML += "<th>" + resultData[i]["genre"] + "</th>";
         let movieId = resultData[i]["movie_id"];
         jQuery.ajax({
             dataType: "json", // Setting return data type
@@ -60,7 +61,7 @@ function handleMovieResult(resultData) {
             url: "api/stars?id=" + movieId, // Setting request url, which is mapped by StarsServlet in Stars.java
             success: (rData) => handleStarResult(rData) // Setting callback function to handle data returned successfully by the StarsServlet
         });
-        rowHTML += "<th>" + resultData[i]["genre"] + "</th>";
+        
         rowHTML += "</tr>";
 
         // Append the row created to the table body, which will refresh the page

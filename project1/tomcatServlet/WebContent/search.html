@@ -7,12 +7,17 @@
 <body>
 
 <h1 ALIGN="CENTER">Main Page</h1>
-			<form ACTION="MovieList" METHOD="GET">
+			<form id="search_form" method="GET" action="#">
     			Title: <input TYPE="TEXT" name="movie">Enter your movie title<br>
-    			Genre: <input TYPE="TEXT" NAME="genre">Enter your movie year<br>
+    			Year: <input TYPE="TEXT" name="year">Enter your movie year<br>
     			Director: <input TYPE="TEXT" name="director">Enter your director year<br>
-				Star: <input TYPE="TEXT" name="stars">Enter your star<br> 
-    			<input TYPE="SUBMIT" VALUE="Submit Order">
+				Star: <input TYPE="TEXT" name="star">Enter your star<br> 
+    			<input TYPE="SUBMIT" VALUE="Search">
 			</form>
 </body>
+<!-- include jQuery-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- include our own JS file -->
+<script src="./search.js"></script>
+
 </html>
