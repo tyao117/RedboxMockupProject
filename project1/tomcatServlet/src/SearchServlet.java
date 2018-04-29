@@ -46,9 +46,10 @@ public class SearchServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 
 		try {
-			JsonArray jsonArray = new JsonArray();
+			
 				// Create a JsonObject based on the data we retrieve from rs
 				JsonObject jsonObject = new JsonObject();
+				jsonObject.addProperty("status", "success");
 				//if (!title.isEmpty())
 					jsonObject.addProperty("movie_title", title);
 				//if (!year.isEmpty())
@@ -57,9 +58,9 @@ public class SearchServlet extends HttpServlet {
 					jsonObject.addProperty("director", director);
 				//if (!star_name.isEmpty())
 					jsonObject.addProperty("star_name", star_name);
-			jsonArray.add(jsonObject);
+			
             // write JSON string to output
-            out.write(jsonArray.toString());
+            out.write(jsonObject.toString());
             System.out.println("sending it out");
             // set response status to 200 (OK)
             response.setStatus(200);
@@ -68,6 +69,7 @@ public class SearchServlet extends HttpServlet {
 			// write error message JSON object to output
 			e.printStackTrace();
 			JsonObject jsonObject = new JsonObject();
+			jsonObject.addProperty("status", "fail");
 			jsonObject.addProperty("errorMessage", e.getMessage());
 			out.write(jsonObject.toString());
 

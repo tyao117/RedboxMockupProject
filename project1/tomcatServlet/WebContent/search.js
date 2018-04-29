@@ -12,21 +12,22 @@ function handleSearchResult(resultDataString) {
     console.log(resultDataJson);
 
     // If login success, redirect to index.html page
-    //if (resultDataJson["status"] === "success") {
+    if (resultDataJson["status"] === "success") {
     	console.log("success")
     	let string = "movieList.html";
-    	string += "?movie_title=" + resultData["movie_title"];
-    	string += "&movie_year=" + resultData["movie_year"];
-    	string += "&director=" + resultData["director"];
-    	string += "&star_name=" + resultData["star_name"];
+    	string += "?movie_title=" + resultDataJson["movie_title"];
+    	string += "&movie_year=" + resultDataJson["movie_year"];
+    	string += "&director=" + resultDataJson["director"];
+    	string += "&star_name=" + resultDataJson["star_name"];
+    	console.log(string);
     	window.location.replace(string);
-    //}
+    }
     // If login fail, display error message on <div> with id "login_error_message"
-    //else {
-        //console.log("show error message");
-        //console.log(resultDataJson["message"]);
-        //jQuery("#login_error_message").text(resultDataJson["message"]);
-    //}
+    else {
+        console.log("show error message");
+        console.log(resultDataJson["message"]);
+        jQuery("#login_error_message").text(resultDataJson["message"]);
+    }
 }
 
 /**
