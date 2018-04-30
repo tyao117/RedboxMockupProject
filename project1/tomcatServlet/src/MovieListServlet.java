@@ -65,10 +65,7 @@ public class MovieListServlet extends HttpServlet {
 						") ml, genres g, genres_in_movies gm\n" + 
 						"where g.id=gm.genreId and gm.movieId=ml.id and g.name = '"+ genre +"'\n" + 
 						"group by ml.id, ml.title, ml.year, ml.director, ml.rating) as result, genres as g";
-				if (orderBy != null)
-				{
-					query += "\n order by " + orderBy;
-				}
+				
 			} else {
 				query = "select distinct movies.*\n" + 
 						"from (select ml.id, ml.title, ml.year, ml.director, ml.rating, group_concat(distinct g.name separator', ') as genre\n" + 
@@ -80,10 +77,10 @@ public class MovieListServlet extends HttpServlet {
 						"where g.id=gm.genreId and gm.movieId=ml.id \n" + 
 						"group by ml.id, ml.title, ml.year, ml.director, ml.rating) as movies, stars as s, stars_in_movies as sm\n" + 
 						"where s.id=sm.starId and sm.movieId=movies.id and s.name like '%"+star_name+"%' ";
-				if (orderBy != null)
-				{
-					query += "\n order by " + orderBy;
-				}
+			}
+			if (orderBy != null)
+			{
+				query += "\n order by " + orderBy;
 			}
 			// Declare our statement
 			PreparedStatement statement = dbcon.prepareStatement(query);
