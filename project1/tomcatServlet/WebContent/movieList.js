@@ -31,7 +31,6 @@ function getParameterByName(target) {
 
 function handleStarResult(rData) {
 	let movieTableBodyElement = jQuery("#movie_table_body");
-	console.log("Going through this");
 	let rowHTML="";
 	rowHTML += "<th>";
 	//Iterate through resultData, no more than 10 entries
@@ -85,13 +84,33 @@ function handleMovieResult(resultData) {
     }
 }
 
+function handleGStr(string, type, getString) {
+	if (string) {
+		if (getString.length) {
+			getString +="&";
+		} else {
+			getString += "?"; 
+		}
+		getString += type + string;
+	}
+	console.log("function=" + getString);
+	return getString;
+}
+
+// start of the page is here
 let movie_title = getParameterByName("movie_title");
 let movie_year= getParameterByName("movie_year");
 let director= getParameterByName("director");
 let star_name= getParameterByName("star_name");
 let genre = getParameterByName("genre");
-console.log(movie_title + " " + movie_year + " " + director + " " + star_name);
+let getString = "";
+getString = handleGStr(movie_title, "movie_title=", getString);
+getString = handleGStr(movie_year, "movie_year=", getString);
+getString = handleGStr(director, "director=", getString);
+getString = handleGStr(star_name, "star_name=", getString);
+getString = handleGStr(genre, "genre=", getString);
 
+console.log("getString=" + getString);
 /**
  * Once this .js is loaded, following scripts will be executed by the browser
  */
@@ -99,6 +118,6 @@ console.log(movie_title + " " + movie_year + " " + director + " " + star_name);
 jQuery.ajax({
     dataType: "json", // Setting return data type
     method: "GET", // Setting request method
-    url: "api/movielist?movie_title=" + movie_title + "&movie_year="+ movie_year + "&director=" + director + "&star_name= " + star_name, // Setting request url, which is mapped by StarsServlet in Stars.java
+    url: "api/movielist" + getString, // Setting request url, which is mapped by StarsServlet in Stars.java
     success: (resultData) => handleMovieResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
 });
