@@ -43,11 +43,7 @@ public class MovieListServlet extends HttpServlet {
 		year = (year != null) ? year : "";
 		director = (director != null) ? director : "";
 		star_name = (star_name != null) ? star_name : "";
-		
-		System.out.println("movie_title=" + title);
-		System.out.println("movie_year=" + year);
-		System.out.println("director="+ director);
-		System.out.println("star_name=" + star_name);
+
 		System.out.println("going to movieServlet");
 		
 		// Output stream to STDOUT
@@ -59,16 +55,15 @@ public class MovieListServlet extends HttpServlet {
 			String query = "";
 			if (genre != null) {
 				System.out.println("going into Genre!!!!!");
-				query = "select result.* \n" + 
+				query = "select distinct result.* \n" + 
 						"from (select ml.id, ml.title, ml.year, ml.director, ml.rating, group_concat(distinct g.name separator', ') as genre\n" + 
 						"from (SELECT distinct m.id, title, year, director, rating\n" + 
 						"	from movies m, ratings r\n" + 
-						"	where m.id=r.movieId and m.title like '%star%' and m.year like '%%' and m.director like '%%'\n" + 
+						"	where m.id=r.movieId\n" + 
 						"	order by m.id\n" + 
 						") ml, genres g, genres_in_movies gm\n" + 
-						"where g.id=gm.genreId and gm.movieId=ml.id\n" + 
-						"group by ml.id, ml.title, ml.year, ml.director, ml.rating) as result, genres as g\n" + 
-						"where g.name = '" + genre + "'";
+						"where g.id=gm.genreId and gm.movieId=ml.id and g.name = '"+ genre +"'\n" + 
+						"group by ml.id, ml.title, ml.year, ml.director, ml.rating) as result, genres as g";
 			} else {
 			// Construct a query with parameter represented by "?"
 				query = "select distinct movies.*\n" + 
