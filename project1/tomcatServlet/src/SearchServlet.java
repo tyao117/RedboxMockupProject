@@ -14,6 +14,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+
 // Declaring a WebServlet called SingleStarServlet, which maps to url "/api/single-star"
 @WebServlet(name = "SearchServlet", urlPatterns = "/api/search")
 public class SearchServlet extends HttpServlet {
@@ -42,8 +43,8 @@ public class SearchServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 
 		try {
-//				if (year.isEmpty() || !NumberUtils.isNumberic(year))
-//					throw new IOException();
+				if (!year.isEmpty() && !isNumeric(year))
+					throw new IOException();
 				// Create a JsonObject based on the data we retrieve from rs
 				JsonObject jsonObject = new JsonObject();
 				jsonObject.addProperty("status", "success");
@@ -76,5 +77,11 @@ public class SearchServlet extends HttpServlet {
 		out.close();
 
 	}
+	
+	public boolean isNumeric(String s) {  
+	    return s != null && s.matches("[-+]?\\d*\\.?\\d+");  
+	}  
 
 }
+
+
