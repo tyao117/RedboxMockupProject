@@ -54,7 +54,13 @@ function handleMovieResult(resultData) {
     
     // Iterate through resultData, no more than 10 entries
     for (let i = 0; i < Math.min(10, resultData.length); i++) {
-
+    	let movieId = resultData[i]["movie_id"];
+        jQuery.ajax({
+            dataType: "json", // Setting return data type
+            method: "GET", // Setting request method
+            url: "api/stars?id=" + movieId, // Setting request url, which is mapped by StarsServlet in Stars.java
+            success: (rData) => handleStarResult(rData) // Setting callback function to handle data returned successfully by the StarsServlet
+        });
         // Concatenate the html tags with resultData jsonObject
         let rowHTML = "";
         rowHTML += "<tr>";
@@ -69,13 +75,7 @@ function handleMovieResult(resultData) {
         rowHTML += "<th>" + resultData[i]["movie_director"] + "</th>";
         rowHTML += "<th>" + resultData[i]["movie_rating"] + "</th>";
         rowHTML += "<th>" + resultData[i]["genre"] + "</th>";
-        let movieId = resultData[i]["movie_id"];
-        jQuery.ajax({
-            dataType: "json", // Setting return data type
-            method: "GET", // Setting request method
-            url: "api/stars?id=" + movieId, // Setting request url, which is mapped by StarsServlet in Stars.java
-            success: (rData) => handleStarResult(rData) // Setting callback function to handle data returned successfully by the StarsServlet
-        });
+        
         
         rowHTML += "</tr>";
 

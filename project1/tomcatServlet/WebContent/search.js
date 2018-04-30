@@ -1,5 +1,17 @@
 // Get id from URL
 
+function handleGStr(string, type, getString) {
+	if (string) {
+		if (getString !== "movieList.html") {
+			getString +="&";
+		} else {
+			getString += "?"; 
+		}
+		getString += type + string;
+	}
+	console.log("function=" + getString);
+	return getString;
+}
 /**
  * Handle the data returned by LoginServlet
  * @param resultDataString jsonObject
@@ -14,13 +26,13 @@ function handleSearchResult(resultDataString) {
     // If login success, redirect to index.html page
     if (resultDataJson["status"] === "success") {
     	console.log("success")
-    	let string = "movieList.html?";
-    	string += "movie_title=" + resultDataJson["movie_title"];
-    	string += "&movie_year=" + resultDataJson["movie_year"];
-    	string += "&director=" + resultDataJson["director"];
-    	string += "&star_name=" + resultDataJson["star_name"];
-    	console.log(string);
-    	window.location.replace(string);
+    	let getString = "movieList.html";
+    	getString = handleGStr(resultDataJson["movie_title"], "movie_title=", getString);
+    	getString = handleGStr(resultDataJson["movie_year"], "movie_year=", getString);
+    	getString = handleGStr(resultDataJson["director"], "director=", getString);
+    	getString = handleGStr(resultDataJson["star_name"], "star_name=", getString);
+    	console.log(getString);
+    	window.location.replace(getString);
     }
     // If login fail, display error message on <div> with id "login_error_message"
     else {
