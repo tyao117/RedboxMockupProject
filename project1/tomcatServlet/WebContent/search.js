@@ -9,7 +9,6 @@ function handleGStr(string, type, getString) {
 		}
 		getString += type + string;
 	}
-	console.log("function=" + getString);
 	return getString;
 }
 /**
