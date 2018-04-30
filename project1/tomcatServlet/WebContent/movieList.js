@@ -101,12 +101,14 @@ let movie_year= getParameterByName("movie_year");
 let director= getParameterByName("director");
 let star_name= getParameterByName("star_name");
 let genre = getParameterByName("genre");
+let orderBy = getParameterByName("order_by");
 let getString = "";
 getString = handleGStr(movie_title, "movie_title=", getString);
 getString = handleGStr(movie_year, "movie_year=", getString);
 getString = handleGStr(director, "director=", getString);
 getString = handleGStr(star_name, "star_name=", getString);
 getString = handleGStr(genre, "genre=", getString);
+getString = handleGStr(orderBy, "order_by=", getString);
 
 console.log("getString=" + getString);
 /**
