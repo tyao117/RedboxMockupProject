@@ -96,13 +96,13 @@ function handleGStr(string, type, getString) {
 }
 
 // start of the page is here
-let movie_title = getParameterByName("movie_title");
-let movie_year= getParameterByName("movie_year");
-let director= getParameterByName("director");
-let star_name= getParameterByName("star_name");
-let genre = getParameterByName("genre");
-let orderBy = getParameterByName("order_by");
-let getString = "";
+var movie_title = getParameterByName("movie_title");
+var movie_year= getParameterByName("movie_year");
+var director= getParameterByName("director");
+var star_name= getParameterByName("star_name");
+var genre = getParameterByName("genre");
+var orderBy = getParameterByName("order_by");
+var getString = "";
 getString = handleGStr(movie_title, "movie_title=", getString);
 getString = handleGStr(movie_year, "movie_year=", getString);
 getString = handleGStr(director, "director=", getString);
