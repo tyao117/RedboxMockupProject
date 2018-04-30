@@ -51,7 +51,20 @@ function handleResult(resultData) {
     movieInfoElement.append("<p>Director: " + resultData[0]["movie_director"] + "</p>");
     movieInfoElement.append("<p>Rating: " + resultData[0]["rating"] + "</p>");
     movieInfoElement.append("<p>Genre: " + resultData[0]["genre"] + "</p>");
-    
+    let genres = resultData[0]["genre"].split(', ');
+    movieInfoElement.append("<th>");
+    for (let i = 0; i < genres.length; i++)
+    	{
+    	if (i > 0)
+    		movieInfoElement.append(", ");
+    	movieInfoElement.append(
+            // Add a link to single-star.html with id passed with GET url parameter
+            '<a href="movieList.html?genre=' + genres[i] + '">'
+            + genres[i] +     // display star_name for the link text
+            '</a>');
+    	}
+   movieInfoElement.append("</th>");
+//    console.log(genres);
     console.log("handleResult: populating movie table from resultData");
     
 

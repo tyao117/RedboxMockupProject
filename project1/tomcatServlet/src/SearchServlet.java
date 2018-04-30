@@ -42,7 +42,8 @@ public class SearchServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 
 		try {
-			
+//				if (year.isEmpty() || !NumberUtils.isNumberic(year))
+//					throw new IOException();
 				// Create a JsonObject based on the data we retrieve from rs
 				JsonObject jsonObject = new JsonObject();
 				jsonObject.addProperty("status", "success");

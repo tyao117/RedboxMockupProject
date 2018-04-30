@@ -8,7 +8,6 @@
  *      2. Populate the data to correct html elements.
  */
 
-
 /**
  * Handles the data returned by the API, read the jsonObject and populate data into html elements
  * @param resultData jsonObject
@@ -18,7 +17,6 @@ function getParameterByName(target) {
     let url = window.location.href;
     // Encode target parameter name to url encoding
     target = target.replace(/[\[\]]/g, "\\$&");
-
     // Ues regular expression to find matched parameter value
     let regex = new RegExp("[?&]" + target + "(=([^&#]*)|&|#|$)"),
         results = regex.exec(url);

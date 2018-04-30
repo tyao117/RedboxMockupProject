@@ -65,12 +65,11 @@ public class MovieListServlet extends HttpServlet {
 						"where g.id=gm.genreId and gm.movieId=ml.id and g.name = '"+ genre +"'\n" + 
 						"group by ml.id, ml.title, ml.year, ml.director, ml.rating) as result, genres as g";
 			} else {
-			// Construct a query with parameter represented by "?"
 				query = "select distinct movies.*\n" + 
 						"from (select ml.id, ml.title, ml.year, ml.director, ml.rating, group_concat(distinct g.name separator', ') as genre\n" + 
 						"from (SELECT distinct m.id, title, year, director, rating\n" + 
 						"	from movies m, ratings r\n" + 
-						"	where m.id=r.movieId and m.title like '%"+title+"%' and m.year like '%%' and m.director like '%"+director+"%'\n" + 
+						"	where m.id=r.movieId and m.title like '"+title+"%' and m.year like '%"+year+"%' and m.director like '%"+director+"%'\n" + 
 						"	order by m.id\n" + 
 						") ml, genres g, genres_in_movies gm\n" + 
 						"where g.id=gm.genreId and gm.movieId=ml.id \n" + 
