@@ -49,7 +49,7 @@ function handleResult(resultData) {
     movieInfoElement.append("<p>Title: " + resultData[0]["movie_title"] + "</p>");
     movieInfoElement.append("<p>Year: " + resultData[0]["movie_year"] + "</p>");
     movieInfoElement.append("<p>Director: " + resultData[0]["movie_director"] + "</p>");
-    movieInfoElement.append("<p>Rating: " + resultData[0]["rating"] + "</p>");
+    movieInfoElement.append("<p>Rating: " + resultData[0]["movie_rating"] + "</p>");
     movieInfoElement.append("<p>Genre: " + resultData[0]["genre"] + "</p>");
     let genres = resultData[0]["genre"].split(', ');
     movieInfoElement.append("<th>");
