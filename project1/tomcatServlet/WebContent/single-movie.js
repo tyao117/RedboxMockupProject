@@ -50,9 +50,9 @@ function handleResult(resultData) {
     movieInfoElement.append("<p>Year: " + resultData[0]["movie_year"] + "</p>");
     movieInfoElement.append("<p>Director: " + resultData[0]["movie_director"] + "</p>");
     movieInfoElement.append("<p>Rating: " + resultData[0]["movie_rating"] + "</p>");
-    movieInfoElement.append("<p>Genre: " + resultData[0]["genre"] + "</p>");
+    movieInfoElement.append("<p>Genre: ");
     let genres = resultData[0]["genre"].split(', ');
-    movieInfoElement.append("<th>");
+
     for (let i = 0; i < genres.length; i++)
     	{
     	if (i > 0)
@@ -63,7 +63,7 @@ function handleResult(resultData) {
             + genres[i] +     // display star_name for the link text
             '</a>');
     	}
-   movieInfoElement.append("</th>");
+   movieInfoElement.append("</p>");
 //    console.log(genres);
     console.log("handleResult: populating movie table from resultData");
     

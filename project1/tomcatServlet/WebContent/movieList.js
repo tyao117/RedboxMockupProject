@@ -115,6 +115,9 @@ getString = handleGStr(genre, "genre=", getString);
 getString = handleGStr(orderBy, "order_by=", getString);
 
 console.log("getString=" + getString);
+document.getElementById("MainPage").onclick = function () {
+    window.location.replace("main.html");
+};
 /**
  * Once this .js is loaded, following scripts will be executed by the browser
  */
