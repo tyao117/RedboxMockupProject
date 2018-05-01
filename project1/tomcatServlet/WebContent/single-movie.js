@@ -51,8 +51,7 @@ function handleResult(resultData) {
     movieInfoElement.append("<p>Director: " + resultData[0]["movie_director"] + "</p>");
     movieInfoElement.append("<p>Rating: " + resultData[0]["movie_rating"] + "</p>");
     movieInfoElement.append("<p>Genre: ");
-    let genres = resultData[0]["genre"].split(', ');
-
+    let genres = resultData[0]["movie_genre"].split(', ');
     for (let i = 0; i < genres.length; i++)
     	{
     	if (i > 0)

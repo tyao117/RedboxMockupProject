@@ -108,7 +108,7 @@ public class MovieListServlet extends HttpServlet {
 				jsonObject.addProperty("movie_year", movieYear);
 				jsonObject.addProperty("movie_director", movieDirector);
 				jsonObject.addProperty("movie_rating", movieRating);
-				jsonObject.addProperty("genre", genre);
+				jsonObject.addProperty("movie_genre", genre);
 				jsonArray.add(jsonObject);
 			}
             // write JSON string to output
