@@ -161,7 +161,7 @@ todos.controller('MovieController', function($scope, $http) {
 		    var begin = (($scope.currentPage - 1) * $scope.numPerPage)
 		    , end = begin + $scope.numPerPage;
 		    
-		    $scope.filteredMovies = $scope.movieList.slice(begin, end);
+		    $scope.filteredMovies = $scope.movieListTitle.slice(begin, end);
 		    
 		    if($scope.sortType === 'movie_title')
 		    	$scope.filteredMovies = $scope.movieListTitle.slice(begin, end);
@@ -171,9 +171,9 @@ todos.controller('MovieController', function($scope, $http) {
 		    
 		    for(let i = 0; i < $scope.filteredMovies.length; i++){
 		    	$http.get("api/stars?id=" + $scope.filteredMovies[i]['movie_id']).then(function(starsJSON){
-		    		  console.log(starsJSON);
-		    		 $scope.filteredMovies[i]['stars'] = starsJSON.data; 
-		    	  });
+		    	console.log(starsJSON);
+		    	$scope.filteredMovies[i]['stars'] = starsJSON.data; 
+		    	});
 		    }
 		  });
   });
