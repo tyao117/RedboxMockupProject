@@ -87,9 +87,7 @@ function handleMovieResult(resultData) {
         movieTableBodyElement.append(rowHTML);
         
     }
-    $(document).ready( function () {
-	    $('#movie_table').DataTable();
-	} );
+    
 }
 
 function handleGStr(string, type, getString) {
@@ -129,3 +127,5 @@ jQuery.ajax({
     url: "api/movielist" + getString, // Setting request url, which is mapped by StarsServlet in Stars.java
     success: (resultData) => handleMovieResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
 });
+
+
