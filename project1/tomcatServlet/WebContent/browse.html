@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Browse</title>
+</head>
+<body>
+
+<h1 ALIGN="CENTER">Browse by Genre</h1>
+	<div ng-app="genres">
+		<div ng-app="genreController">
+			<table>
+				<tr>
+					<td ng-repeat="genre in genreList">
+						<a href="{{'movieList.html?genre=' + genere.name}}">{{genre.name}}</a>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</body>
+<!-- include jQuery-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- include our own JS file -->
+<script src="./browseGenre.js"></script>
+
+</html>
