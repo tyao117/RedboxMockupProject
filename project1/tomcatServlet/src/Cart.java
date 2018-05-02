@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
@@ -21,27 +22,26 @@ import java.sql.Statement;
  */
 
 
-// Declaring a WebServlet called FormServlet, which maps to url "/form"
+// Declaring a WebServlet called CartServlet, which maps to url "/form"
 @WebServlet(name = "CartServlet", urlPatterns = "/api/cart")
 public class Cart extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 	
-    // Create a dataSource which registered in web.xml
-    @Resource(name = "jdbc/moviedb")
-    private DataSource dataSource;
+//    // Create a dataSource which registered in web.xml
+//    @Resource(name = "jdbc/moviedb")
+//    private DataSource dataSource;
     
     // Use http GET
-    public void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
-    	System.out.println("Going here");
     	response.setContentType("application/json");    // Response mime type
     	
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
-        String name;
-        
+        User name;
+        JsonArray jsonArray = new JsonArray();
         try {        	
-        	name = (String) request.getSession().getAttribute("user");
+        	name = (User) request.getSession().getAttribute("user");
             // Give a result status
             if ( name != null) {
             	// Login success:
@@ -49,15 +49,15 @@ public class Cart extends HttpServlet {
                 // set this user into the session
                 JsonObject responseJsonObject = new JsonObject();
                 responseJsonObject.addProperty("status", "success");
-                responseJsonObject.addProperty("message", "success");
-                out.write(responseJsonObject.toString());
+                responseJsonObject.addProperty("name", name.getUsername());
+                jsonArray.add(responseJsonObject);
             } else {
             	// Login fail
                 JsonObject responseJsonObject = new JsonObject();
                 responseJsonObject.addProperty("status", "fail");
-                out.write(responseJsonObject.toString());
+                jsonArray.add(responseJsonObject);
             }
-
+            out.write(jsonArray.toString());
             // Close all structures
 
 
@@ -66,7 +66,8 @@ public class Cart extends HttpServlet {
             // Output Error Massage to html
         	JsonObject responseJsonObject = new JsonObject();
             responseJsonObject.addProperty("status", "exception");
-            response.getWriter().write(responseJsonObject.toString());
+            jsonArray.add(responseJsonObject);
+            out.write(jsonArray.toString());
             return;
         }
         out.close();
