@@ -173,10 +173,9 @@ todos.controller('MovieController', function($scope, $http) {
 		    	$http.get("api/stars?id=" + $scope.filteredMovies[i]['movie_id']).then(function(starsJSON){
 		    	console.log(starsJSON);
 		    	$scope.filteredMovies[i]['stars'] = starsJSON.data; 
-		    	});
-		    }
+		    	})};
 		  });
-  });
+  }); 
   
   
 });
