@@ -62,6 +62,7 @@
         <th> <a href = '#' ng-click="sortType = 'movie_rating'" > Rating <span ng-show="sortType == 'movie_rating'" class="fa fa-caret-down"></span> </a></th>
         <th>Genre</th>
         <th>Star</th>
+        <th>ADD</th>
 	</tr>
 	<tr ng-repeat="movie in filteredMovies | orderBy:sortType:true">
 		<td>{{movie.movie_id}}</td>
@@ -71,6 +72,7 @@
 		<td>{{movie.movie_rating}}</td>
 		<td>{{movie.movie_genre}}</td>
 		<td><text ng-repeat="star in movie.stars"><a href="{{'single-star.html?id=' + star.star_id}}">{{star.star_name}} </a></text></td>
+		<td><a href="{{'cart.html?id=' + movie.movie_id}}">Add</a>
 	</tr>
 </table>
     <pagination 

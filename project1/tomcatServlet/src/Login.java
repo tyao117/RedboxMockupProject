@@ -35,7 +35,7 @@ public class Login extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
 
-        response.setContentType("text/html");    // Response mime type
+        response.setContentType("application/json");    // Response mime type
 
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
