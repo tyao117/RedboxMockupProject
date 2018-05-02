@@ -63,6 +63,9 @@ function handleResult(resultData) {
             '</a>');
     	}
    movieInfoElement.append("</p>");
+   document.getElementById("Add").onclick = function () {
+       window.location.replace("cart.html?id=" + resultData[0]["movie_id"] + "&value=1");
+   };
 //    console.log(genres);
     console.log("handleResult: populating movie table from resultData");
     

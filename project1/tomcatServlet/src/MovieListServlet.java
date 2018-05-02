@@ -82,6 +82,7 @@ public class MovieListServlet extends HttpServlet {
 			{
 				query += "\n order by " + orderBy;
 			}
+			query += "\n limit 500 ";
 			// Declare our statement
 			PreparedStatement statement = dbcon.prepareStatement(query);
 

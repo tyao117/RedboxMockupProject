@@ -5,14 +5,35 @@
 <title>My Cart</title>
 <!-- include jQuery-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
 </head>
 <body>
 
-<h1 ALIGN="CENTER">Main Page</h1>
+<h1 ALIGN="CENTER">Shopping Cart</h1>
 			
+<h1>Cart</h1>
 
+<!-- Id "star_table" is useful for jQuery to find the html element with id, class here is mapping to Bootstrap defined class CSS -->
+<table id=cart_table class="table table-striped">
+    <!-- Create a table header -->
+    <thead>
+    <tr>
+        <!-- Titles of each column-->
+        <th>ID</th>
+        <th>Title</th>
+       	<th>Quantity</th>
+    </tr>
+    </thead>
+    <!-- Table body is left empty here, will be populated with the data retrieved with index.js -->
+    <!-- Again, id "star_table_body" is useful for jQuery to find this html element -->
+    <tbody id=cart_table_body></tbody>
+</table>
 <!-- include our own JS file -->
 <script src="./cart.js"></script>
-
+<script> //Initialize it to be a DataTable
+$(document).ready( function () {
+    $('#cart_table').DataTable();
+} );</script>
 </body>
 </html>
