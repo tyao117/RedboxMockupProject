@@ -39,7 +39,7 @@ function handleStarResult(rData,movieId) {
 	rowHTML += '<a href="single-star.html?id=' + rData[i]['star_id'] + '">'+ rData[i]["star_name"] + '</a>';
   }
 
-  movieTableBodyElement.append(rowHTML);
+  movieTableBodyElement.html(rowHTML);
 }
 
 function handleMovieResult(resultData) {
@@ -69,6 +69,7 @@ function handleMovieResult(resultData) {
         rowHTML += "<th>" + resultData[i]["movie_rating"] + "</th>";
         rowHTML += "<th>" + resultData[i]["movie_genre"] + "</th>";
         rowHTML += "<th id=" + movieId +"></th>";
+
         rowHTML += "<th>" +
 					
 					'<a href="cart.html?id=' + resultData[i]['movie_id'] + "&value=1" +'">'
@@ -76,18 +77,21 @@ function handleMovieResult(resultData) {
 					'</a>' +
 					"</th>";
         rowHTML += "</tr>";
-        jQuery.ajax({
-            dataType: "json", // Setting return data type
-            method: "GET", // Setting request method
-            url: "api/stars?id=" + movieId, // Setting request url, which is mapped by StarsServlet in Stars.java
-            success: (rData) => handleStarResult(rData, movieId) // Setting callback function to handle data returned successfully by the StarsServlet
-        });
-
         // Append the row created to the table body, which will refresh the page
         movieTableBodyElement.append(rowHTML);
-        
     }
-    
+    $(document).ready( function () {
+        $('#movie_table').DataTable();
+    } );
+    for (let i = 0; i < resultData.length; i++) {
+    	let movieId = resultData[i]["movie_id"];
+    	jQuery.ajax({
+    		dataType: "json", // Setting return data type
+    		method: "GET", // Setting request method
+    		url: "api/stars?id=" + movieId, // Setting request url, which is mapped by StarsServlet in Stars.java
+    		success: (rData) => handleStarResult(rData, movieId) // Setting callback function to handle data returned successfully by the StarsServlet
+    	});
+    }
 }
 
 function handleGStr(string, type, getString) {
@@ -127,5 +131,4 @@ jQuery.ajax({
     url: "api/movielist" + getString, // Setting request url, which is mapped by StarsServlet in Stars.java
     success: (resultData) => handleMovieResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
 });
-
 
