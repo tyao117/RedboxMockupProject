@@ -3,7 +3,8 @@
  * @param resultDataString jsonObject
  */
 function handleLoginResult(resultDataString) {
-    resultDataJson = JSON.parse(resultDataString);
+//    resultDataJson = JSON.parse(resultDataString);
+	resultDataJson = resultDataString;
     console.log("handle login response");
     console.log(resultDataJson);
     console.log(resultDataJson["status"]);
