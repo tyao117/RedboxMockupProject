@@ -34,6 +34,23 @@ function handleMovieResult(rData,movieId) {
 function handleResult(resultData) {
 	console.log(resultData)
 	let movieTableBodyElement = jQuery("#cart_table_body");
+//	for(let i = 0; i < localStorage.length; i++) {
+//		let movieId = localStorage.key(i);
+//		let movieData = localStorage.getItem(movieId);
+//		let rowHTML = "";
+//		rowHTML += "<tr>";
+//		rowHTML += "<td>" + movieId +"</td>";
+//		rowHTML += "<td id=" + movieId +">" + movieData['movie_title'] + "</td>";
+//		rowHTML += "<td>" + movieData['movie_quantity'] + "</td>";
+//      rowHTML += "</tr>";
+//      jQuery.ajax({
+//          dataType: "json", // Setting return data type
+//          method: "GET", // Setting request method
+//          url: "api/single-movie?id=" + movieId, // Setting request url, which is mapped by StarsServlet in Stars.java
+//          success: (rData) => handleMovieResult(rData, movieId) // Setting callback function to handle data returned successfully by the StarsServlet
+//      });
+//      movieTableBodyElement.append(rowHTML);
+//	}
 	for (let i = 0; i < resultData.length; i++) {
     	let movieId = resultData[i]["movie_id"];
         
@@ -54,6 +71,12 @@ function handleResult(resultData) {
 	}
 }
 
+document.getElementById("checkout").onclick = doCheckout()
+
+function doCheckout() {
+	var cartContents = document.getElementById("cart_table_body");
+	localStorage.setItem("cart", JSON.stringify(cartContents));
+}
 
 // Get id from URL
 let movieId = getParameterByName('id');

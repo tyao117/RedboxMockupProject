@@ -71,7 +71,8 @@ function handleMovieResult(resultData) {
         rowHTML += "<th id=" + movieId +"></th>";
 
         rowHTML += "<th>" +
-					
+
+//        			'<a onclick="addToCart(' + restultData[i] + ')" href="">'
 					'<a href="cart.html?id=' + resultData[i]['movie_id'] + "&value=1" +'">'
 					+ 'Add' +     // display star_name for the link text
 					'</a>' +
@@ -93,6 +94,21 @@ function handleMovieResult(resultData) {
     	});
     }
 }
+
+//function addToCart(movie) {
+//	
+//	//check if movie exists in localStorage already
+//	var movieData;
+//	if((movieData = localStorage.getItem(movie["movie_id"])) == null) {
+//		var newData = {};
+//		newData.title = movie["movie_title"];
+//		newData.quantity = 1;
+//	} else {
+//		movieData[quantity] += 1;
+//		localStorage.removeItem(movie["movie_id"])
+//	}
+//	localSession.setItem(movie["movie_id"], newData);
+//}
 
 function handleGStr(string, type, getString) {
 	if (string) {
