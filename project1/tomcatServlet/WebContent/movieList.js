@@ -125,69 +125,9 @@ console.log("getString=" + getString);
  * Once this .js is loaded, following scripts will be executed by the browser
  */
 // Makes the HTTP GET request and registers on success callback function handleStarResult
-<<<<<<< HEAD
-//jQuery.ajax({
-//    dataType: "json", // Setting return data type
-//    method: "GET", // Setting request method
-//    url: "api/movielist" + getString, // Setting request url, which is mapped by StarsServlet in Stars.java
-//    success: (resultData) => handleMovieResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
-//});
-
-
-var todos = angular.module('movies', ['ui.bootstrap']);
-
-todos.controller('MovieController', function($scope, $http) {
-  $scope.filteredMovies = [];
-  $scope.movieList = [];
-  $scope.currentPage = 1;
-  $scope.numPerPage = 10;
-  $scope.sortType = 'movie_title';
-  
-  $http.get("api/movielist" + getString).then(function(movieJSON){
-	 //console.log(movieJSON);
-	 $scope.movieList = movieJSON.data;
-	 $scope.movieListTitle = movieJSON.data.slice();
-	 $scope.movieListRating = movieJSON.data.slice();
-	 
-	 
-	 $scope.movieListTitle.sort(function(a,b){
-		 //console.log (a['movie_title'] < b['movie_title']);
-		 if  (a['movie_title'] < b['movie_title'])
-			 return -1;
-		 else if  (a['movie_title'] === b['movie_title'])
-			 return 0;
-		 else
-			 return 1;
-	 });
-	 console.log($scope.movieListTitle);
-	 $scope.movieListRating.sort(function(a,b){return a['movie_rating'] < b['movie_rating']});
-	 $scope.$watch('currentPage + numPerPage', function() {
-		    var begin = (($scope.currentPage - 1) * $scope.numPerPage)
-		    , end = begin + $scope.numPerPage;
-		    
-		    $scope.filteredMovies = $scope.movieListTitle.slice(begin, end);
-		    
-		    if($scope.sortType === 'movie_title')
-		    	$scope.filteredMovies = $scope.movieListTitle.slice(begin, end);
-		    
-		    if($scope.sortType === 'movie_rating')
-		    	$scope.filteredMovies = $scope.movieListRating.slice(begin, end);
-		    
-		    for(let i = 0; i < $scope.filteredMovies.length; i++){
-		    	$http.get("api/stars?id=" + $scope.filteredMovies[i]['movie_id']).then(function(starsJSON){
-		    	console.log(starsJSON);
-		    	$scope.filteredMovies[i]['stars'] = starsJSON.data; 
-		    	})};
-		  });
-  }); 
-  
-  
-=======
 jQuery.ajax({
     dataType: "json", // Setting return data type
     method: "GET", // Setting request method
     url: "api/movielist" + getString, // Setting request url, which is mapped by StarsServlet in Stars.java
     success: (resultData) => handleMovieResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
->>>>>>> origin/tim-feature1
 });
-
