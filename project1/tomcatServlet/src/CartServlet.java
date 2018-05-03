@@ -30,7 +30,7 @@ import java.util.Map.Entry;
 
 // Declaring a WebServlet called CartServlet, which maps to url "/form"
 @WebServlet(name = "CartServlet", urlPatterns = "/api/cart")
-public class Cart extends HttpServlet {
+public class CartServlet extends HttpServlet {
 	private static final long serialVersionUID = 2L;
 
 //    // Create a dataSource which registered in web.xml
