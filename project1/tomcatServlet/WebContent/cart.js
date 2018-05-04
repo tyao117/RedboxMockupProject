@@ -90,3 +90,6 @@ else {
 document.getElementById("Checkout").onclick = function() {
     window.location.replace("checkout.html");
 }
+document.getElementById("Main").onclick = function() {
+    window.location.replace("main.html");
+}
