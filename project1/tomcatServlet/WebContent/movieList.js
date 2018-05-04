@@ -120,6 +120,7 @@ getString = handleGStr(director, "director=", getString);
 getString = handleGStr(star_name, "star_name=", getString);
 getString = handleGStr(genre, "genre=", getString);
 
+
 console.log("getString=" + getString);
 /**
  * Once this .js is loaded, following scripts will be executed by the browser

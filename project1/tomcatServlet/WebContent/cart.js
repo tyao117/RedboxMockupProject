@@ -1,4 +1,10 @@
+document.getElementById("Main").onclick = function() {
+    window.location.replace("main.html");
+}
 
+document.getElementById("Checkout").onclick = function() {
+    window.location.replace("checkout.html");
+}
 
 function getParameterByName(target) {
     // Get request URL
@@ -85,11 +91,4 @@ else {
         url: "api/cart", // Setting request url, which is mapped by StarsServlet in Stars.java
         success: (resultData) => handleResult(resultData) // Setting callback function to handle data returned successfully by the SingleStarServlet
     });
-}
-
-document.getElementById("Checkout").onclick = function() {
-    window.location.replace("checkout.html");
-}
-document.getElementById("Main").onclick = function() {
-    window.location.replace("main.html");
 }
