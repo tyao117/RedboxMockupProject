@@ -13,6 +13,9 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 // Declaring a WebServlet called SingleStarServlet, which maps to url "/api/single-star"
 @WebServlet(name = "MovieServlet", urlPatterns = "/api/movielist")
@@ -63,33 +66,28 @@ public class MovieListServlet extends HttpServlet {
 			String query = "";
 			if (genre != null) {
 				System.out.println("going into Genre!!!!!");
-				query = "select distinct result.* \n" + 
-						"from (select ml.id, ml.title, ml.year, ml.director, ml.rating, group_concat(distinct g.name separator', ') as genre\n" + 
-						"from (SELECT distinct m.id, title, year, director, rating\n" + 
-						"	from movies m, ratings r\n" + 
-						"	where m.id=r.movieId\n" + 
-						"	order by m.id\n" + 
-						") ml, genres g, genres_in_movies gm\n" + 
-						"where g.id=gm.genreId and gm.movieId=ml.id and g.name = '"+ genre +"'\n" + 
-						"group by ml.id, ml.title, ml.year, ml.director, ml.rating) as result, genres as g";
+                query = ("SELECT m.id, m.title, m.year, m.director, GROUP_CONCAT(DISTINCT g.name separator ',') AS genres, GROUP_CONCAT(DISTINCT s.name, ',', s.id separator ',') AS starNameID, r.rating\r\n" + 
+                		"    				FROM movies m, stars_in_movies sim, stars s, genres g, genres_in_movies gim, ratings r\r\n" + 
+                		"    				WHERE m.id = sim.movieid AND s.id = sim.starId AND g.id = gim.genreId AND m.id = gim.movieId AND m.id = r.movieId\r\n" + 
+                		"    				AND m.title LIKE '%" + title + "%' AND m.director LIKE '%" + director + "%' AND m.year LIKE '%" + year + "%' \r\n" + 
+                		"    				AND s.name LIKE '%" + star_name + "%' AND g.name LIKE '%" + genre + "%' \r\n" + 
+                		"    				GROUP BY m.id, m.title, m.year, m.director, r.rating \r\n");        
 				
+
+
 			} else {
-				query = "select distinct movies.*\n" + 
-						"from (select ml.id, ml.title, ml.year, ml.director, ml.rating, group_concat(distinct g.name separator', ') as genre\n" + 
-						"from (SELECT distinct m.id, title, year, director, rating\n" + 
-						"	from movies m, ratings r\n" + 
-						"	where m.id=r.movieId and m.title like '"+ title +"%' and m.year like '%"+year+"%' and m.director like '%"+director+"%'\n" + 
-						"	order by m.id\n" + 
-						") ml, genres g, genres_in_movies gm\n" + 
-						"where g.id=gm.genreId and gm.movieId=ml.id \n" + 
-						"group by ml.id, ml.title, ml.year, ml.director, ml.rating) as movies, stars as s, stars_in_movies as sm\n" + 
-						"where s.id=sm.starId and sm.movieId=movies.id and s.name like '%"+star_name+"%' ";
+                query = ("SELECT m.id, m.title, m.year, m.director, GROUP_CONCAT(DISTINCT g.name separator ',') AS genres, GROUP_CONCAT(DISTINCT s.name, ',', s.id separator ',') AS starNameID, r.rating\r\n" + 
+                		"    				FROM movies m, stars_in_movies sim, stars s, genres g, genres_in_movies gim, ratings r\r\n" + 
+                		"    				WHERE m.id = sim.movieid AND s.id = sim.starId AND g.id = gim.genreId AND m.id = gim.movieId AND m.id = r.movieId\r\n" + 
+                		"    				AND m.title LIKE '" + title + "%' AND m.director LIKE '%" + director + "%' AND m.year LIKE '%" + year + "%' \r\n" + 
+                		"    				AND s.name LIKE '%" + star_name + "%' \r\n" + 
+                		"    				GROUP BY m.id, m.title, m.year, m.director, r.rating \r\n"); 
 			}
-			if (orderBy != null)
-			{
-				query += "\n order by " + orderBy;
-			}
-			query += "\n limit 500 ";
+//			if (orderBy != null)
+//			{
+//				query += "\n order by " + orderBy;
+//			}
+			query += "\n limit 1000 ";
 			// Declare our statement
 			PreparedStatement statement = dbcon.prepareStatement(query);
 
@@ -107,7 +105,19 @@ public class MovieListServlet extends HttpServlet {
 				String movieYear = rs.getString("year");
 				String movieDirector = rs.getString("director");
 				String movieRating = rs.getString("rating");
-				genre = rs.getString("genre");
+				genre = rs.getString("genres");
+				String stars = rs.getString("starNameID");
+				
+				String[] individualStar = stars.split(",");
+				List<String> starList = new ArrayList<String>(Arrays.asList(individualStar));
+				JsonArray starNameArray = new JsonArray();
+				for (int i = 0; i < starList.size(); i = i+2) {
+					starNameArray.add(starList.get(i));
+				}
+				JsonArray starIDArray = new JsonArray();
+				for (int i = 1; i < starList.size(); i = i+2) {
+					starIDArray.add(starList.get(i));
+				}
 				
 				// Create a JsonObject based on the data we retrieve from rs
 				JsonObject jsonObject = new JsonObject();	
@@ -117,6 +127,8 @@ public class MovieListServlet extends HttpServlet {
 				jsonObject.addProperty("movie_director", movieDirector);
 				jsonObject.addProperty("movie_rating", movieRating);
 				jsonObject.addProperty("movie_genre", genre);
+				jsonObject.add("star_name_array", starNameArray);
+				jsonObject.add("star_id_array", starIDArray);
 				jsonArray.add(jsonObject);
 			}
             // write JSON string to output

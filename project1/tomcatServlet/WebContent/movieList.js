@@ -27,73 +27,6 @@ function getParameterByName(target) {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
-function handleStarResult(rData,movieId) {
-	let movieTableBodyElement = jQuery("#"+movieId);
-	let rowHTML="";
-	
-	//Iterate through resultData, no more than 10 entries
-	for (let i = 0; i < rData.length; i++) {
-		if (i > 0) {
-		  rowHTML += ", ";
-		}
-	rowHTML += '<a href="single-star.html?id=' + rData[i]['star_id'] + '">'+ rData[i]["star_name"] + '</a>';
-  }
-
-  movieTableBodyElement.html(rowHTML);
-}
-
-function handleMovieResult(resultData) {
-
-    console.log("handleStarResult: populating star table from resultData");
-
-    // Populate the star table
-    // Find the empty table body by id "star_table_body"
-    let movieTableBodyElement = jQuery("#movie_table_body");
-    
-    // Iterate through resultData, no more than 10 entries
-    for (let i = 0; i < resultData.length; i++) {
-    	let movieId = resultData[i]["movie_id"];
-        
-        // Concatenate the html tags with resultData jsonObject
-        let rowHTML = "";
-        rowHTML += "<tr>";
-        rowHTML += "<th>" + resultData[i]["movie_id"] + "</th>";
-        rowHTML += "<th>" +
-            		// Add a link to single-star.html with id passed with GET url parameter
-            		'<a href="single-movie.html?id=' + resultData[i]['movie_id'] + '">'
-            		+ resultData[i]["movie_title"] +     // display star_name for the link text
-            		'</a>' +
-            		"</th>";
-        rowHTML += "<th>" + resultData[i]["movie_year"] + "</th>";
-        rowHTML += "<th>" + resultData[i]["movie_director"] + "</th>";
-        rowHTML += "<th>" + resultData[i]["movie_rating"] + "</th>";
-        rowHTML += "<th>" + resultData[i]["movie_genre"] + "</th>";
-        rowHTML += "<th id=" + movieId +"></th>";
-
-        rowHTML += "<th>" +
-					
-					'<a href="cart.html?id=' + resultData[i]['movie_id'] + "&value=1" +'">'
-					+ 'Add' +     // display star_name for the link text
-					'</a>' +
-					"</th>";
-        rowHTML += "</tr>";
-        // Append the row created to the table body, which will refresh the page
-        movieTableBodyElement.append(rowHTML);
-    }
-    $(document).ready( function () {
-        $('#movie_table').DataTable();
-    } );
-    for (let i = 0; i < resultData.length; i++) {
-    	let movieId = resultData[i]["movie_id"];
-    	jQuery.ajax({
-    		dataType: "json", // Setting return data type
-    		method: "GET", // Setting request method
-    		url: "api/stars?id=" + movieId, // Setting request url, which is mapped by StarsServlet in Stars.java
-    		success: (rData) => handleStarResult(rData, movieId) // Setting callback function to handle data returned successfully by the StarsServlet
-    	});
-    }
-}
-
 function handleGStr(string, type, getString) {
 	if (string) {
 		if (getString.length) {
@@ -124,15 +57,55 @@ getString = handleGStr(star_name, "star_name=", getString);
 getString = handleGStr(genre, "genre=", getString);
 getString = handleGStr(search, "s=", getString);
 
-console.log("getString=" + getString);
-/**
- * Once this .js is loaded, following scripts will be executed by the browser
- */
-// Makes the HTTP GET request and registers on success callback function handleStarResult
-jQuery.ajax({
-    dataType: "json", // Setting return data type
-    method: "GET", // Setting request method
-    url: "api/movielist" + getString, // Setting request url, which is mapped by StarsServlet in Stars.java
-    success: (resultData) => handleMovieResult(resultData) // Setting callback function to handle data returned successfully by the StarsServlet
-});
-
+$(document).ready(function() {
+    $('#movie_table').DataTable({
+        "processing": true,
+        "serverSide": false,
+        "draw": 1,
+        "recordsTotal": 1000,
+        "recordsFiltered": 1000,
+        "pagingType": "simple",
+        "ajax":{"url":"api/movielist" + getString,"dataSrc":""},
+        "columns" : [ {
+            "data" : "movie_id"
+        }, {
+            "data" : "movie_title",
+            "render": function(data, type, row, meta){
+                if(type === 'display'){
+                    data = '<a href="single-movie.html?id=' + row.movie_id + '">' + data + '</a>';
+                }
+                return data;
+            }
+        }, {
+            "data" : "movie_year"
+        }, {
+            "data" : "movie_director"
+        }, {
+        	"data" : "movie_rating"
+        }, {
+        	"data" : "movie_genre"
+        }, {
+        	"data" : "row.star_id_array",
+            "render": function(data, type, row, meta){
+            	var array_length = row.star_name_array.length;
+            	data = "";
+            	for (var i = 0; i < array_length; i++){
+                    if(type === 'display'){
+                		data += '<a href="single-star.html?id=' + row.star_id_array[i] + '">' + row.star_name_array[i] + ', ' +'</a>';
+                    }
+            	}
+            	return data;
+            }
+        }, {
+        	"data" : "movie_id",
+        	"render": function(data, type, row, meta){
+                if(type === 'display'){
+                	data = '<a href="cart.html?id=' + row.movie_id + "&value=1" +'">'+ 'Add' + '</a>';
+                }
+                return data;
+            }
+        }
+        ]
+    }
+);
+} );
