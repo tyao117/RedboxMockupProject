@@ -39,8 +39,15 @@ public class MovieListServlet extends HttpServlet {
 		String star_name = request.getParameter("star_name");
 		String genre = request.getParameter("genre");
 		String orderBy = request.getParameter("order_by");
+		String frmSearch = request.getParameter("s");
 		
+		String titleTemp;
+		
+		if (title != null && frmSearch != null)
+			title = "%" + title;
 		title = (title != null) ? title : "";
+		
+		System.out.println("TitleTemp = "+ title);
 		year = (year != null) ? year : "";
 		director = (director != null) ? director : "";
 		star_name = (star_name != null) ? star_name : "";
@@ -71,7 +78,7 @@ public class MovieListServlet extends HttpServlet {
 						"from (select ml.id, ml.title, ml.year, ml.director, ml.rating, group_concat(distinct g.name separator', ') as genre\n" + 
 						"from (SELECT distinct m.id, title, year, director, rating\n" + 
 						"	from movies m, ratings r\n" + 
-						"	where m.id=r.movieId and m.title like '"+title+"%' and m.year like '%"+year+"%' and m.director like '%"+director+"%'\n" + 
+						"	where m.id=r.movieId and m.title like '"+ title +"%' and m.year like '%"+year+"%' and m.director like '%"+director+"%'\n" + 
 						"	order by m.id\n" + 
 						") ml, genres g, genres_in_movies gm\n" + 
 						"where g.id=gm.genreId and gm.movieId=ml.id \n" + 

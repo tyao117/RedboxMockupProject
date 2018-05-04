@@ -30,13 +30,13 @@ function handleSearchResult(resultDataString) {
     	getString = handleGStr(resultDataJson["movie_year"], "movie_year=", getString);
     	getString = handleGStr(resultDataJson["director"], "director=", getString);
     	getString = handleGStr(resultDataJson["star_name"], "star_name=", getString);
-    	console.log(getString);
-    	window.location.replace(getString);
+    	console.log("string=" + getString+"&s=yes");
+    	window.location.replace(getString+"&s=yes");
     }
     // If login fail, display error message on <div> with id "login_error_message"
     else {
         console.log("show error message");
-        console.log(resultDataJson["message"]);
+        alert(resultDataJson["message"]);
         jQuery("#login_error_message").text(resultDataJson["message"]);
     }
 }
