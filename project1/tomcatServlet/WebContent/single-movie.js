@@ -15,6 +15,10 @@
  * @param target String
  * @returns {*}
  */
+document.getElementById("Main").onclick = function() {
+    window.location.replace("main.html");
+}
+
 function getParameterByName(target) {
     // Get request URL
     let url = window.location.href;

@@ -40,6 +40,10 @@ function handleGStr(string, type, getString) {
 	return getString;
 }
 
+document.getElementById("Main").onclick = function() {
+    window.location.replace("main.html");
+}
+
 // start of the page is here
 let movie_title = getParameterByName("movie_title");
 let movie_year= getParameterByName("movie_year");
