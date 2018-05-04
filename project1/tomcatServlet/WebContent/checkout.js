@@ -7,11 +7,9 @@ function handleMovieResult(rData, movieId) {
 }
 
 function printSuccess(rData) {
-	console.log("Success");
+	alert("Success");
 	console.log(rData);
 }
-
-
 
 function handleConfirmResult(data) {
 	console.log(data);
@@ -26,6 +24,14 @@ function handleConfirmResult(data) {
 			url: "api/insertsale?id=" + cusID, // Setting request url, which is mapped by StarsServlet in Stars.java
 			success: (rData) => printSuccess(rData) // Setting callback function to handle data returned successfully by the StarsServlet
 		});
+	}
+	else if (data === null) {
+		alert("Nothing is in the cart");
+		window.location.replace("main.html");
+	}
+	else
+	{
+		alert("Failure");
 	}
 }
 
@@ -72,6 +78,10 @@ function submitForm(formSubmitEvent) {
         (resultDataString) => handleConfirmResult(resultDataString));
 }
 
+$("#success").hide();
+$("#failure").hide();
+
+	
 jQuery.ajax({
     dataType: "json",  // Setting return data type
     method: "GET",// Setting request method

@@ -36,10 +36,18 @@
 			<form id="confirm_form" method="post" action="#">
     			First Name: <input TYPE="TEXT" name="firstName">Enter your first name<br>
     			Last Name: <input TYPE="TEXT" name="lastName">Enter your last name<br>
-    			Credit Card Number: <input TYPE="TEXT" name="id">Enter your credit card number<br>
-				Expiration Date: <input TYPE="TEXT" name="expiration">Enter your expiration date<br> 
+    			Credit Card Number: <input TYPE="TEXT" name="id">Enter your credit card number(exactly)<br>
+				Expiration Date: <input TYPE="TEXT" name="expiration">Enter your expiration date(XXXX-XX-XX)<br> 
 				<input type="submit" value="Confirm">
 			</form>
+		</div>
+		<div class="container">
+			<div id=success class="alert alert-success">
+				<strong>Success!</strong>
+			</div>
+			<div id=failure class="alert alert-warning">
+				<strong>Failure!</strong>
+			</div>
 		</div>
 		<!-- include our own JS file -->
 		<script src="./checkout.js"></script>
