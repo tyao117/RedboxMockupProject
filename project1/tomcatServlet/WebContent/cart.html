@@ -14,7 +14,7 @@
 <h1 ALIGN="CENTER">Shopping Cart</h1>
 			
 <h1>Cart</h1>
-
+<button id="Checkout" class="float-left submit-button" >Checkout</button>
 <!-- Id "star_table" is useful for jQuery to find the html element with id, class here is mapping to Bootstrap defined class CSS -->
 <table id=cart_table class="table table-striped">
     <!-- Create a table header -->
@@ -32,6 +32,10 @@
 </table>
 <!-- include our own JS file -->
 <script src="./cart.js"></script>
-
+<script type="text/javascript">
+    document.getElementById("Checkout").onclick = function () {
+        window.location.replace("checkout.html");
+    };
+</script>
 </body>
 </html>
