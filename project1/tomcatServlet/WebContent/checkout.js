@@ -6,23 +6,26 @@ function handleMovieResult(rData, movieId) {
     movieTableBodyElement.append(rowHTML);
 }
 
+function printSuccess(rData) {
+	console.log("Success");
+	console.log(rData);
+}
+
+
+
 function handleConfirmResult(data) {
 	console.log(data);
 	if (data["status"] === "success") {
-		console.log("this is the data table");
-		console.log(dataTable);
-		for (let i = 0; i < dataTable.length; i++) {
-			for (let j = 0; i < dataTable[i]["movie_quantity"]; j++) {
-				let movieId = dataTable[i]["movie_id"];
-				console.log(movieId);
-				jQuery.ajax({
-		            dataType: "json", // Setting return data type
-		            method: "PUT", // Setting request method
-		            url: "api/insertsale?movieid=" + movieId, // Setting request url, which is mapped by StarsServlet in Stars.java
-		            success: (rData) => handleMovieResult(rData, movieId) // Setting callback function to handle data returned successfully by the StarsServlet
-		        });
-			}
-		}
+		
+		console.log("this is the data");
+		console.log(data);
+		let cusID = data["id"];
+		jQuery.ajax({
+			dataType: "json", // Setting return data type
+			method: "PUT", // Setting request method
+			url: "api/insertsale?id=" + cusID, // Setting request url, which is mapped by StarsServlet in Stars.java
+			success: (rData) => printSuccess(rData) // Setting callback function to handle data returned successfully by the StarsServlet
+		});
 	}
 }
 

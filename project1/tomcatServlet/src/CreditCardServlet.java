@@ -83,8 +83,10 @@ public class CreditCardServlet extends HttpServlet {
             		&& lastName.equals(dblastName) && expiration.equals(dbexpiration)
             		&& sessionId.equals(id)) {
             	// Credit success:
+            	String cusID = (String)request.getSession().getAttribute("customerId");
                 JsonObject.addProperty("status", "success");
                 JsonObject.addProperty("message", "success");
+                JsonObject.addProperty("id", cusID);
             } else {
             	// Credit card fail
                 JsonObject.addProperty("status", "fail");
