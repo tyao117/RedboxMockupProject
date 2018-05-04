@@ -23,7 +23,7 @@ import java.sql.Statement;
 
 
 // Declaring a WebServlet called FormServlet, which maps to url "/form"
-@WebServlet(name = "CreditCardServlet", urlPatterns = "/api/creditcard")
+@WebServlet(name = "CreditCardServlet", urlPatterns = "/api/checkout")
 public class CreditCardServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
@@ -56,7 +56,7 @@ public class CreditCardServlet extends HttpServlet {
             String dbfirstName = "";
             String dblastName = "";
             String dbexpiration = "";
-            String sessionId = request.getSession().getAttribute("customerId").toString();
+            String sessionId = request.getSession().getAttribute("CCID").toString();
             // Generate a SQL query
             String query = String.format("SELECT * "
             							+ "FROM moviedb.creditcards "

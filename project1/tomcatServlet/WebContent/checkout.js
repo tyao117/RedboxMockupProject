@@ -5,6 +5,10 @@ function handleMovieResult(rData, movieId) {
     movieTableBodyElement.append(rowHTML);
 }
 
+function handleConfirmResult(resultDataString) {
+	console.log(resultDataString);
+}
+
 function handleResult(resultData) {
     console.log(" ajax call working");
     console.log(resultData);
@@ -30,15 +34,11 @@ function handleResult(resultData) {
         });
         movieTableBodyElement.append(rowHTML);
     }
-    console.log("Going here");
-}
-
-function doCheckout() {
-    var cartContents = document.getElementById("cart_table_body");
+    console.log("Tabbulation is finished");
 }
 
 function submitForm(formSubmitEvent) {
-    console.log("submit search form");
+    console.log("submit confirm form");
     // Important: disable the default action of submitting the form
     //   which will cause the page to refresh
     //   see jQuery reference for details: https://api.jquery.com/submit/

@@ -56,8 +56,9 @@ public class Login extends HttpServlet {
             String dbName = null;
             String dbPassword = null;
             String dbID = null;
+            String dbccid = null;
             // Generate a SQL query
-            String query = String.format("SELECT email, password, id from customers where email='%s' or password='%s' limit 20", name, password);
+            String query = String.format("SELECT email, password, ccId, id from customers where email='%s' or password='%s' limit 20", name, password);
             
             // Perform the query
             ResultSet rs = statement.executeQuery(query);
@@ -67,6 +68,7 @@ public class Login extends HttpServlet {
             	dbName = rs.getString("email");
             	dbPassword = rs.getString("password");
             	dbID = rs.getString("id");
+            	dbccid = rs.getString("ccId");
             }
 
             // Give a result status
@@ -76,6 +78,7 @@ public class Login extends HttpServlet {
                 // set this user into the session
                 request.getSession().setAttribute("user", new User(name));
                 request.getSession().setAttribute("customerId", dbID);
+                request.getSession().setAttribute("CCID", dbccid);
                 JsonObject responseJsonObject = new JsonObject();
                 responseJsonObject.addProperty("status", "success");
                 responseJsonObject.addProperty("message", "success");
