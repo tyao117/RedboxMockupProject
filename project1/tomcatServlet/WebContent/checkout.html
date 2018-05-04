@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Checkout</title>
+		<!-- include jQuery-->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
+		<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
+	</head>
+	<body>
+		
+		<h1 ALIGN="CENTER">Checkout</h1>
+		
+		<div>
+			<h3>Cart</h3>
+			
+			<!-- Id "star_table" is useful for jQuery to find the html element with id, class here is mapping to Bootstrap defined class CSS -->
+			<table id=cart_table class="table table-striped">
+			    <!-- Create a table header -->
+			    <thead>
+				    <tr>
+				        <!-- Titles of each column-->
+				        <th>ID</th>
+				        <th>Title</th>
+				        <th>Quantity</th>
+				    </tr>
+			    </thead>
+			    <!-- Table body is left empty here, will be populated with the data retrieved with index.js -->
+			    <!-- Again, id "star_table_body" is useful for jQuery to find this html element -->
+			    <tbody id=cart_table_body></tbody>
+			</table>
+		</div>
+		<div>
+			<h3>Checkout</h3>
+			<form id="confirm_form" method="GET" action="#">
+    			First Name: <input TYPE="TEXT" name="fname">Enter your first name<br>
+    			Last Name: <input TYPE="TEXT" name="year">Enter your last name<br>
+    			Credit Card Number: <input TYPE="TEXT" name="director">Enter your credit card number<br>
+				Expiration Date: <input TYPE="TEXT" name="star">Enter your expiration date<br> 
+				<input id="confirm" type="button" value="Confirm" href="confirm.html"/>
+			</form>
+		</div>
+		<!-- include our own JS file -->
+		<script src="./checkout.js"></script>
+	</body>
+</html>
