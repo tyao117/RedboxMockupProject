@@ -43,8 +43,8 @@ function submitForm(formSubmitEvent) {
     //   which will cause the page to refresh
     //   see jQuery reference for details: https://api.jquery.com/submit/
     formSubmitEvent.preventDefault();
-    jQuery.get(
-        "api/checkout",
+    jQuery.post(
+        "api/creditcard",
         // Serialize the confirm form to the data sent by POST request
         jQuery("#confirm_form").serialize(),
         (resultDataString) => handleConfirmResult(resultDataString));
