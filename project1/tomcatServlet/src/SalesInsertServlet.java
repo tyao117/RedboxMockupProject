@@ -50,7 +50,7 @@ public class SalesInsertServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         JsonObject jsonObject = new JsonObject();
         Connection dbCon = null;
-    	Statement statement = null;
+        Statement statement = null;
         // Output stream to STDOUT
         try {
         	dbCon = dbCon = dataSource.getConnection();
@@ -65,11 +65,11 @@ public class SalesInsertServlet extends HttpServlet {
         			for (int i = 0; i < size; i++) {
         				System.out.println((String)pair.getKey());
         				query = "INSERT INTO sales " + "VALUES (NULL," + data + ", '" + ((String)pair.getKey()) + "', CURDATE())";
+        				statement.executeUpdate(query);
         			}
         			it.remove();
         		}
         	}
-        	statement.executeUpdate(query);
         	statement.close();
         	jsonObject.addProperty("status", "sucess");
         	// Printing out a temporary Json String
