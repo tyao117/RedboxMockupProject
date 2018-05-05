@@ -20,8 +20,12 @@ function printSuccess(rData) {
 }
 
 function handleConfirmResult(data) {
-    console.log(data);
-    if (data === null) {
+    console.log(sessionStorage.getItem("checkout"));
+    for (let i = 0; i < sessionStorage.length; ++i)
+    	{
+    	console.log(sessionStorage.key(i));
+    	}
+    if (sessionStorage.getItem("checkout") === null) {
 		alert("Nothing is in the cart");
 		window.location.replace("main.html");
 	} else if (data["status"] === "success") {
@@ -40,31 +44,39 @@ function handleConfirmResult(data) {
 }
 
 function handleResult(resultData) {
-	dataTable = resultData;
-    sessionStorage.setItem("checkout", JSON.stringify(resultData));
+	if (resultData !== null)
+		dataTable = resultData;
+	if (sessionStorage.getItem("checkout") !== null) {
+		sessionStorage.removeItem("checkout");
+	}
+	console.log("HELLO HTERJHLK");
+	console.log(sessionStorage.getItem("checkout"));
+	sessionStorage.setItem("checkout", JSON.stringify(resultData));
     console.log(" ajax call working");
-    console.log(resultData);
-    let movieTableBodyElement = jQuery("#cart_table_body");
-    for (let i = 0; i < resultData.length; i++) {
-        let movieId = resultData[i]["movie_id"];
-        let num = parseInt(resultData[i]["movie_quantity"]);
-        console.log(num);
-        // Concatenate the html tags with resultData jsonObject
-        let rowHTML = "";
-        rowHTML += "<tr>";
-        rowHTML += "<th>" + resultData[i]["movie_id"] + "</th>";
-        rowHTML += "<th id=" + movieId + "></th>";
-        rowHTML += "<th>";
-        rowHTML += resultData[i]["movie_quantity"];
-        rowHTML += "</th>";
-        rowHTML += "</tr>";
-        jQuery.ajax({
-            dataType: "json", // Setting return data type
-            method: "GET", // Setting request method
-            url: "api/single-movie?id=" + movieId, // Setting request url, which is mapped by StarsServlet in Stars.java
-            success: (rData) => handleMovieResult(rData, movieId) // Setting callback function to handle data returned successfully by the StarsServlet
-        });
-        movieTableBodyElement.append(rowHTML);
+    if (resultData !== null) {
+    	console.log(resultData);
+    	let movieTableBodyElement = jQuery("#cart_table_body");
+    	for (let i = 0; i < resultData.length; i++) {
+    		let movieId = resultData[i]["movie_id"];
+    		let num = parseInt(resultData[i]["movie_quantity"]);
+    		console.log(num);
+    		// Concatenate the html tags with resultData jsonObject
+    		let rowHTML = "";
+    		rowHTML += "<tr>";
+    		rowHTML += "<th>" + resultData[i]["movie_id"] + "</th>";
+    		rowHTML += "<th id=" + movieId + "></th>";
+    		rowHTML += "<th>";
+    		rowHTML += resultData[i]["movie_quantity"];
+    		rowHTML += "</th>";
+    		rowHTML += "</tr>";
+    		jQuery.ajax({
+    			dataType: "json", // Setting return data type
+    			method: "GET", // Setting request method
+    			url: "api/single-movie?id=" + movieId, // Setting request url, which is mapped by StarsServlet in Stars.java
+    			success: (rData) => handleMovieResult(rData, movieId) // Setting callback function to handle data returned successfully by the StarsServlet
+    		});
+    		movieTableBodyElement.append(rowHTML);
+    	}
     }
  
     console.log("Tabbulation is finished");

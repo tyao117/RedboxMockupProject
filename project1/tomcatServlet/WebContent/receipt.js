@@ -4,10 +4,18 @@ document.getElementById("Main").onclick = function() {
 
 var items = JSON.parse(sessionStorage.getItem("checkout"));
 console.log(items);
+
+function handleMovieResult(rData, movieId) {
+    let movieTableBodyElement = jQuery("#" + movieId);
+    let rowHTML = "";
+    rowHTML += '<a href="single-movie.html?id=' + rData[0]['movie_id'] + '">' + rData[0]['movie_title'] + '</a>';
+    movieTableBodyElement.append(rowHTML);
+}
+
 function handleResult(resultData) {
     console.log(resultData)
     let movieTableBodyElement = jQuery("#cart_table_body");
-    for (let i = 0; i < resultData.length; i++) {
+    for (let i = 0; i < resultData.length; i = i + 2) {
         let movieId = resultData[i]["movie_id"];
         let num = parseInt(resultData[i]["movie_quantity"]);
         console.log(num);
@@ -18,9 +26,7 @@ function handleResult(resultData) {
         rowHTML += "<th>" + resultData[i]["movie_id"] + "</th>";
         rowHTML += "<th id=" + movieId + "></th>";
         rowHTML += "<th>";
-        rowHTML += "<a href=" + baseURL + (-1) + ">-</a>";
         rowHTML += resultData[i]["movie_quantity"];
-        rowHTML += "<a href=" + baseURL + (1) + ">+</a>";
         rowHTML += "</th>";
         rowHTML += "</tr>";
         movieTableBodyElement.append(rowHTML);
@@ -32,7 +38,8 @@ function handleResult(resultData) {
         });
         movieTableBodyElement.append(rowHTML);
     }
-    sessionStorage.setItem("checkout",null);
+    sessionStorage.removeItem("checkout");
+    sessionStorage.clear();
     $(document).ready(function () {
         $('#cart_table').DataTable();
     });
