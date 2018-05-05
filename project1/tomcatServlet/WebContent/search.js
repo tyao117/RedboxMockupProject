@@ -1,5 +1,9 @@
 // Get id from URL
 
+document.getElementById("Main").onclick = function() {
+    window.location.replace("main.html");
+}
+
 function handleGStr(string, type, getString) {
 	if (string) {
 		if (getString !== "movieList.html") {
