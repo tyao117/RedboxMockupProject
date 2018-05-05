@@ -15,7 +15,7 @@ function handleMovieResult(rData, movieId) {
 function handleResult(resultData) {
     console.log(resultData)
     let movieTableBodyElement = jQuery("#cart_table_body");
-    for (let i = 0; i < resultData.length; i = i + 2) {
+    for (let i = 0; i < resultData.length; i++) {
         let movieId = resultData[i]["movie_id"];
         let num = parseInt(resultData[i]["movie_quantity"]);
         console.log(num);
