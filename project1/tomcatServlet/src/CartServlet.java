@@ -63,7 +63,7 @@ public class CartServlet extends HttpServlet {
         		 if (cart != null) {
         			 if (value != null) {
         				 if (cart.get(id) != null) {
-        					 int x = cart.get(id);
+        					 // change this logic if you are going to change the front end
         					 cart.put(id, cart.get(id) + Integer.parseInt(value));
         				 } else {
         					 cart.put(id, 1);
