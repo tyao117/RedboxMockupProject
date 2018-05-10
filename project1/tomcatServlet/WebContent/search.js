@@ -34,7 +34,7 @@ function handleSearchResult(resultDataString) {
     	getString = handleGStr(resultDataJson["movie_year"], "movie_year=", getString);
     	getString = handleGStr(resultDataJson["director"], "director=", getString);
     	getString = handleGStr(resultDataJson["star_name"], "star_name=", getString);
-    	getString = handleGStr("yes", "star_name=", getString);
+    	getString = handleGStr("yes", "s=", getString);
     	console.log("string=" + getString+"&s=yes");
     	window.location.replace(getString);
     }
