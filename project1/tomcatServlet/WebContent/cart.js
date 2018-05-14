@@ -53,13 +53,20 @@ function handleResult(resultData) {
 //	}
 	for (let i = 0; i < resultData.length; i++) {
     	let movieId = resultData[i]["movie_id"];
-        
+    	let num = parseInt(resultData[i]["movie_quantity"]);
+    	console.log(num);
+    	let baseURL ="cart.html?" + "id=" + resultData[i]["movie_id"] + "&value="; 
         // Concatenate the html tags with resultData jsonObject
         let rowHTML = "";
         rowHTML += "<tr>";
         rowHTML += "<th>" + resultData[i]["movie_id"] + "</th>";
         rowHTML += "<th id=" + movieId +"></th>";
-        rowHTML += "<th>" + resultData[i]["movie_quantity"] + "</th>";
+        rowHTML += "<th>";
+        rowHTML += "<a href=" + baseURL + (-1) + ">-</a>";
+        rowHTML += resultData[i]["movie_quantity"];
+        rowHTML += "<a href=" + baseURL + (1) + ">+</a>";
+        rowHTML += "</th>";
+        
         rowHTML += "</tr>";
         jQuery.ajax({
             dataType: "json", // Setting return data type
@@ -69,6 +76,9 @@ function handleResult(resultData) {
         });
         movieTableBodyElement.append(rowHTML);
 	}
+	$(document).ready( function () {
+	    $('#cart_table').DataTable();
+	} );
 }
 
 document.getElementById("checkout").onclick = doCheckout()
@@ -99,6 +109,3 @@ else {
 		success: (resultData) => handleResult(resultData) // Setting callback function to handle data returned successfully by the SingleStarServlet
 	});}
 
-$(document).ready( function () {
-    $('#movie_table').DataTable();
-} );
