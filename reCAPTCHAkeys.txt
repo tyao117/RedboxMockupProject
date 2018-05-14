@@ -1,0 +1,12 @@
+Site key:
+6Lc2MFkUAAAAADFR-J5oecXX4GL8M6vRpwZnZQik
+
+Secret Key:
+6Lc2MFkUAAAAAC2g5UStaE9u0I0wK6g07aNu5Paa
+
+HTML template source 
+<script src='https://www.google.com/recaptcha/api.js'></script>
+
+
+Paste this at the end of form
+<div class="g-recaptcha" data-sitekey="6Lc2MFkUAAAAADFR-J5oecXX4GL8M6vRpwZnZQik"></div>

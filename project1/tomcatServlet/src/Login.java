@@ -39,8 +39,20 @@ public class Login extends HttpServlet {
 
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
+        
+        // Getting the reCAPTCHA response
+        String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+        System.out.println("gRecaptchaResponse=" + gRecaptchaResponse);
 
-
+        // Verify reCAPTCHA
+        try {
+        	RecaptchaVerifyUtils.verify(gRecaptchaResponse);
+        } catch (Exception e) {
+        	JsonObject responseJsonObject = new JsonObject();
+        	responseJsonObject.addProperty("status", "success");
+        	responseJsonObject.addProperty("message", e.getMessage());
+        	return;
+        }
         try {
         	
             // Create a new connection to database
