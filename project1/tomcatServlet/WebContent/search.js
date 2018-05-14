@@ -1,5 +1,9 @@
 // Get id from URL
 
+document.getElementById("Main").onclick = function() {
+    window.location.replace("main.html");
+}
+
 function handleGStr(string, type, getString) {
 	if (string) {
 		if (getString !== "movieList.html") {
@@ -30,13 +34,14 @@ function handleSearchResult(resultDataString) {
     	getString = handleGStr(resultDataJson["movie_year"], "movie_year=", getString);
     	getString = handleGStr(resultDataJson["director"], "director=", getString);
     	getString = handleGStr(resultDataJson["star_name"], "star_name=", getString);
-    	console.log(getString);
+    	getString = handleGStr("yes", "s=", getString);
+    	console.log("string=" + getString+"&s=yes");
     	window.location.replace(getString);
     }
     // If login fail, display error message on <div> with id "login_error_message"
     else {
         console.log("show error message");
-        console.log(resultDataJson["message"]);
+        alert(resultDataJson["message"]);
         jQuery("#login_error_message").text(resultDataJson["message"]);
     }
 }

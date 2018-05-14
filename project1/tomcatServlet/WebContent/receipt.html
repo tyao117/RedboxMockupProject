@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>My Cart</title>
+<title>Receipt</title>
 <!-- include jQuery-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
@@ -11,11 +11,10 @@
 </head>
 <body>
 
-<h1 ALIGN="CENTER">Shopping Cart</h1>
+<h1 ALIGN="CENTER">Receipt</h1>
 			
-<h1>Cart</h1>
+
 <button id="Main" class="float-left submit-button" >Main</button>
-<button id="Checkout" class="float-left submit-button" >Checkout</button>
 <!-- Id "star_table" is useful for jQuery to find the html element with id, class here is mapping to Bootstrap defined class CSS -->
 <table id=cart_table class="table table-striped">
     <!-- Create a table header -->
@@ -24,20 +23,15 @@
         <!-- Titles of each column-->
         <th>ID</th>
         <th>Title</th>
-        <th>Quantity</th>
+       	<th>Quantity</th>
     </tr>
     </thead>
     <!-- Table body is left empty here, will be populated with the data retrieved with index.js -->
     <!-- Again, id "star_table_body" is useful for jQuery to find this html element -->
     <tbody id=cart_table_body></tbody>
 </table>
-<input id="checkout" type="button" value="Checkout"/>
 <!-- include our own JS file -->
-<script src="./cart.js">
-document.getElementById("Checkout").onclick = function() {
-	window.location.replace("checkout.html");
-}
-</script>
+<script src="./receipt.js"></script>
 
 </body>
 </html>

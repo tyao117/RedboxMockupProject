@@ -1,0 +1,31 @@
+title
+	%(title)%	=> USING LIKE if it is from search
+	(title)% 	=> USING LIKE if it is from browse
+year		
+	%year%		=> USING LIKE (parsing is done beforehand to check the query) 
+director	
+	%director%	=> USING LIKE (see if the input is a first or last name
+genre	=(genre)	=> cannot be searched through the search page, so we made it fixed
+
+query 1 (not by genre)
+query = "select distinct movies.*\n" + 
+"from (select ml.id, ml.title, ml.year, ml.director, ml.rating, group_concat(distinct g.name separator', ') as genre\n" + 
+"from (SELECT distinct m.id, title, year, director, rating\n" + 
+"	from movies m, ratings r\n" + 
+"	where m.id=r.movieId and m.title like '"+ title +"%' and m.year like '%"+year+"%' and m.director like '%"+director+"%'\n" + 
+"	order by m.id\n" + 
+") ml, genres g, genres_in_movies gm\n" + 
+"where g.id=gm.genreId and gm.movieId=ml.id \n" + 
+"group by ml.id, ml.title, ml.year, ml.director, ml.rating) as movies, stars as s, stars_in_movies as sm\n" + 
+"where s.id=sm.starId and sm.movieId=movies.id and s.name like '%"+star_name+"%' ";
+
+query 2 (by genre)
+"select distinct result.* \n" + 
+"from (select ml.id, ml.title, ml.year, ml.director, ml.rating, group_concat(distinct g.name separator', ') as genre\n" + 
+"from (SELECT distinct m.id, title, year, director, rating\n" + 
+"	from movies m, ratings r\n" + 
+"	where m.id=r.movieId\n" + 
+"	order by m.id\n" + 
+") ml, genres g, genres_in_movies gm\n" + 
+"where g.id=gm.genreId and gm.movieId=ml.id and g.name = '"+ genre +"'\n" + 
+"group by ml.id, ml.title, ml.year, ml.director, ml.rating) as result, genres as g";

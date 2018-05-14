@@ -15,6 +15,9 @@
  * @param target String
  * @returns {*}
  */
+document.getElementById("Main").onclick = function() {
+    window.location.replace("main.html");
+}
 function getParameterByName(target) {
     // Get request URL
     let url = window.location.href;
@@ -76,6 +79,7 @@ function handleResult(resultData) {
 /**
  * Once this .js is loaded, following scripts will be executed by the browser\
  */
+
 
 // Get id from URL
 let starId = getParameterByName('id');
