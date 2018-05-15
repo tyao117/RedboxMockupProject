@@ -13,7 +13,9 @@ import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
@@ -39,12 +41,10 @@ public class CreditCardServlet extends HttpServlet {
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
         try {
-        	System.out.println("trying out the server call");
             // Create a new connection to database
             Connection dbCon = dataSource.getConnection();
 
-            // Declare a new statement
-            Statement statement = dbCon.createStatement();
+            // Get the current session
             HttpSession session = request.getSession();
             
             // Retrieve parameter "name" from the http request, which refers to the value of <input name="name"> in index.html
@@ -57,19 +57,21 @@ public class CreditCardServlet extends HttpServlet {
             String dblastName = "";
             String dbexpiration = "";
             String sessionId = request.getSession().getAttribute("CCID").toString();
-            System.out.println("GOing here");
+
             // Generate a SQL query
             String query = String.format("SELECT * "
             							+ "FROM moviedb.creditcards "
-            							+ "WHERE id= '%s' "
-            							+ "AND firstName='%s' "
-            							+ "AND lastName = '%s' "
-            							+ "AND expiration='%s'", 
-            							id, firstName, lastName, expiration );
-            
+            							+ "WHERE id=? "
+            							+ "AND firstName=? "
+            							+ "AND lastName=? "
+            							+ "AND expiration=? ");
+            PreparedStatement statement = dbCon.prepareStatement(query);
+            statement.setString(1, id);
+            statement.setString(2, firstName);
+            statement.setString(3, lastName);
+            statement.setString(4, expiration);
             // Perform the query
-            ResultSet rs = statement.executeQuery(query);
-            System.out.println("exiting the query");
+            ResultSet rs = statement.executeQuery();
             //Check if you have a login
             while(rs.next()) {
             	dbId = rs.getString("id");
@@ -112,6 +114,13 @@ public class CreditCardServlet extends HttpServlet {
             statement.close();
             dbCon.close();
 
+        } catch (SQLException ex) {
+			ex.printStackTrace();
+			JsonObject jsonObject = new JsonObject();
+			jsonObject.addProperty("errorMessage", ex.getMessage());
+			out.write(jsonObject.toString());
+			// set reponse status to 500 (Internal Server Error)
+			response.setStatus(500);
         } catch (Exception ex) {
             // Output Error Massage to html
         	System.out.println(ex.getStackTrace());
@@ -119,6 +128,7 @@ public class CreditCardServlet extends HttpServlet {
             object.addProperty("status", "fail");
             object.addProperty("message", "dbConnection or something else");
             out.write(object.toString());
+            response.setStatus(500);
         }
         out.close();
     }
