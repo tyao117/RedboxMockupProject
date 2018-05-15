@@ -14,6 +14,7 @@ import com.google.gson.JsonArray;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -50,11 +51,10 @@ public class SalesInsertServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         JsonObject jsonObject = new JsonObject();
         Connection dbCon = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
         // Output stream to STDOUT
         try {
-        	dbCon = dbCon = dataSource.getConnection();
-        	statement = dbCon.createStatement();
+        	dbCon = dataSource.getConnection();
         	String query = "";
         	HashMap<String, Integer> cart = (HashMap<String, Integer>) session.getAttribute("previousItems");
         	synchronized (cart) {
@@ -64,8 +64,11 @@ public class SalesInsertServlet extends HttpServlet {
         			int size = (Integer)pair.getValue();
         			for (int i = 0; i < size; i++) {
         				System.out.println((String)pair.getKey());
-        				query = "INSERT INTO sales " + "VALUES (NULL," + data + ", '" + ((String)pair.getKey()) + "', CURDATE())";
-        				statement.executeUpdate(query);
+        				query = "INSERT INTO sales VALUES (NULL, ?, ?, CURDATE())";
+        				statement = dbCon.prepareStatement(query);
+        				statement.setString(1,  data);
+        				statement.setString(2, (String)pair.getKey());
+        				statement.executeUpdate();
         			}
         			it.remove();
         		}
@@ -74,14 +77,13 @@ public class SalesInsertServlet extends HttpServlet {
         	jsonObject.addProperty("status", "sucess");
         	// Printing out a temporary Json String
         	
-        	
         } catch (SQLException se) {
         	se.printStackTrace();
         	jsonObject.addProperty("status" , "failure");
         	jsonObject.addProperty("message", "SQL Error");
     	} catch (Exception ex) {
     		jsonObject.addProperty("status" , "failure");
-        	jsonObject.addProperty("message", "unknown");
+        	jsonObject.addProperty("message", "dataConnection or other shit");
         } finally {
         	try {
         		if (statement !=null)
