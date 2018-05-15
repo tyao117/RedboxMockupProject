@@ -13,6 +13,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -67,26 +68,23 @@ public class MovieListServlet extends HttpServlet {
 			if (genre != null) {
 				System.out.println("going into Genre!!!!!");
                 query = ("SELECT m.id, m.title, m.year, m.director, GROUP_CONCAT(DISTINCT g.name separator ',') AS genres, GROUP_CONCAT(DISTINCT s.name, ',', s.id separator ',') AS starNameID, r.rating\r\n" + 
-                		"    				FROM movies m, stars_in_movies sim, stars s, genres g, genres_in_movies gim, ratings r\r\n" + 
-                		"    				WHERE m.id = sim.movieid AND s.id = sim.starId AND g.id = gim.genreId AND m.id = gim.movieId AND m.id = r.movieId\r\n" + 
-                		"    				AND g.name LIKE '%" + genre + "%' \r\n" + 
-                		"    				GROUP BY m.id, m.title, m.year, m.director, r.rating \r\n");        
+                		"	FROM movies m, stars_in_movies sim, stars s, genres g, genres_in_movies gim, ratings r\r\n" + 
+                		"   WHERE m.id = sim.movieid AND s.id = sim.starId AND g.id = gim.genreId AND m.id = gim.movieId AND m.id = r.movieId\r\n" + 
+                		"   AND g.name LIKE '%" + genre + "%' \r\n" + 
+                		"   GROUP BY m.id, m.title, m.year, m.director, r.rating \r\n" + 
+                		"	LIMIT 1000");        
 				
 
 
 			} else {
                 query = ("SELECT m.id, m.title, m.year, m.director, GROUP_CONCAT(DISTINCT g.name separator ',') AS genres, GROUP_CONCAT(DISTINCT s.name, ',', s.id separator ',') AS starNameID, r.rating\r\n" + 
-                		"FROM movies m, stars_in_movies sim, stars s, genres g, genres_in_movies gim, ratings r\r\n" + 
-                		"WHERE m.id = sim.movieid AND s.id = sim.starId AND g.id = gim.genreId AND m.id = gim.movieId AND m.id = r.movieId\r\n" + 
-                		"AND m.title LIKE '" + title + "%' AND m.director LIKE '%" + director + "%' AND m.year LIKE '%" + year + "%' \r\n" + 
-                		"AND s.name LIKE '%" + star_name + "%' \r\n" + 
-                		"GROUP BY m.id, m.title, m.year, m.director, r.rating \r\n"); 
+                		"	FROM movies m, stars_in_movies sim, stars s, genres g, genres_in_movies gim, ratings r\r\n" + 
+                		"	WHERE m.id = sim.movieid AND s.id = sim.starId AND g.id = gim.genreId AND m.id = gim.movieId AND m.id = r.movieId\r\n" + 
+                		"	AND m.title LIKE '" + title + "%' AND m.director LIKE '%" + director + "%' AND m.year LIKE '%" + year + "%' \r\n" + 
+                		"	AND s.name LIKE '%" + star_name + "%' \r\n" + 
+                		"	GROUP BY m.id, m.title, m.year, m.director, r.rating \r\n" +
+                		"	LIMIT 1000"); 
 			}
-//			if (orderBy != null)
-//			{
-//				query += "\n order by " + orderBy;
-//			}
-			query += "\n limit 1000 ";
 			// Declare our statement
 			PreparedStatement statement = dbcon.prepareStatement(query);
 
@@ -137,6 +135,13 @@ public class MovieListServlet extends HttpServlet {
 			rs.close();
 			statement.close();
 			dbcon.close();
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			JsonObject jsonObject = new JsonObject();
+			jsonObject.addProperty("errorMessage", ex.getMessage());
+			out.write(jsonObject.toString());
+			// set reponse status to 500 (Internal Server Error)
+			response.setStatus(500);
 		} catch (Exception e) {
 			// write error message JSON object to output
 			e.printStackTrace();

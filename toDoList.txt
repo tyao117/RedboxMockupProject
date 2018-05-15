@@ -1,15 +1,13 @@
-Setup the Tomcat Programming Environment; X
-Using the Java Servlet examples above, make a sample Java servlet program work in your environment. The program should be able to talk to your database server using JDBC; X
-Implement the "Login" Page; X 
-Implement the "Search" Page; (currently working on this) X
-Implement the "Movie list" page, including the "Sorting" and "Prev/Next" features; (currently working on)
-	need to work on:
-		Pagination
-		Sorting
-Implement the "Single Movie" page; X
-Implement the "Single Star" page; X
-Implement the "Browsing by movie genre" page; (need to do)
-Implement the "Browsing by movie title" page; (need to do)
-Add a "Add to Shopping Cart" button to each movie on all pages; (need to do)
-Add a "Checkout" button to all pages; ( need to do)
-Implement the page to do checkout. (need to do)
+Prepared Statement
+    Login
+    MovieList
+    EmployeeLogin
+
+Stored Procedure
+    add movies
+
+Encrpt the passwords for the employees
+
+Parse out the data for the XML
+    
+
