@@ -59,31 +59,31 @@ public class CartServlet extends HttpServlet {
             session.setAttribute("previousItems", cart);
         }
         try {        	
-        	 synchronized (cart) {
-        		 if (cart != null) {
-        			 if (value != null) {
-        				 if (cart.get(id) != null) {
-        					 // change this logic if you are going to change the front end
-        					 cart.put(id, cart.get(id) + Integer.parseInt(value));
-        				 } else {
-        					 cart.put(id, 1);
-        				 }
-        			 }
-        			 Iterator<Entry<String, Integer>> it = cart.entrySet().iterator();
-                	 while (it.hasNext()) {
-                		 Map.Entry pair = (Map.Entry)it.next();
-                		 if ((Integer) pair.getValue() <= 0)
-                			 it.remove();
-                		 else {
-                		 JsonObject responseJsonObject = new JsonObject();
-                		 responseJsonObject.addProperty("movie_id", pair.getKey().toString());
-                		 responseJsonObject.addProperty("movie_quantity", pair.getValue().toString());
-                		 jsonArray.add(responseJsonObject);
-                		  // avoids a ConcurrentModificationException
-                		 }
-                	 }
-        		 }
-        	 }
+        	synchronized (cart) {
+        		if (cart != null) {
+        			if (value != null) {
+        				if (cart.get(id) != null) {
+        					// change this logic if you are going to change the front end
+        					cart.put(id, cart.get(id) + Integer.parseInt(value));
+        				} else {
+        					cart.put(id, 1);
+        				}
+        			}
+        			Iterator<Entry<String, Integer>> it = cart.entrySet().iterator();
+        			while (it.hasNext()) {
+        				Map.Entry pair = (Map.Entry)it.next();
+        				if ((Integer) pair.getValue() <= 0)
+        					it.remove();
+        				else {
+        					JsonObject responseJsonObject = new JsonObject();
+        					responseJsonObject.addProperty("movie_id", pair.getKey().toString());
+        					responseJsonObject.addProperty("movie_quantity", pair.getValue().toString());
+        					jsonArray.add(responseJsonObject);
+        					// avoids a ConcurrentModificationException
+        				}
+        			}
+        		}
+        	}
         	 session.setAttribute("previousItems", cart);
         	 out.write(jsonArray.toString());
         	 // Close all structures
