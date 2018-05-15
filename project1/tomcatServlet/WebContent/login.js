@@ -34,8 +34,7 @@ function submitLoginForm(formSubmitEvent) {
     //   which will cause the page to refresh
     //   see jQuery reference for details: https://api.jquery.com/submit/
     formSubmitEvent.preventDefault();
-    jQuery.post(
-        "api/login",
+    jQuery.post("api/login",
         // Serialize the login form to the data sent by POST request
         jQuery("#login_form").serialize(),
         (resultDataString) => handleLoginResult(resultDataString));

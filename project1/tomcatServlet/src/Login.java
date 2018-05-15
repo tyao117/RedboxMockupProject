@@ -14,7 +14,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-
+import org.jasypt.util.password.StrongPasswordEncryptor;
 /**
  * A servlet that takes input from a html <form> and talks to MySQL moviedb,
  * generates output as a html <table>
@@ -94,9 +94,9 @@ public class Login extends HttpServlet {
             	dbID = rs.getString("id");
             	dbccid = rs.getString("ccId");
             }
-
+            boolean passwordSuccess = new StrongPasswordEncryptor().checkPassword(password,dbPassword);
             // Give a result status
-            if (name.equals(dbName) && password.equals(dbPassword)) {
+            if (name.equals(dbName) && passwordSuccess) {
             	// Login success:
 
                 // set this user into the session
@@ -113,7 +113,8 @@ public class Login extends HttpServlet {
                 responseJsonObject.addProperty("status", "fail");
                 if (!name.equals(dbName)) {
                     responseJsonObject.addProperty("message", "user " + name + " doesn't exist");
-                } else if (!password.equals(dbPassword)) {
+                } else if (!passwordSuccess) {
+                	
                     responseJsonObject.addProperty("message", "incorrect password");
                 }
                 response.getWriter().write(responseJsonObject.toString());
