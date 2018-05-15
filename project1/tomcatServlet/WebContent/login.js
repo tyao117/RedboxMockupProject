@@ -16,7 +16,6 @@ function handleLoginResult(resultDataString) {
     }
     // If login fail, display error message on <div> with id "login_error_message"
     else {
-
         console.log("show error message");
         console.log(resultDataJson["message"]);
         alert(resultDataJson["message"]);

@@ -51,8 +51,20 @@ public class Login extends HttpServlet {
         	JsonObject responseJsonObject = new JsonObject();
         	responseJsonObject.addProperty("status", "success");
         	responseJsonObject.addProperty("message", e.getMessage());
+        	out.write(responseJsonObject.toString());
+        	out.close();
         	return;
         }
+        if (gRecaptchaResponse == null)
+        {
+        	JsonObject responseJsonObject = new JsonObject();
+        	responseJsonObject.addProperty("status", "success");
+        	responseJsonObject.addProperty("message", "must click on Recaptcha");
+        	out.write(responseJsonObject.toString());
+        	out.close();
+        	return;
+        }
+        
         try {
         	
             // Create a new connection to database
