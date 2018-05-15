@@ -70,23 +70,37 @@ public class MovieListServlet extends HttpServlet {
                 query = ("SELECT m.id, m.title, m.year, m.director, GROUP_CONCAT(DISTINCT g.name separator ',') AS genres, GROUP_CONCAT(DISTINCT s.name, ',', s.id separator ',') AS starNameID, r.rating\r\n" + 
                 		"	FROM movies m, stars_in_movies sim, stars s, genres g, genres_in_movies gim, ratings r\r\n" + 
                 		"   WHERE m.id = sim.movieid AND s.id = sim.starId AND g.id = gim.genreId AND m.id = gim.movieId AND m.id = r.movieId\r\n" + 
-                		"   AND g.name LIKE '%" + genre + "%' \r\n" + 
+                		"   AND g.name LIKE ? \r\n" + 
                 		"   GROUP BY m.id, m.title, m.year, m.director, r.rating \r\n" + 
                 		"	LIMIT 1000");        
-				
-
-
+         
 			} else {
                 query = ("SELECT m.id, m.title, m.year, m.director, GROUP_CONCAT(DISTINCT g.name separator ',') AS genres, GROUP_CONCAT(DISTINCT s.name, ',', s.id separator ',') AS starNameID, r.rating\r\n" + 
                 		"	FROM movies m, stars_in_movies sim, stars s, genres g, genres_in_movies gim, ratings r\r\n" + 
                 		"	WHERE m.id = sim.movieid AND s.id = sim.starId AND g.id = gim.genreId AND m.id = gim.movieId AND m.id = r.movieId\r\n" + 
-                		"	AND m.title LIKE '" + title + "%' AND m.director LIKE '%" + director + "%' AND m.year LIKE '%" + year + "%' \r\n" + 
-                		"	AND s.name LIKE '%" + star_name + "%' \r\n" + 
+                		"	AND m.title LIKE ? AND m.director LIKE ? AND m.year LIKE ? \r\n" + 
+                		"	AND s.name LIKE ? \r\n" + 
                 		"	GROUP BY m.id, m.title, m.year, m.director, r.rating \r\n" +
                 		"	LIMIT 1000"); 
 			}
 			// Declare our statement
 			PreparedStatement statement = dbcon.prepareStatement(query);
+
+						// Set the parameter represented by "?" in the query to the id we get from url,
+						// num 1 indicates the first "?" in the query
+			if (genre != null) {
+				genre = "%" + genre + "%";
+				statement.setString(1, genre);
+			} else {
+				title = title + "%";
+				director = "%" + director +"%";
+				year = "%" + year + "%";
+				star_name = "%" + star_name + "%";
+				statement.setString(1, title);
+				statement.setString(2, director);
+				statement.setString(3, year);
+				statement.setString(4, star_name);
+			}
 
 			// Set the parameter represented by "?" in the query to the id we get from url,
 			// num 1 indicates the first "?" in the query

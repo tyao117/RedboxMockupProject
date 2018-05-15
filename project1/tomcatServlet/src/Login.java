@@ -12,6 +12,7 @@ import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import org.jasypt.util.password.StrongPasswordEncryptor;
@@ -71,7 +72,6 @@ public class Login extends HttpServlet {
             Connection dbCon = dataSource.getConnection();
 
             // Declare a new statement
-            Statement statement = dbCon.createStatement();
 
             // Retrieve parameter "name" from the http request, which refers to the value of <input name="name"> in index.html
             String name = request.getParameter("email");
@@ -82,11 +82,15 @@ public class Login extends HttpServlet {
             String dbID = null;
             String dbccid = null;
             // Generate a SQL query
-            String query = String.format("SELECT email, password, ccId, id from customers where email='%s' or password='%s' limit 20", name, password);
+            
+            String query = String.format("SELECT email, password, ccId, id from customers where email=? or password=? limit 20");
+            PreparedStatement statement = dbCon.prepareStatement(query);
+            statement.setString(1, name);
+            statement.setString(2, password);
+            
             
             // Perform the query
-            ResultSet rs = statement.executeQuery(query);
-            
+            ResultSet rs = statement.executeQuery();
             //Check if you have a login
             while(rs.next()) {
             	dbName = rs.getString("email");
