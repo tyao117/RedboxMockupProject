@@ -1,0 +1,125 @@
+24|Dram
+25|Susp
+26|Romt
+27|Musc
+28|Myst
+29|susp
+30|Comd
+31|Docu
+32|Advt
+33|Actn
+34|West
+35|Fant
+36|ScFi
+37|Cart
+38|Horr
+39|BioP
+40|Hist
+41|Epic
+42|Biop
+43|CnRb
+44|DRam
+45|Surr
+46|Crim
+47|Cond
+48|Romt Comd
+49|Noir
+50|BioG
+51|Disa
+52|West1
+53|Adctx
+54|txx
+55|Camp
+56|SciF
+57|Surl
+58|Porn
+59|surreal
+60|RomtAdvt
+61|Ctxxx
+62|stage musical
+63|Muusc
+64|Avant Garde
+65|CnRbb
+66|Draam
+67|ram
+68|Ctcxx
+69|Dramn
+70|Psych Dram
+71|Ctxx
+72|Comdx
+73|comd
+74|Homo
+75|DRAM
+76|romt
+77|Muscl
+78|CmR
+79|Duco
+80|dram
+81|H
+82|S.F.
+83|actn
+84|FantH*
+85|RFP; H*
+86|musc
+87|Natu
+88|TV
+89|Scat
+90|BiopP
+91|Mystp
+92|DraM
+93|CnR
+94|bnw TV
+95|col TV
+96|H**
+97|Bio
+98|AvGa
+99|Comd West
+100|H0
+101|Weird
+102|noir
+103|Scfi
+104|Dramd
+105|fant
+106|Dram>
+107|Cult
+108|porn
+109|Ront
+110|Sctn
+111|Dist
+112|Hor
+113|sports
+114|Psyc
+115|Adct
+116|Viol
+117|CA
+118|BioPx
+119|Axtn
+120|SxFi
+121|BioB
+122|Kinky
+123|BioPP
+124|TVmini
+125|Ducu
+126|Romtx
+127|Sati
+128|Dicu
+129|Romt Fant
+130|Comd Noir
+131|Faml
+132|UnDr
+133|Expm
+134|Noir Comd Romt
+135|Art Video
+136|Romt Actn
+137|Dram Docu
+138|Allegory
+139|Romt. Comd
+140|Dram.Actn
+141|Noir Comd
+142|Porb
+143|verite
+144|Romt Dram
+145|anti-Dram
+146|Act
+147|Docu Dram
+148|Road
