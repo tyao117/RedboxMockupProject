@@ -19,7 +19,7 @@ function handleLoginResult(resultDataString) {
         console.log("show error message");
         console.log(resultDataJson["message"]);
         alert(resultDataJson["message"]);
-        jQuery("#login_error_message").text(resultDataJson["message"]);
+        //jQuery("#login_error_message").text(resultDataJson["message"]);
     }
 }
 
@@ -34,7 +34,7 @@ function submitLoginForm(formSubmitEvent) {
     //   which will cause the page to refresh
     //   see jQuery reference for details: https://api.jquery.com/submit/
     formSubmitEvent.preventDefault();
-    jQuery.post("api/login",
+    jQuery.post("/api/employee_login",
         // Serialize the login form to the data sent by POST request
         jQuery("#login_form").serialize(),
         (resultDataString) => handleLoginResult(resultDataString));
