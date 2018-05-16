@@ -12,7 +12,7 @@ function handleLoginResult(resultDataString) {
     // If login success, redirect to index.html page
     if (resultDataJson["status"] === "success") {
     	console.log("success")
-        window.location.replace("main.html");
+        window.location.replace("_employeePortal.html");
     }
     // If login fail, display error message on <div> with id "login_error_message"
     else {
@@ -34,7 +34,7 @@ function submitLoginForm(formSubmitEvent) {
     //   which will cause the page to refresh
     //   see jQuery reference for details: https://api.jquery.com/submit/
     formSubmitEvent.preventDefault();
-    jQuery.post("/api/employee_login",
+    jQuery.post("api/employee_login",
         // Serialize the login form to the data sent by POST request
         jQuery("#login_form").serialize(),
         (resultDataString) => handleLoginResult(resultDataString));

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Main Page</title>
+</head>
+<body>
+
+<h1 ALIGN="CENTER">Fabflix Tables</h1>
+	<div ALIGN="CENTER">
+		<button id="Add Movie" class="float-center submit-button">Add Movie</button>
+		<button id="Home" class="float-center submit-button">Home</button>
+		<button id="Add Star" class="float-center submit-button">Add Star</button>
+	</div>
+	<div>
+	
+	</div>
+	<script type="text/javascript">
+		document.getElementById("Add Movie").onclick = function() {
+			window.location.replace("_add_movie.html");
+		};
+
+		document.getElementById("Home").onclick = function() {
+			window.location.replace("_employeePortal.html");
+		};
+
+		document.getElementById("Add Star").onclick = function() {
+			window.location.replace("_add_star.html");
+		}
+	</script>
+<script src="_tables.js"></script>
+</body>
+</html>

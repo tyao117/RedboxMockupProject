@@ -79,15 +79,13 @@ public class LoginEmployees extends HttpServlet {
             // Make new variables for the result
             String dbName = null;
             String dbPassword = null;
-            String dbID = null;
-            String dbccid = null;
+
             // Generate a SQL query
             
             String query = String.format("SELECT email, password from employees where email=? or password=? limit 20");
             PreparedStatement statement = dbCon.prepareStatement(query);
             statement.setString(1, name);
             statement.setString(2, password);
-            
             
             // Perform the query
             ResultSet rs = statement.executeQuery();
@@ -100,11 +98,8 @@ public class LoginEmployees extends HttpServlet {
             // Give a result status
             if (name.equals(dbName) && passwordSuccess) {
             	// Login success:
-
                 // set this user into the session
                 request.getSession().setAttribute("user", new User(name));
-                request.getSession().setAttribute("customerId", dbID);
-                request.getSession().setAttribute("CCID", dbccid);
                 JsonObject responseJsonObject = new JsonObject();
                 responseJsonObject.addProperty("status", "success");
                 responseJsonObject.addProperty("message", "success");
