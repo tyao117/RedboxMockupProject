@@ -24,10 +24,13 @@ public class SAXParsing {
 			e.printStackTrace();
 		}
     	
-        MovieSAXParser spe = new MovieSAXParser();
-        spe.runMovieParser(statement);
-//        System.out.println(genres);
-        timeCompare tc = new timeCompare(spe.getMovieMapping(), statement);
+        MovieSAXParser msp = new MovieSAXParser(statement);
+        msp.runMovieParser();
+        StarsSAXParser ssp = new StarsSAXParser(statement);
+        ssp.runStarsParser();
+        CastSAXParser csp = new CastSAXParser(statement, ssp.getStarsMapping(), msp.getMovieMapping());
+        csp.runCastsParser();
+        timeCompare tc = new timeCompare(msp.getMovieMapping(), statement);
         tc.runTimeCompare();
     }
 

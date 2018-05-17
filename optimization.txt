@@ -1,0 +1,20 @@
+We implemented the following three insert methods and compared the time it took to complete all the inserts.
+The target was a table with 21097 inserts incoming with 100 data elements already in the table.
+Notes, time was measured with system time.
+
+method 1: each insert has 2 queries
+	  query 1: query to check for repeat
+	  query 2: insert query
+
+method 2: create an in-memory table of data
+	  check the in-memory table for repeat 
+	  insert query
+
+method 3: create and in-memory table of data
+	  check the in-memory table for repeat
+	  write data to a file
+	  load all the written data into mysql
+
+Method 1 took 100644 miliseconds to complete.
+Method 2 took 25446 miliseconds to complete.
+Method 3 took 158 miliseconds to complete.

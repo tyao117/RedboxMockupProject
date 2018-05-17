@@ -24,9 +24,9 @@ public class timeCompare {
 	}
 	
 	public void runTimeCompare() {
-//		createTable();
-//		method1();
-//		dropTable();
+		createTable();
+		method1();
+		dropTable();
 
 		createTable();
 		method2();
@@ -136,7 +136,7 @@ public class timeCompare {
 				String id = rs.getString("xml_id");
 				dummyData.put(id, id);
 			}
-			Writer my_writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("dummy.txt"), "utf-8"));
+			Writer my_writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("test.txt"), "ISO-8859-1"));
 			
 			for(String key : movieIdMapping.keySet()) {
 					
@@ -153,7 +153,7 @@ public class timeCompare {
 			
 			my_writer.close();
 			
-			query = "load data local infile 'dummy.txt' into table movie_id_maps "
+			query = "load data local infile 'test.txt' into table movie_id_maps "
 				  + "columns terminated by '|' "
 				  + "lines terminated by '\\n';";
 			statement.execute(query);

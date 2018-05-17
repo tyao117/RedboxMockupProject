@@ -19,7 +19,6 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
-
 import org.xml.sax.helpers.DefaultHandler;
 
 public class MovieSAXParser extends DefaultHandler {
@@ -49,12 +48,13 @@ public class MovieSAXParser extends DefaultHandler {
 	
 
 
-    public MovieSAXParser() {
+    public MovieSAXParser(Statement statement) {
     	movieXML = new File("stanford-movies/mains243.xml");
         mId = "";
         mName = "";
         mYear = "";
         mDir = "";
+        this.statement = statement;
         movies = new HashMap<String, String>();
         movieGenres = new HashSet<String>();
         genres = new HashMap<String, Integer>();
@@ -62,9 +62,7 @@ public class MovieSAXParser extends DefaultHandler {
         genres_in_movies = new HashSet<String>();
     }
 
-    public void runMovieParser(Statement statement) {       	
-
-            this.statement = statement;
+    public void runMovieParser() {       	
             parseDocument();
 
     }
@@ -76,7 +74,7 @@ public class MovieSAXParser extends DefaultHandler {
     private void parseDocument() {
 //        System.out.println("set up parsing");
         createHashes();
-        createTempTable();
+        getMaxIds();
 
         //get a factory
         SAXParserFactory spf = SAXParserFactory.newInstance();
@@ -130,8 +128,7 @@ public class MovieSAXParser extends DefaultHandler {
     	}
     }
     
-    public void createTempTable() {
-//    	System.out.println("select max(id) as id from movies");
+    public void getMaxIds() {
     	try {
         	String query = "select max(id) as id from movies;";
 			ResultSet rs = statement.executeQuery(query);
@@ -157,15 +154,14 @@ public class MovieSAXParser extends DefaultHandler {
         //reset
     	if (qName.equalsIgnoreCase("movies")) {
             try {
-    			writer1 = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("movies.txt"), "utf-8"));
-    			writer2 = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("genres.txt"), "utf-8"));
-    			writer3 = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("genres_in_movies.txt"), "utf-8"));
+    			writer1 = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("movies.txt"), "ISO-8859-1"));
+    			writer2 = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("genres.txt"), "ISO-8859-1"));
+    			writer3 = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("genres_in_movies.txt"), "ISO-8859-1"));
     		} catch (UnsupportedEncodingException | FileNotFoundException e) {
     			// TODO Auto-generated catch block
     			e.printStackTrace();
     		}
     	} else if (qName.equalsIgnoreCase("film")) {
-//            System.out.println("Found a film");
         	//Clear movie data for next movie by same director
         	mId = null;
         	mName = null;
@@ -175,12 +171,26 @@ public class MovieSAXParser extends DefaultHandler {
     }
 
     public void characters(char[] ch, int start, int length) throws SAXException {
-        tempVal = new String(ch, start, length);
+        tempVal = new String(ch, start, length).trim();
     }
 
     
     public void endElement(String uri, String localName, String qName) throws SAXException {
         if (qName.equalsIgnoreCase("film")) {
+        	if (xmlId == null || mName == null || mYear == null || mDir == null) {
+        		System.out.println("This table does not take null values. "
+        				+ "The following movie was not added id: " + xmlId + ", title: " + mName + ", year: " + mYear + ", director: " + mDir);
+        		return;
+        	}
+        	
+        	//move id increment to the above if-statement if time allows it.
+        	maxMId += 1;
+        	mId = Integer.toString(maxMId);
+        	
+        	if(mId.length() == 6)
+        		mId = "tt0".concat(mId);
+        	else
+        		mId = "tt".concat(mId);
         	String movie = mName + "|" + mYear + "|" + mDir;
     		myMap<String, String> map = new myMap<String, String>(movies);
     		
@@ -188,18 +198,18 @@ public class MovieSAXParser extends DefaultHandler {
         	{
         		String oMovie = mId + "|" + movie + "\n";
         		movieIdMapping.put(xmlId, mId);
-//        		System.out.println("Write " + oMovie + " to movies.txt file");
         		try {
 					writer1.write(oMovie);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+        		
         	} else { // else change the key of the movie_id mapping to reflect the fact that the movie from the the xml already exists in database
         		movieIdMapping.put(xmlId, movieIdMapping.remove(movies.get(movie)));
         	}
+        	
         	for(String temp : movieGenres) {
-        		temp = temp.trim();
         		
         		if(temp.isEmpty()) {
         			System.out.println("no genre avaliable");
@@ -211,7 +221,6 @@ public class MovieSAXParser extends DefaultHandler {
         		{
         			++maxGId;
         			String newGenre = Integer.toString(genres.get(temp)) + "|" + temp + "\n";
-//        			System.out.println("Write " + newGenre + " to genres.txt file");
         			try {
 						writer2.write(newGenre);
 					} catch (IOException e) {
@@ -222,7 +231,6 @@ public class MovieSAXParser extends DefaultHandler {
         		
         		String gim = genres.get(temp) + "|" + movies.get(movie);// reminder: movies.get(movie) returns the movie_id
         		if(genres_in_movies.add(gim)) {
-//        			System.out.println("Write " + gim + " to genres_in_movies.txt file");
         			gim += "\n";
         			try {
 						writer3.write(gim);
@@ -235,24 +243,18 @@ public class MovieSAXParser extends DefaultHandler {
         	
         	movieGenres.clear();
         } else if (qName.equalsIgnoreCase("fid")) {
-        	//move id increment to the above if-statement if time allows it.
-        	maxMId += 1;
-        	mId = Integer.toString(maxMId);
-        	
-        	if(mId.length() == 6)
-        		mId = "tt0".concat(mId);
-        	else
-        		mId = "tt".concat(mId);
-        	
-            xmlId = tempVal;
+        	xmlId = (tempVal.length() > 0) ? tempVal : null;
 //            System.out.println(mId + " " + xmlId);
         } else if (qName.equalsIgnoreCase("t")) {
-            mName = tempVal;
+            mName = (tempVal.length() > 0) ? tempVal : null;
         } else if (qName.equalsIgnoreCase("year")) {
-            mYear = tempVal;
+            mYear = (tempVal.length() > 0) ? tempVal : null;
         } else if (qName.equalsIgnoreCase("dirn") && mDir == null) {
-        	mDir = tempVal;
+        	mDir = (tempVal.length() > 0) ? tempVal : null;
         } else if (qName.equalsIgnoreCase("cat")) {
+        	if (tempVal.length() == 0) {
+        		System.out.println("one of genres was empty for " + xmlId + ", " + mName + ", " + mYear + ", " + mDir);
+        	}
         	movieGenres.add(tempVal);
         } else if (qName.equalsIgnoreCase("movies")) {
         	try {
@@ -260,23 +262,26 @@ public class MovieSAXParser extends DefaultHandler {
 				writer2.close();
 				writer3.close();
 
-				/*
-				String query = "load data local infile 'movies.txt' into table movie_id_maps "
+				
+				String query = "load data local infile 'movies.txt' into table movies "
 					  + "columns terminated by '|' "
 					  + "lines terminated by '\\n';";
 				statement.execute(query);
 				
-				query = "load data local infile 'genres.txt' into table movie_id_maps "
+				query = "load data local infile 'genres.txt' into table genres "
 						+ "columns terminated by '|' "
 						+ "lines terminated by '\\n';";
 				statement.execute(query);
 				
-				query = "load data local infile 'genres_in_movies.txt' into table movie_id_maps "
+				query = "load data local infile 'genres_in_movies.txt' into table genres_in_movies "
 						+ "columns terminated by '|' "
 						+ "lines terminated by '\\n';";
 				statement.execute(query);
-				*/
+				
 			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -284,130 +289,3 @@ public class MovieSAXParser extends DefaultHandler {
     }
 
 }
-
-
-
-
-
-
-//This following was originally used to condense the amount of genres needed to be added. May re-implement if time allows it.
-
-//public void insertGenre(String genre) {
-//	System.out.println("insert ignore into genres (name) values (" + genre + ");");
-//}
-//
-//public void insertMovie() {
-//	System.out.println("insert ignore into movies values (" + mId + ", " + mName + ", " + mYear + ", " + mDir + ");");
-//}
-//
-//public void insertGenreInMovie(String genre) {
-//	System.out.println("insert ignore into genres_in_movies values ((select id from genres where name =" + genre + "), " + mId +");");
-//}
-
-//if(temp.equalsIgnoreCase("comd") | temp.equalsIgnoreCase("comdx")) {
-//insertGenre("comedy");
-//insertMovie();
-//insertGenreInMovie("comedy");           		
-//} else if(temp.equalsIgnoreCase("epic")) {
-//insertGenre("epic");
-//insertMovie();
-//insertGenreInMovie("epic");           		
-//} else if(temp.equalsIgnoreCase("s.f.") || temp.equalsIgnoreCase("Scfi")  || temp.equalsIgnoreCase("Sxfi")|| temp.equalsIgnoreCase("Scif")) {
-//insertGenre("Sci-Fi");
-//insertMovie();
-//insertGenreInMovie("Sci-Fi");           		
-//} else if(temp.equalsIgnoreCase("stage musical") || temp.equalsIgnoreCase("Muscl") || temp.equalsIgnoreCase("Musc")|| temp.equalsIgnoreCase("Muusc")) {
-//insertGenre("Musical");
-//insertMovie();
-//insertGenreInMovie("Musical");           		
-//} else if(temp.equalsIgnoreCase("myst")) {
-//insertGenre("Mystery");
-//insertMovie();
-//insertGenreInMovie("Mystery");           		
-//} else if(temp.equalsIgnoreCase("susp")) {
-//insertGenre("Suspense");
-//insertMovie();
-//insertGenreInMovie("Suspense");           		
-//} else if(temp.equalsIgnoreCase("avga") || temp.equalsIgnoreCase("Avant Garde")) {
-//insertGenre("Avant-Garde");
-//insertMovie();
-//insertGenreInMovie("Avant-Garde");           		
-//} else if(temp.equalsIgnoreCase("dram") || temp.equalsIgnoreCase("draam") || temp.equalsIgnoreCase("dramn") || temp.equalsIgnoreCase("drama") || temp.equalsIgnoreCase("dramd") || temp.equalsIgnoreCase("Dram>")) {
-//insertGenre("Drama");
-//insertMovie();
-//insertGenreInMovie("Drama");           		
-//} else if(temp.equalsIgnoreCase("actn") || temp.equalsIgnoreCase("act") || temp.equalsIgnoreCase("axtn")) {
-//insertGenre("Action");
-//insertMovie();
-//insertGenreInMovie("Action");           		
-//} else if(temp.equalsIgnoreCase("Hor") || temp.equalsIgnoreCase("Horr")) {
-//insertGenre("Horror");
-//insertMovie();
-//insertGenreInMovie("Horror");           		
-//} else if(temp.equalsIgnoreCase("Expm")) {
-//insertGenre("Experimental");
-//insertMovie();
-//insertGenreInMovie("Experimental");           		
-//} else if(temp.equalsIgnoreCase("verite")) {
-//insertGenre("Verite");
-//insertMovie();
-//insertGenreInMovie("Verite");           		
-//} else if(temp.equalsIgnoreCase("Advt")) {
-//insertGenre("Adventure");
-//insertMovie();
-//insertGenreInMovie("Adventure");           		
-//} else if(temp.equalsIgnoreCase("Psyc")) {
-//insertGenre("Psychological");
-//insertMovie();
-//insertGenreInMovie("Psychological");           		
-//} else if(temp.equalsIgnoreCase("porn") || temp.equalsIgnoreCase("porb")) {
-//insertGenre("Adult");
-//insertMovie();
-//insertGenreInMovie("Adult");           		
-//} else if(temp.equalsIgnoreCase("fant")) {
-//insertGenre("Fantasy");
-//insertMovie();
-//insertGenreInMovie("Fantasy");           		
-//} else if(temp.equalsIgnoreCase("Hist")) {
-//insertGenre("Historical");
-//insertMovie();
-//insertGenreInMovie("Historical");           		
-//} else if(temp.equalsIgnoreCase("romt") || temp.equalsIgnoreCase("ront")) {
-//insertGenre("Romantic");
-//insertMovie();
-//insertGenreInMovie("Romantic");           		
-//} else if(temp.equalsIgnoreCase("docu") || temp.equalsIgnoreCase("ducu") || temp.equalsIgnoreCase("dicu") || temp.equalsIgnoreCase("duco")) {
-//insertGenre("Documentary");
-//insertMovie();
-//insertGenreInMovie("Documentary");           		
-//} else if(temp.equalsIgnoreCase("fam") || temp.equalsIgnoreCase("faml")) {
-//insertGenre("Family");
-//insertMovie();
-//insertGenreInMovie("Family");           		
-//} else if(temp.equalsIgnoreCase("Cult")) {
-//insertGenre("Cult");
-//insertMovie();
-//insertGenreInMovie("Cult");           		
-//} else if(temp.equalsIgnoreCase("West1") || temp.equalsIgnoreCase("West")) {
-//insertGenre("Western");
-//insertMovie();
-//insertGenreInMovie("Western");           		
-//} else if(temp.equalsIgnoreCase("sport")) {
-//insertGenre("Sport");
-//insertMovie();
-//insertGenreInMovie("Sport");           		
-//} else if(temp.equalsIgnoreCase("cart")) {
-//insertGenre("Cartoon");
-//insertMovie();
-//insertGenreInMovie("Cartoon");           		
-//} else if(temp.equalsIgnoreCase("biop")) {
-//insertGenre("Biography");
-//insertMovie();
-//insertGenreInMovie("Biography");           		
-//} else if(temp.equalsIgnoreCase("noir")) {
-//insertGenre("Noir");
-//insertMovie();
-//insertGenreInMovie("Noir");           		
-//} else {
-//System.out.println("Invalid genre: " + temp + ", movie is not added");
-//}
