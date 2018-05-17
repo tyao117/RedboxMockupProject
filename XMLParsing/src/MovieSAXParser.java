@@ -64,7 +64,6 @@ public class MovieSAXParser extends DefaultHandler {
 
     public void runMovieParser() {       	
             parseDocument();
-
     }
     
     public HashMap<String,String> getMovieMapping() {
@@ -158,6 +157,7 @@ public class MovieSAXParser extends DefaultHandler {
     			writer2 = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("genres.txt"), "ISO-8859-1"));
     			writer3 = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("genres_in_movies.txt"), "ISO-8859-1"));
                 writer4 = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("ratings.txt"), "ISO-8859-1"));
+
     		} catch (UnsupportedEncodingException | FileNotFoundException e) {
     			// TODO Auto-generated catch block
     			e.printStackTrace();
@@ -197,7 +197,7 @@ public class MovieSAXParser extends DefaultHandler {
         	if(map.add(movie, mId)) // If successfully add the new movie, write movie to csv file and add the movie_id mapping to the movieIds hashMap
         	{
         		String oMovie = mId + "|" + movie + "\n";
-                String oRating = mId + "|" + 0.0 + "|" + 0 + "\n";
+                String oRating = mId + "|" + "0.0" + "|" + "0" + "\n";
         		movieIdMapping.put(xmlId, mId);
         		try {
 					writer1.write(oMovie);
@@ -319,10 +319,7 @@ public class MovieSAXParser extends DefaultHandler {
         		} else {
         			System.out.println("The following genre is not accepted: " + temp);
         			--size;
-        			if (size == 0) {
-        				System.out.println("This movie does not have any genres. Movie " + mName + " not added");
-        				return;
-        			}
+        			return;
         		}
         		
         		myMap<String, Integer> map2 = new myMap<String, Integer>(genres);
@@ -363,6 +360,7 @@ public class MovieSAXParser extends DefaultHandler {
         } else if (qName.equalsIgnoreCase("cat")) {
         	if (tempVal.length() == 0) {
         		System.out.println("one of genres was empty for " + xmlId + ", " + mName + ", " + mYear + ", " + mDir);
+        		return;
         	}
         	movieGenres.add(tempVal);
         } else if (qName.equalsIgnoreCase("movies")) {
@@ -370,28 +368,33 @@ public class MovieSAXParser extends DefaultHandler {
 				writer1.close();
 				writer2.close();
 				writer3.close();
+				writer4.close();
 
-				
+				System.out.println("loading the movies ~~~!~~!~!");
 				String query = "load data local infile 'movies.txt' into table movies "
 					  + "columns terminated by '|' "
 					  + "lines terminated by '\\n';";
 				statement.execute(query);
-				
+
+				System.out.println("loading the gneres ~~~!~~!~!");
 				query = "load data local infile 'genres.txt' into table genres "
 						+ "columns terminated by '|' "
 						+ "lines terminated by '\\n';";
 				statement.execute(query);
 				
+				System.out.println("loading the gneres_in_movies ~~~!~~!~!");
 				query = "load data local infile 'genres_in_movies.txt' into table genres_in_movies "
 						+ "columns terminated by '|' "
 						+ "lines terminated by '\\n';";
 				statement.execute(query);
-
+				
+				System.out.println("loading the ratings~~~!~~!~!");
                 query = "load data local infile 'ratings.txt' into ratings "
                         + "columns terminated by '|' "
                         + "lines terminated by '\\n';";
                 statement.execute(query);
 				
+                
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
