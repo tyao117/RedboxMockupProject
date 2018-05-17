@@ -57,50 +57,63 @@ response.setContentType("application/json"); // Response mime type
 
 		try {
             Connection dbCon = dataSource.getConnection();
-            String query = "call add_movie(?, ?, ?, ?, ?, ?);";            
-
+            
+            String query = "call add_movie(?, ?, ?, ?, ?, ?);";        
+            
+            String checkQuery = "SELECT * FROM movies\n" + 
+            		"WHERE title =? AND year =? AND director =?;";
+            
+            java.sql.PreparedStatement checkStatement = dbCon.prepareStatement(checkQuery);
+			
             java.sql.PreparedStatement preparedStatement = dbCon.prepareStatement(query);
             
-            if (id == "") {
-                String maxIdQuery =  "SELECT max(id) from movies;";
-                java.sql.PreparedStatement maxIdStatement = dbCon.prepareStatement(maxIdQuery);
-    			ResultSet resultSet = maxIdStatement.executeQuery();
-    			while (resultSet.next()) {
-    				String maxID = resultSet.getString("max(id)");
-    				String s_maxID = maxID.substring(2);
-    				Integer i_maxID = Integer.parseInt(s_maxID);
-    				i_maxID ++;
-    				s_maxID = Integer.toString(i_maxID);
-    				s_maxID = "tt0" + s_maxID;
-    				
-	            preparedStatement.setString(1, s_maxID);
-	            preparedStatement.setString(2, title);
-	            preparedStatement.setString(3, year);
-	            preparedStatement.setString(4, director);
-	            preparedStatement.setString(5, genre);
-	            preparedStatement.setString(6, star);
-    			}
-            }
-            else {
-                preparedStatement.setString(1, id);
-                preparedStatement.setString(2, title);
-                preparedStatement.setString(3, year);
-                preparedStatement.setString(4, director);
-                preparedStatement.setString(5, genre);
-                preparedStatement.setString(6, star);
-            }
+            checkStatement.setString(1, title);
+            checkStatement.setString(2, year);
+            checkStatement.setString(3, director);
 
+			ResultSet resultSet1 = checkStatement.executeQuery();
+			
+			if (resultSet1.first()) {
+				JsonObject jsonObject = new JsonObject();
+				jsonObject.addProperty("status", "fail");
+				jsonObject.addProperty("message", "Duplicate movie");
+				out.write(jsonObject.toString());
+			}
+			else {
+	            if (id == "") {
+	                String maxIdQuery =  "SELECT max(id) from movies;";
+	                java.sql.PreparedStatement maxIdStatement = dbCon.prepareStatement(maxIdQuery);
+	    			ResultSet resultSet2 = maxIdStatement.executeQuery();
+	    			while (resultSet2.next()) {
+	    				String maxID = resultSet2.getString("max(id)");
+	    				String s_maxID = maxID.substring(2);
+	    				Integer i_maxID = Integer.parseInt(s_maxID);
+	    				i_maxID ++;
+	    				s_maxID = Integer.toString(i_maxID);
+	    				s_maxID = "tt0" + s_maxID;
+	    				
+		            preparedStatement.setString(1, s_maxID);
+		            preparedStatement.setString(2, title);
+		            preparedStatement.setString(3, year);
+		            preparedStatement.setString(4, director);
+		            preparedStatement.setString(5, genre);
+		            preparedStatement.setString(6, star);
+	    			}
+	            }
+	            else {
+	                preparedStatement.setString(1, id);
+	                preparedStatement.setString(2, title);
+	                preparedStatement.setString(3, year);
+	                preparedStatement.setString(4, director);
+	                preparedStatement.setString(5, genre);
+	                preparedStatement.setString(6, star);
+	            }
             preparedStatement.executeUpdate();
-            
 			JsonObject jsonObject = new JsonObject();
 			jsonObject.addProperty("status", "success");
 			jsonObject.addProperty("message", "Successful insertion. ");
 		    response.getWriter().write(jsonObject.toString());
-		} catch (SQLException ex) {
-			JsonObject jsonObject = new JsonObject();
-			jsonObject.addProperty("status", "fail");
-			jsonObject.addProperty("message", ex.getMessage());
-			out.write(jsonObject.toString());
+			}
 		} catch (Exception e) {
 			// write error message JSON object to output
 			e.printStackTrace();
@@ -120,5 +133,6 @@ response.setContentType("application/json"); // Response mime type
 	    return s != null && s.matches("[-+]?\\d*\\.?\\d+");  
 	}  
 
-
 }
+
+

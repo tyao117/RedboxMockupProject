@@ -7,48 +7,43 @@
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Add Movie</title>
+<title>Add Star</title>
 
 </head>
 
 <body>
 	<div ALIGN="CENTER">
-		<button id="Home" class="float-center submit-button">Add
+		<button id="Add Movie" class="float-center submit-button">Add
 			Movie</button>
 		<button id="Show Tables" class="float-center submit-button">Show
 			tables</button>
-		<button id="Add Star" class="float-center submit-button">Add
-			Star</button>
 		<button id="Add Info" class="float-center submit-button">Add
 			Info</button>
+		<button id="Home" class="float-center submit-button">Home</button>
 	</div>
     <body BGCOLOR="#FDF5E6">
-		<h1 ALIGN="CENTER">Add Movie</h1>
-			<form id="add_movie_form" method="POST" action="#">
-    			ID: <input TYPE="INPUT" NAME="movie_id"><br>
-    			Title: <input TYPE="INPUT" NAME="movie_title"><br>
-    			Director: <input TYPE="INPUT" NAME="movie_director"><br>
-    			Year: <input TYPE="INPUT" NAME="movie_year"><br>
-    			Genre: <input TYPE="INPUT" NAME="movie_genre"><br>
-    			Star Name:<input TYPE="INPUT" NAME="movie_star"><br>
+		<h1 ALIGN="CENTER">Add Star</h1>
+			<form id="add_star_form" method="POST" action="#">
+    			Star Name: <input TYPE="INPUT" NAME="star_name"><br>
+    			Birth Year: <input TYPE="INPUT" NAME="star_birthyear"><br>
     			<input TYPE="SUBMIT" VALUE="Submit">
 			</form>
 			
 <!-- include jQuery-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <!-- include our own JS file -->
-<script src="./_add_movie.js"></script>
+<script src="./_add_star.js"></script>
 <script type="text/javascript">
-		document.getElementById("Home").onclick = function() {
-			window.location.replace("_employeePortal.html");
+		document.getElementById("Add Star").onclick = function() {
+			window.location.replace("_add_movie.html");
 		};
 
 		document.getElementById("Show Tables").onclick = function() {
 			window.location.replace("_tables.html");
 		};
 
-		document.getElementById("Add Star").onclick = function() {
-			window.location.replace("_add_star.html");
+		document.getElementById("Home").onclick = function() {
+			window.location.replace("_employeePortal.html");
 		}
 		document.getElementById("Add Info").onclick = function() {
 			window.location.replace("_add_info.html");
