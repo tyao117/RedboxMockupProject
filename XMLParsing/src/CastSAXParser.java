@@ -117,7 +117,8 @@ public class CastSAXParser extends DefaultHandler {
 	    public void endElement(String uri, String localName, String qName) throws SAXException {
 	    	if (qName.equalsIgnoreCase("m")) {
 	    		if(sId == null || mId == null) {
-	    			System.out.println("Actor or movie does not exsist in database. Actor: " + actor + ", movie id: " + movieId);
+	    			System.out.println("Actor or movie does not exist in database. Actor: " + actor + ", movie id: " + movieId);
+	    			return;
 	    		}
 	    		String cast = sId + "|" + mId;
 	    		if(casts.add(cast)) {

@@ -178,8 +178,7 @@ public class MovieSAXParser extends DefaultHandler {
     public void endElement(String uri, String localName, String qName) throws SAXException {
         if (qName.equalsIgnoreCase("film")) {
         	if (xmlId == null || mName == null || mYear == null || mDir == null) {
-        		System.out.println("This table does not take null values. "
-        				+ "The following movie was not added id: " + xmlId + ", title: " + mName + ", year: " + mYear + ", director: " + mDir);
+        		System.out.println("Error: the following movie was not added id: " + xmlId + ", title: " + mName + ", year: " + mYear + ", director: " + mDir);
         		return;
         	}
         	
@@ -214,6 +213,101 @@ public class MovieSAXParser extends DefaultHandler {
         		if(temp.isEmpty()) {
         			System.out.println("no genre avaliable");
         			continue;
+        		}
+        		
+        		if(temp.equalsIgnoreCase("comd") || temp.equalsIgnoreCase("comdx") || temp.equalsIgnoreCase("cond")) {
+	        		temp = "Comedy";        		
+        		} else if(temp.equalsIgnoreCase("epic")) {
+        			temp = "Epic";
+        		} else if(temp.equalsIgnoreCase("s.f.") || temp.equalsIgnoreCase("Scfi")  || temp.equalsIgnoreCase("Sxfi")|| temp.equalsIgnoreCase("Scif")) {
+        			temp = "Sci-Fi";
+        		} else if(temp.equalsIgnoreCase("stage musical") || temp.equalsIgnoreCase("Muscl")) {
+        			temp = "Musical";
+        		} else if (temp.equalsIgnoreCase("Musc")|| temp.equalsIgnoreCase("Muusc")) {
+        			temp = "Music";
+        		}else if(temp.equalsIgnoreCase("myst") || temp.equalsIgnoreCase("mystp")) {
+        			temp = "Mystery";
+        		} else if(temp.equalsIgnoreCase("susp")) {
+        			temp = "Suspense";
+        		} else if(temp.equalsIgnoreCase("avga") || temp.equalsIgnoreCase("Avant Garde")) {
+        			temp = "Avant-Garde";
+        		} else if(temp.equalsIgnoreCase("dram") || temp.equalsIgnoreCase("draam") || temp.equalsIgnoreCase("dramn") || temp.equalsIgnoreCase("drama") || temp.equalsIgnoreCase("dramd") || temp.equalsIgnoreCase("Dram>")) {
+        			temp = "Drama";
+        		} else if(temp.equalsIgnoreCase("actn") || temp.equalsIgnoreCase("act") || temp.equalsIgnoreCase("axtn")) {
+        			temp = "Action";
+        		} else if(temp.equalsIgnoreCase("Hor") || temp.equalsIgnoreCase("Horr")) {
+        			temp = "Horror";
+        		} else if(temp.equalsIgnoreCase("Expm")) {
+        			temp = "Experimental";
+        		} else if(temp.equalsIgnoreCase("verite")) {
+        			temp = "Verite";
+        		} else if(temp.equalsIgnoreCase("Advt") || temp.equalsIgnoreCase("Adctx") || temp.equalsIgnoreCase("Adct")) {
+        			temp = "Adventure";
+        		} else if(temp.equalsIgnoreCase("Psyc")) {
+        			temp = "Psychological";
+        		} else if(temp.equalsIgnoreCase("porn") || temp.equalsIgnoreCase("porb") || temp.equalsIgnoreCase("kinky")) {
+        			temp = "Adult";
+        		} else if(temp.equalsIgnoreCase("fant")) {
+        			temp = "Fantasy";
+        		} else if(temp.equalsIgnoreCase("Hist")) {
+        			temp = "History"; 
+        		} else if(temp.equalsIgnoreCase("romt") || temp.equalsIgnoreCase("Romtx") || temp.equalsIgnoreCase("Ront")) {
+        			temp = "Romance";
+        		} else if(temp.equalsIgnoreCase("docu") || temp.equalsIgnoreCase("ducu") || temp.equalsIgnoreCase("dicu") || temp.equalsIgnoreCase("duco")) {
+        			temp = "Documentary";
+        		} else if(temp.equalsIgnoreCase("fam") || temp.equalsIgnoreCase("faml")) {
+        			temp = "Family";
+        		} else if(temp.equalsIgnoreCase("Cult")) {
+        			temp = "Cult";
+        		} else if(temp.equalsIgnoreCase("West1") || temp.equalsIgnoreCase("West")) {
+        			temp = "Western";
+        		} else if(temp.equalsIgnoreCase("sport") || temp.equalsIgnoreCase("sports")) {
+        			temp = "Sport";
+        		} else if(temp.equalsIgnoreCase("cart")) {
+        			temp = "Animation";
+        		} else if(temp.equalsIgnoreCase("biop") || temp.equalsIgnoreCase("biopp") || temp.equalsIgnoreCase("biog") || temp.equalsIgnoreCase("biob") || temp.equalsIgnoreCase("BioPx")|| temp.equalsIgnoreCase("bio") ) {
+        			temp = "Biography";
+        		} else if(temp.equalsIgnoreCase("noir")) {
+        			temp = "Noir";
+        		} else if(temp.equalsIgnoreCase("col TV") || temp.equalsIgnoreCase("bnw TV") || temp.equalsIgnoreCase("TV") || temp.equalsIgnoreCase("TVmini")) {
+        			temp = "TV";
+        		} else if(temp.equalsIgnoreCase("Surl") || temp.equalsIgnoreCase("Surreal") || temp.equalsIgnoreCase("Surr")) {
+        			temp = "Surreal";
+        		} else if(temp.equalsIgnoreCase("crim")) {
+        			temp = "Crime";
+        		} else if(temp.equalsIgnoreCase("Dram.Actn")) {
+        			temp = "Drama";
+        			movieGenres.add("Action");
+        		} else if(temp.equalsIgnoreCase("Psych Dram")) {
+        			temp = "Psychological";
+        			movieGenres.add("Drama");
+        		} else if(temp.equalsIgnoreCase("Romt Dram")) {
+        			temp = "Romance";
+        			movieGenres.add("Drama");
+        		} else if(temp.equalsIgnoreCase("Romt. Comd") || temp.equalsIgnoreCase("Romt Comd")) {
+        			temp = "Romance";
+        			movieGenres.add("Comedy");
+        		} else if(temp.equalsIgnoreCase("Docu Dram") || temp.equalsIgnoreCase("Dram Docu")) {
+        			temp = "Documentary";
+        			movieGenres.add("Drama");
+        		} else if(temp.equalsIgnoreCase("Romt Actn") || temp.equalsIgnoreCase("RomtAdvt")) {
+        			temp = "Romance";
+        			movieGenres.add("Action");
+        		} else if(temp.equalsIgnoreCase("Comd West")) {
+        			temp = "Comedy";
+        			movieGenres.add("Western");
+        		} else if(temp.equalsIgnoreCase("Noir Comd Romt")) {
+        			temp = "Noir";
+        			movieGenres.add("Comedy");
+        			movieGenres.add("Romance");
+        		} else if(temp.equalsIgnoreCase("Comd Noir") || temp.equalsIgnoreCase("Noir Comd")) {
+        			temp = "Comedy";
+        			movieGenres.add("Noir");
+        		} else if(temp.equalsIgnoreCase("Romt Fant")) {
+        			temp = "Romance";
+        			movieGenres.add("Fantasy");
+        		} else {
+        			System.out.println("The following genre is not accepted: " + temp);
         		}
         		
         		myMap<String, Integer> map2 = new myMap<String, Integer>(genres);

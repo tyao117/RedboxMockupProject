@@ -30,8 +30,8 @@ public class SAXParsing {
         ssp.runStarsParser();
         CastSAXParser csp = new CastSAXParser(statement, ssp.getStarsMapping(), msp.getMovieMapping());
         csp.runCastsParser();
-        timeCompare tc = new timeCompare(msp.getMovieMapping(), statement);
-        tc.runTimeCompare();
+//        timeCompare tc = new timeCompare(msp.getMovieMapping(), statement);
+//        tc.runTimeCompare();
     }
 
 }
