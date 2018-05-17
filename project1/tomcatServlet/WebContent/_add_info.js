@@ -13,7 +13,6 @@ function handleLoginResult(resultDataString) {
     if (resultDataJson["status"] === "success") {
     	console.log("success");
     	alert("Success");
-
     }
     // If login fail, display error message on <div> with id "login_error_message"
     else {
@@ -30,7 +29,6 @@ function handleLoginResult(resultDataString) {
  */
 function submitLoginForm(formSubmitEvent) {
     console.log("submit info form");
-
     // Important: disable the default action of submitting the form
     //   which will cause the page to refresh
     //   see jQuery reference for details: https://api.jquery.com/submit/

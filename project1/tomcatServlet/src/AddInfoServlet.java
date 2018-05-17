@@ -41,10 +41,12 @@ response.setContentType("application/json"); // Response mime type
 		String genre = request.getParameter("movie_genre");
 		//String rating = request.getParameter("rating");
 
-        id = id.isEmpty() ? "NULL" : id;
-        genre = genre.isEmpty() ? "NULL" : genre;
-        star = star.isEmpty() ? "NULL" : star;
-        
+		if (id == "")
+			id = null;
+		if (star == "")
+			star = null;
+		if (genre == "")
+			genre = null;
         //rating = Objects.toString(rating, "");
 
 		// Output stream to STDOUT
@@ -52,12 +54,23 @@ response.setContentType("application/json"); // Response mime type
 
 		try {
             Connection dbCon = dataSource.getConnection();
-            String query = "call add_info(?, ?, ?)";        
-            java.sql.PreparedStatement preparedStatement = dbCon.prepareStatement(query);
-            preparedStatement.setString(1, id);
-            preparedStatement.setString(2, genre);
-            preparedStatement.setString(3, star);
+            
+            String query = "call add_info(?, ?, ?);";        
+            PreparedStatement preparedStatement = dbCon.prepareStatement(query);
+            if (id == null)
+            	preparedStatement.setString(1, null);
+            else 
+            	preparedStatement.setString(1, id);
+            if (genre == null)
+            	preparedStatement.setString(2, null);
+            else 
+            	preparedStatement.setString(2, genre);
+            if (star == null)
+            	preparedStatement.setString(3, null);
+            else 
+            	preparedStatement.setString(3, star);
             preparedStatement.executeUpdate();
+            
 			JsonObject jsonObject = new JsonObject();
 			jsonObject.addProperty("status", "success");
 			jsonObject.addProperty("message", "Successful insertion. ");

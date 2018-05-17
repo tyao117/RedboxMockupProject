@@ -24,8 +24,8 @@
     <body BGCOLOR="#FDF5E6">
 		<h1 ALIGN="CENTER">Add Star</h1>
 			<form id="add_star_form" method="POST" action="#">
-    			Star Name: <input TYPE="INPUT" NAME="star_name"><br>
-    			Birth Year: <input TYPE="INPUT" NAME="star_birthyear"><br>
+    			Star Name: <input TYPE="TEXT" NAME="star_name"><br>
+    			Birth Year: <input TYPE="TEXT" NAME="star_birthyear"><br>
     			<input TYPE="SUBMIT" VALUE="Submit">
 			</form>
 			
@@ -34,20 +34,18 @@
 <!-- include our own JS file -->
 <script src="./_add_star.js"></script>
 <script type="text/javascript">
-		document.getElementById("Add Star").onclick = function() {
+		document.getElementById("Add Movie").onclick = function() {
 			window.location.replace("_add_movie.html");
 		};
-
 		document.getElementById("Show Tables").onclick = function() {
 			window.location.replace("_tables.html");
 		};
-
 		document.getElementById("Home").onclick = function() {
 			window.location.replace("_employeePortal.html");
-		}
+		};
 		document.getElementById("Add Info").onclick = function() {
 			window.location.replace("_add_info.html");
-		}
+		};
 	</script>
 </body>
 </html>

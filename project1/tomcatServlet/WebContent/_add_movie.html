@@ -25,12 +25,12 @@
     <body BGCOLOR="#FDF5E6">
 		<h1 ALIGN="CENTER">Add Movie</h1>
 			<form id="add_movie_form" method="POST" action="#">
-    			ID: <input TYPE="INPUT" NAME="movie_id"><br>
-    			Title: <input TYPE="INPUT" NAME="movie_title"><br>
-    			Director: <input TYPE="INPUT" NAME="movie_director"><br>
-    			Year: <input TYPE="INPUT" NAME="movie_year"><br>
-    			Genre: <input TYPE="INPUT" NAME="movie_genre"><br>
-    			Star Name:<input TYPE="INPUT" NAME="movie_star"><br>
+    			ID: <input TYPE="TEXT" NAME="movie_id"><br>
+    			Title: <input TYPE="TEXT" NAME="movie_title"><br>
+    			Director: <input TYPE="TEXT" NAME="movie_director"><br>
+    			Year: <input TYPE="TEXT" NAME="movie_year"><br>
+    			Genre: <input TYPE="TEXT" NAME="movie_genre"><br>
+    			Star Name:<input TYPE="TEXT" NAME="movie_star"><br>
     			<input TYPE="SUBMIT" VALUE="Submit">
 			</form>
 			
@@ -49,10 +49,11 @@
 
 		document.getElementById("Add Star").onclick = function() {
 			window.location.replace("_add_star.html");
-		}
+		};
+		
 		document.getElementById("Add Info").onclick = function() {
 			window.location.replace("_add_info.html");
-		}
+		};
 	</script>
 </body>
 </html>
