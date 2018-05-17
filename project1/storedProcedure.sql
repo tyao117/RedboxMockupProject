@@ -10,6 +10,7 @@ BEGIN
 	REPLACE INTO movies VALUES(in_id, in_title, in_year, in_director);
     SELECT id from genres WHERE in_genre=name INTO genre_id;
     SELECT id from stars WHERE in_star=name INTO star_id;
+    INSERT INTO ratings VALUE (in_id, 0.0,0);
     INSERT INTO stars_in_movies VALUES (star_id, in_id);
     INSERT INTO genres_in_movies VALUES (genre_id, in_id);
 END

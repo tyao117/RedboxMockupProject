@@ -45,7 +45,7 @@ public class MovieSAXParser extends DefaultHandler {
 	private Writer writer1;
 	private Writer writer2;
 	private Writer writer3;
-	
+	private Writer writer4;
 
 
     public MovieSAXParser(Statement statement) {
@@ -157,6 +157,7 @@ public class MovieSAXParser extends DefaultHandler {
     			writer1 = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("movies.txt"), "ISO-8859-1"));
     			writer2 = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("genres.txt"), "ISO-8859-1"));
     			writer3 = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("genres_in_movies.txt"), "ISO-8859-1"));
+                writer4 = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("ratings.txt"), "ISO-8859-1"));
     		} catch (UnsupportedEncodingException | FileNotFoundException e) {
     			// TODO Auto-generated catch block
     			e.printStackTrace();
@@ -196,9 +197,11 @@ public class MovieSAXParser extends DefaultHandler {
         	if(map.add(movie, mId)) // If successfully add the new movie, write movie to csv file and add the movie_id mapping to the movieIds hashMap
         	{
         		String oMovie = mId + "|" + movie + "\n";
+                String oRating = mId + "|" + 0.0 + "|" + 0 + "\n";
         		movieIdMapping.put(xmlId, mId);
         		try {
 					writer1.write(oMovie);
+                    writer4.write(oRating);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -371,6 +374,11 @@ public class MovieSAXParser extends DefaultHandler {
 						+ "columns terminated by '|' "
 						+ "lines terminated by '\\n';";
 				statement.execute(query);
+
+                query = "load data local infile 'ratings.txt' into ratings "
+                        + "columns terminated by '|' "
+                        + "lines terminated by '\\n';";
+                statement.execute(query);
 				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
