@@ -208,14 +208,14 @@ public class MovieSAXParser extends DefaultHandler {
 				}
         		
         	} else { // else change the key of the movie_id mapping to reflect the fact that the movie from the the xml already exists in database
+//        		System.out.println("There was a repeat");
         		movieIdMapping.put(xmlId, movieIdMapping.remove(movies.get(movie)));
+        		if(mName.equalsIgnoreCase("Jerry and Tom")) {
+        			System.out.println("found it!!");
+        		}
         	}
         	
         	int size = movieGenres.size();
-        	if (size == 0) {
-        		System.out.println("This movie does not have any genres. Movie " + mName + " not added");
-        		return;
-        	}
         	
         	HashSet<String> secondary = new HashSet<String>();
         	
@@ -285,6 +285,8 @@ public class MovieSAXParser extends DefaultHandler {
         			temp = "Surreal";
         		} else if(temp.equalsIgnoreCase("crim") || temp.equalsIgnoreCase("cnr") || temp.equalsIgnoreCase("cmr") || temp.equalsIgnoreCase("cnrb") || temp.equalsIgnoreCase("cnrbb")) {
         			temp = "Crime";
+        		} else if (temp.equalsIgnoreCase("N/A")) {
+        			temp = "N/A";
         		} else if(temp.equalsIgnoreCase("Dram.Actn")) {
         			temp = "Drama";
         			secondary.add("Action");
@@ -317,10 +319,14 @@ public class MovieSAXParser extends DefaultHandler {
         			temp = "Romance";
         			secondary.add("Fantasy");
         		} else {
-        			System.out.println("The following genre is not accepted: " + temp);
+//        			System.out.println("The following genre is not accepted: " + temp);
         			--size;
-        			return;
         		}
+        		
+        		if (size == 0) {
+            		System.out.println("This movie does not have any genres. The genre for " + mName + " defaulted to N/A");
+            		movieGenres.add("N/A");
+            	}
         		
         		myMap<String, Integer> map2 = new myMap<String, Integer>(genres);
         		if(map2.add(temp, maxGId+1))
@@ -380,6 +386,12 @@ public class MovieSAXParser extends DefaultHandler {
         } else if (qName.equalsIgnoreCase("t")) {
             mName = (tempVal.length() > 0) ? tempVal : null;
         } else if (qName.equalsIgnoreCase("year")) {
+        	try {
+        		Integer.parseInt(tempVal);
+        	} catch (NumberFormatException e) {
+        		mYear = null;
+        		return;
+        	}
             mYear = (tempVal.length() > 0) ? tempVal : null;
         } else if (qName.equalsIgnoreCase("dirn") && mDir == null) {
         	mDir = (tempVal.length() > 0) ? tempVal : null;

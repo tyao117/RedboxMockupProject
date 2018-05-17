@@ -120,7 +120,7 @@ public class CastSAXParser extends DefaultHandler {
 //	    			System.out.println("Actor or movie does not exist in database. Actor: " + actor + ", movie id: " + movieId);
 	    			return;
 	    		}
-	    		String cast = sId + "|" + mId;
+	    		String cast = sId + "|" + mId + "\n";
 	    		if(casts.add(cast)) {
 	    			try {
 						writer.write(cast);
