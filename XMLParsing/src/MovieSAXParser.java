@@ -214,11 +214,13 @@ public class MovieSAXParser extends DefaultHandler {
         	int size = movieGenres.size();
         	if (size == 0) {
         		System.out.println("This movie does not have any genres. Movie " + mName + " not added");
+        		return;
         	}
         	
         	for(String temp : movieGenres) {
         		
         		if(temp.isEmpty()) {
+        			--size;
         			System.out.println("no genre avaliable");
         			continue;
         		}
@@ -319,6 +321,7 @@ public class MovieSAXParser extends DefaultHandler {
         			--size;
         			if (size == 0) {
         				System.out.println("This movie does not have any genres. Movie " + mName + " not added");
+        				return;
         			}
         		}
         		
