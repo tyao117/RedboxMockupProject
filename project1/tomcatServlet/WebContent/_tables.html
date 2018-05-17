@@ -2,7 +2,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Main Page</title>
+<title>MetaData</title>
+<!-- Load jQuery and Bootstrap JS -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </head>
 <body>
 
@@ -12,8 +16,352 @@
 		<button id="Home" class="float-center submit-button">Home</button>
 		<button id="Add Star" class="float-center submit-button">Add Star</button>
 	</div>
-	<div>
-	
+	<div class="row">
+		<div class="col-sm-8 col-sm-offset-2">
+
+			<h3>stars</h3>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>Attribute</th>
+						<th>Attribute Type</th>
+					</tr>
+				</thead>
+				<tbody>
+
+
+					<tr>
+						<td>dob</td>
+						<td>DATE</td>
+					</tr>
+
+
+					<tr>
+						<td>last_name</td>
+						<td>VARCHAR</td>
+					</tr>
+
+
+					<tr>
+						<td>id</td>
+						<td>INT</td>
+					</tr>
+
+
+					<tr>
+						<td>photo_url</td>
+						<td>VARCHAR</td>
+					</tr>
+
+
+					<tr>
+						<td>first_name</td>
+						<td>VARCHAR</td>
+					</tr>
+
+
+				</tbody>
+			</table>
+
+
+			<h3>movies</h3>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>Attribute</th>
+						<th>Attribute Type</th>
+					</tr>
+				</thead>
+				<tbody>
+
+
+					<tr>
+						<td>year</td>
+						<td>INT</td>
+					</tr>
+
+
+					<tr>
+						<td>director</td>
+						<td>VARCHAR</td>
+					</tr>
+
+
+					<tr>
+						<td>banner_url</td>
+						<td>VARCHAR</td>
+					</tr>
+
+
+					<tr>
+						<td>id</td>
+						<td>INT</td>
+					</tr>
+
+
+					<tr>
+						<td>title</td>
+						<td>VARCHAR</td>
+					</tr>
+
+
+					<tr>
+						<td>trailer_url</td>
+						<td>VARCHAR</td>
+					</tr>
+
+
+				</tbody>
+			</table>
+
+
+			<h3>stars_in_movies</h3>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>Attribute</th>
+						<th>Attribute Type</th>
+					</tr>
+				</thead>
+				<tbody>
+
+
+					<tr>
+						<td>star_id</td>
+						<td>INT</td>
+					</tr>
+
+
+					<tr>
+						<td>movie_id</td>
+						<td>INT</td>
+					</tr>
+
+
+				</tbody>
+			</table>
+
+
+			<h3>genres</h3>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>Attribute</th>
+						<th>Attribute Type</th>
+					</tr>
+				</thead>
+				<tbody>
+
+
+					<tr>
+						<td>name</td>
+						<td>VARCHAR</td>
+					</tr>
+
+
+					<tr>
+						<td>id</td>
+						<td>INT</td>
+					</tr>
+
+
+				</tbody>
+			</table>
+
+
+			<h3>genres_in_movies</h3>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>Attribute</th>
+						<th>Attribute Type</th>
+					</tr>
+				</thead>
+				<tbody>
+
+
+					<tr>
+						<td>movie_id</td>
+						<td>INT</td>
+					</tr>
+
+
+					<tr>
+						<td>genre_id</td>
+						<td>INT</td>
+					</tr>
+
+
+				</tbody>
+			</table>
+
+
+			<h3>creditcards</h3>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>Attribute</th>
+						<th>Attribute Type</th>
+					</tr>
+				</thead>
+				<tbody>
+
+
+					<tr>
+						<td>last_name</td>
+						<td>VARCHAR</td>
+					</tr>
+
+
+					<tr>
+						<td>expiration</td>
+						<td>DATE</td>
+					</tr>
+
+
+					<tr>
+						<td>id</td>
+						<td>VARCHAR</td>
+					</tr>
+
+
+					<tr>
+						<td>first_name</td>
+						<td>VARCHAR</td>
+					</tr>
+
+
+				</tbody>
+			</table>
+
+
+			<h3>customers</h3>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>Attribute</th>
+						<th>Attribute Type</th>
+					</tr>
+				</thead>
+				<tbody>
+
+					<tr>
+						<td>password</td>
+						<td>VARCHAR</td>
+					</tr>
+
+
+					<tr>
+						<td>address</td>
+						<td>VARCHAR</td>
+					</tr>
+
+
+					<tr>
+						<td>last_name</td>
+						<td>VARCHAR</td>
+					</tr>
+
+
+					<tr>
+						<td>id</td>
+						<td>INT</td>
+					</tr>
+
+
+					<tr>
+						<td>cc_id</td>
+						<td>VARCHAR</td>
+					</tr>
+
+
+					<tr>
+						<td>first_name</td>
+						<td>VARCHAR</td>
+					</tr>
+
+
+					<tr>
+						<td>email</td>
+						<td>VARCHAR</td>
+					</tr>
+
+
+				</tbody>
+			</table>
+
+
+			<h3>sales</h3>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>Attribute</th>
+						<th>Attribute Type</th>
+					</tr>
+				</thead>
+				<tbody>
+
+
+					<tr>
+						<td>sale_date</td>
+						<td>DATE</td>
+					</tr>
+
+
+					<tr>
+						<td>id</td>
+						<td>INT</td>
+					</tr>
+
+
+					<tr>
+						<td>customer_id</td>
+						<td>INT</td>
+					</tr>
+
+					<tr>
+						<td>movie_id</td>
+						<td>INT</td>
+					</tr>
+
+
+				</tbody>
+			</table>
+
+
+			<h3>employees</h3>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>Attribute</th>
+						<th>Attribute Type</th>
+					</tr>
+				</thead>
+				<tbody>
+
+
+					<tr>
+						<td>password</td>
+						<td>VARCHAR</td>
+					</tr>
+
+
+					<tr>
+						<td>fullname</td>
+						<td>VARCHAR</td>
+					</tr>
+
+
+					<tr>
+						<td>email</td>
+						<td>VARCHAR</td>
+					</tr>
+
+
+				</tbody>
+			</table>
+
+		</div>
 	</div>
 	<script type="text/javascript">
 		document.getElementById("Add Movie").onclick = function() {

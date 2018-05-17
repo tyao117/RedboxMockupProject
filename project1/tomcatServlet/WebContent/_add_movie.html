@@ -1,10 +1,53 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Add Movie</title>
-</head>
-<body>
+<!doctype html>
+<html lang="en">
 
+<head>
+<link type="text/css" rel="stylesheet" href="css/style.css">
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Add Movie</title>
+
+</head>
+
+<body>
+	<div ALIGN="CENTER">
+		<button id="Add Movie" class="float-center submit-button">Add
+			Movie</button>
+		<button id="Show Tables" class="float-center submit-button">Show
+			tables</button>
+		<button id="Add Star" class="float-center submit-button">Add
+			Star</button>
+	</div>
+    <body BGCOLOR="#FDF5E6">
+		<h1 ALIGN="CENTER">Add Movie</h1>
+			<form id="add_movie_form" method="POST" action="#">
+    			ID: <input TYPE="INPUT" NAME="movie_id"><br>
+    			Title: <input TYPE="INPUT" NAME="movie_title"><br>
+    			Director: <input TYPE="INPUT" NAME="movie_director"><br>
+    			Year: <input TYPE="INPUT" NAME="movie_year"><br>
+    			Genre: <input TYPE="INPUT" NAME="movie_genre"><br>
+    			Star Name:<input TYPE="INPUT" NAME="movie_star"><br>
+    			<input TYPE="SUBMIT" VALUE="Sign In">
+			</form>
+			
+<!-- include jQuery-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- include our own JS file -->
+<script src="./_add_movie.js"></script>
+<script type="text/javascript">
+		document.getElementById("Add Movie").onclick = function() {
+			window.location.replace("_add_movie.html");
+		};
+
+		document.getElementById("Show Tables").onclick = function() {
+			window.location.replace("_tables.html");
+		};
+
+		document.getElementById("Add Star").onclick = function() {
+			window.location.replace("_add_star.html");
+		}
+	</script>
 </body>
 </html>
