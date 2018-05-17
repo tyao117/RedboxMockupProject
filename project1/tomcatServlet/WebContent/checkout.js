@@ -109,4 +109,3 @@ jQuery.ajax({
 
 // Bind the submit action of the form to a handler function
 jQuery("#confirm_form").submit((event) => submitForm(event));
-
