@@ -197,7 +197,7 @@ public class MovieSAXParser extends DefaultHandler {
         	if(map.add(movie, mId)) // If successfully add the new movie, write movie to csv file and add the movie_id mapping to the movieIds hashMap
         	{
         		String oMovie = mId + "|" + movie + "\n";
-                String oRating = mId + "|" + "0.0" + "|" + "0" + "\n";
+                String oRating = mId + "|0|0" + "\n";
         		movieIdMapping.put(xmlId, mId);
         		try {
 					writer1.write(oMovie);
@@ -217,6 +217,8 @@ public class MovieSAXParser extends DefaultHandler {
         		return;
         	}
         	
+        	HashSet<String> secondary = new HashSet<String>();
+        	
         	for(String temp : movieGenres) {
         		
         		if(temp.isEmpty()) {
@@ -231,14 +233,12 @@ public class MovieSAXParser extends DefaultHandler {
         			temp = "Epic";
         		} else if(temp.equalsIgnoreCase("s.f.") || temp.equalsIgnoreCase("Scfi")  || temp.equalsIgnoreCase("Sxfi")|| temp.equalsIgnoreCase("Scif")) {
         			temp = "Sci-Fi";
-        		} else if(temp.equalsIgnoreCase("stage musical") || temp.equalsIgnoreCase("Muscl")) {
+        		} else if(temp.equalsIgnoreCase("stage musical") || temp.equalsIgnoreCase("Muscl") || temp.equalsIgnoreCase("Musc")|| temp.equalsIgnoreCase("Muusc")) {
         			temp = "Musical";
-        		} else if (temp.equalsIgnoreCase("Musc")|| temp.equalsIgnoreCase("Muusc")) {
-        			temp = "Music";
-        		}else if(temp.equalsIgnoreCase("myst") || temp.equalsIgnoreCase("mystp")) {
+        		} else if(temp.equalsIgnoreCase("myst") || temp.equalsIgnoreCase("mystp")) {
         			temp = "Mystery";
         		} else if(temp.equalsIgnoreCase("susp")) {
-        			temp = "Suspense";
+        			temp = "Thriller";
         		} else if(temp.equalsIgnoreCase("avga") || temp.equalsIgnoreCase("Avant Garde")) {
         			temp = "Avant-Garde";
         		} else if(temp.equalsIgnoreCase("dram") || temp.equalsIgnoreCase("draam") || temp.equalsIgnoreCase("dramn") || temp.equalsIgnoreCase("drama") || temp.equalsIgnoreCase("dramd") || temp.equalsIgnoreCase("Dram>")) {
@@ -283,39 +283,39 @@ public class MovieSAXParser extends DefaultHandler {
         			temp = "TV";
         		} else if(temp.equalsIgnoreCase("Surl") || temp.equalsIgnoreCase("Surreal") || temp.equalsIgnoreCase("Surr")) {
         			temp = "Surreal";
-        		} else if(temp.equalsIgnoreCase("crim")) {
+        		} else if(temp.equalsIgnoreCase("crim") || temp.equalsIgnoreCase("cnr") || temp.equalsIgnoreCase("cmr") || temp.equalsIgnoreCase("cnrb") || temp.equalsIgnoreCase("cnrbb")) {
         			temp = "Crime";
         		} else if(temp.equalsIgnoreCase("Dram.Actn")) {
         			temp = "Drama";
-        			movieGenres.add("Action");
+        			secondary.add("Action");
         		} else if(temp.equalsIgnoreCase("Psych Dram")) {
         			temp = "Psychological";
-        			movieGenres.add("Drama");
+        			secondary.add("Drama");
         		} else if(temp.equalsIgnoreCase("Romt Dram")) {
         			temp = "Romance";
-        			movieGenres.add("Drama");
+        			secondary.add("Drama");
         		} else if(temp.equalsIgnoreCase("Romt. Comd") || temp.equalsIgnoreCase("Romt Comd")) {
         			temp = "Romance";
-        			movieGenres.add("Comedy");
+        			secondary.add("Comedy");
         		} else if(temp.equalsIgnoreCase("Docu Dram") || temp.equalsIgnoreCase("Dram Docu")) {
         			temp = "Documentary";
-        			movieGenres.add("Drama");
+        			secondary.add("Drama");
         		} else if(temp.equalsIgnoreCase("Romt Actn") || temp.equalsIgnoreCase("RomtAdvt")) {
         			temp = "Romance";
-        			movieGenres.add("Action");
+        			secondary.add("Action");
         		} else if(temp.equalsIgnoreCase("Comd West")) {
         			temp = "Comedy";
-        			movieGenres.add("Western");
+        			secondary.add("Western");
         		} else if(temp.equalsIgnoreCase("Noir Comd Romt")) {
         			temp = "Noir";
-        			movieGenres.add("Comedy");
-        			movieGenres.add("Romance");
+        			secondary.add("Comedy");
+        			secondary.add("Romance");
         		} else if(temp.equalsIgnoreCase("Comd Noir") || temp.equalsIgnoreCase("Noir Comd")) {
         			temp = "Comedy";
-        			movieGenres.add("Noir");
+        			secondary.add("Noir");
         		} else if(temp.equalsIgnoreCase("Romt Fant")) {
         			temp = "Romance";
-        			movieGenres.add("Fantasy");
+        			secondary.add("Fantasy");
         		} else {
         			System.out.println("The following genre is not accepted: " + temp);
         			--size;
@@ -348,6 +348,32 @@ public class MovieSAXParser extends DefaultHandler {
         	}
         	
         	movieGenres.clear();
+        	
+        	for(String temp : secondary) {
+        		myMap<String, Integer> map2 = new myMap<String, Integer>(genres);
+        		if(map2.add(temp, maxGId+1))
+        		{
+        			++maxGId;
+        			String newGenre = Integer.toString(genres.get(temp)) + "|" + temp + "\n";
+        			try {
+						writer2.write(newGenre);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+        		}
+        		
+        		String gim = genres.get(temp) + "|" + movies.get(movie);// reminder: movies.get(movie) returns the movie_id
+        		if(genres_in_movies.add(gim)) {
+        			gim += "\n";
+        			try {
+						writer3.write(gim);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+        		}
+        	}
         } else if (qName.equalsIgnoreCase("fid")) {
         	xmlId = (tempVal.length() > 0) ? tempVal : null;
 //            System.out.println(mId + " " + xmlId);
@@ -393,7 +419,7 @@ public class MovieSAXParser extends DefaultHandler {
                         + "columns terminated by '|' "
                         + "lines terminated by '\\n';";
                 statement.execute(query);
-				
+				System.out.println("the query above works");
                 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
