@@ -211,6 +211,11 @@ public class MovieSAXParser extends DefaultHandler {
         		movieIdMapping.put(xmlId, movieIdMapping.remove(movies.get(movie)));
         	}
         	
+        	int size = movieGenres.size();
+        	if (size == 0) {
+        		System.out.println("This movie does not have any genres. Movie " + mName + " not added");
+        	}
+        	
         	for(String temp : movieGenres) {
         		
         		if(temp.isEmpty()) {
@@ -311,6 +316,10 @@ public class MovieSAXParser extends DefaultHandler {
         			movieGenres.add("Fantasy");
         		} else {
         			System.out.println("The following genre is not accepted: " + temp);
+        			--size;
+        			if (size == 0) {
+        				System.out.println("This movie does not have any genres. Movie " + mName + " not added");
+        			}
         		}
         		
         		myMap<String, Integer> map2 = new myMap<String, Integer>(genres);
