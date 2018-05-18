@@ -414,13 +414,13 @@ public class MovieSAXParser extends DefaultHandler {
 					  + "lines terminated by '\\n';";
 				statement.execute(query);
 
-				System.out.println("loading the gneres ~~~!~~!~!");
+				System.out.println("loading the genres ~~~!~~!~!");
 				query = "load data local infile 'genres.txt' into table genres "
 						+ "columns terminated by '|' "
 						+ "lines terminated by '\\n';";
 				statement.execute(query);
 				
-				System.out.println("loading the gneres_in_movies ~~~!~~!~!");
+				System.out.println("loading the genres_in_movies ~~~!~~!~!");
 				query = "load data local infile 'genres_in_movies.txt' into table genres_in_movies "
 						+ "columns terminated by '|' "
 						+ "lines terminated by '\\n';";
