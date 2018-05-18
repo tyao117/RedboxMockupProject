@@ -13,6 +13,7 @@ import java.sql.Statement;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -82,7 +83,7 @@ public class CastSAXParser extends DefaultHandler {
 	    		while(rs.next()) {
 	    			String sId = rs.getString("starId");
 	    			String mId = rs.getString("movieId");
-	    			String str = sId + "|" + mId;
+	    			String str = sId + "|" + mId + "\n";
 	    			casts.add(str);
 	    		}
 	    		
@@ -116,25 +117,35 @@ public class CastSAXParser extends DefaultHandler {
 		
 	    public void endElement(String uri, String localName, String qName) throws SAXException {
 	    	if (qName.equalsIgnoreCase("m")) {
-	    		if(sId == null || mId == null) {
-//	    			System.out.println("Actor or movie does not exist in database. Actor: " + actor + ", movie id: " + movieId);
+	    		if(mId == null) {
+	    			System.out.println("Actor or movie does not exist in database. Actor: " + actor + ", movie id: " + movieId);
 	    			return;
 	    		}
+	    		
+	    		if (sId == null)
+	    		{
+	    			sId = "000000000"; // set default N/A star
+	    		}
+	    		
 	    		String cast = sId + "|" + mId + "\n";
 	    		if(casts.add(cast)) {
 	    			try {
 						writer.write(cast);
+						
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 	    		}
+	    		
+	    		
 	    	} else if (qName.equalsIgnoreCase("f")) {
 	    		movieId = tempVal;
 	    		mId = movie.get(movieId);
 	    	} else if (qName.equalsIgnoreCase("a")) {
 	    		actor = tempVal;
 	    		sId = stars.get(actor);
+
 	    	} else if (qName.equalsIgnoreCase("casts")) {
 	    		try {
 					writer.close();
@@ -144,7 +155,6 @@ public class CastSAXParser extends DefaultHandler {
 						  + "columns terminated by '|' "
 						  + "lines terminated by '\\n';";
 					statement.execute(query);
-					
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

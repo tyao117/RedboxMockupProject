@@ -161,7 +161,7 @@ public class StarsSAXParser extends DefaultHandler {
 					  + "columns terminated by '|' "
 					  + "lines terminated by '\\n';";
 				statement.execute(query);
-				
+
     		} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
