@@ -325,7 +325,7 @@ public class MovieSAXParser extends DefaultHandler {
         		
         		if (size == 0) {
             		System.out.println("This movie does not have any genres. The genre for " + mName + " defaulted to N/A");
-            		movieGenres.add("N/A");
+            		secondary.add("N/A");
             	}
         		
         		myMap<String, Integer> map2 = new myMap<String, Integer>(genres);
@@ -427,7 +427,7 @@ public class MovieSAXParser extends DefaultHandler {
 				statement.execute(query);
 				
 				System.out.println("loading the ratings~~~!~~!~!");
-                query = "load data local infile 'ratings.txt' into ratings "
+                query = "load data local infile 'ratings.txt' into table ratings "
                         + "columns terminated by '|' "
                         + "lines terminated by '\\n';";
                 statement.execute(query);
