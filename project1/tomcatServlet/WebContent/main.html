@@ -7,10 +7,30 @@
 <body>
 
 <h1 ALIGN="CENTER">Main Page</h1>
+ <!-- Using jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- include jquery autocomplete JS  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.devbridge-autocomplete/1.4.7/jquery.autocomplete.min.js"></script>
+<link
+        href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css"
+        rel="stylesheet" type="text/css" />
+        
+<STYLE TYPE="text/css" media="all">
+    .ui-autocomplete {
+        position: absolute;
+        cursor: default;
+        height: 200px;
+        overflow-y: scroll;
+        overflow-x: hidden;}
+</STYLE>
 	<div ALIGN="CENTER">
 		<button id="Search" class="float-left submit-button">Search</button>
 		<button id="Browse" class="float-left submit-button">Browse</button>
 		<button id="Cart" class="float-left submit-button">Cart</button>
+
+	<div ALIGN="CENTER">
+		Title: <input id = "autocomplete" type="text" name="title" maxlength = "60">
 	</div>
 	<script type="text/javascript">
     document.getElementById("Search").onclick = function () {
@@ -23,8 +43,10 @@
     
     document.getElementById("Cart").onclick = function() {
     	window.location.replace("cart.html");
-    }
-</script>
+    };
+	</script>
+	<script src="main.js"></script>
 
 </body>
+
 </html>
