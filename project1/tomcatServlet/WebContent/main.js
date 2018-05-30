@@ -1,9 +1,15 @@
+var movieCache = {};
+
 function handleLookup(query, doneCallback) {
-	console.log("autocomplete initiated")
-	console.log("sending AJAX request to backend Java Servlet")
+	console.log("autocomplete initiated");
+	console.log("sending AJAX request to backend Java Servlet");
 	
 	// TODO: if you want to check past query results first, you can do it here
-	
+	console.log("query=" + query);
+	if (query in movieCache) {
+		doneCallback({ suggestions: movieCache[query]});
+		return;
+	}
 	// sending the HTTP GET request to the Java Servlet endpoint hero-suggestion
 	// with the query data
 	jQuery.ajax({
@@ -35,11 +41,12 @@ function handleLookupAjaxSuccess(data, query, doneCallback) {
 	
 	// parse the string into JSON
 	var jsonData = JSON.parse(data);
-	console.log(jsonData);
-	console.log(data);
+	// console.log(jsonData);
+	// console.log(data);
 	
 	// TODO: if you want to cache the result into a global variable you can do it here
-
+	movieCache[query] = jsonData;
+	// console.log(movieCache);
 	// call the callback function provided by the autocomplete library
 	// add "{suggestions: jsonData}" to satisfy the library response format according to
 	//   the "Response Format" section in documentation
@@ -56,9 +63,10 @@ function handleLookupAjaxSuccess(data, query, doneCallback) {
 function handleSelectSuggestion(suggestion) {
 	// TODO: jump to the specific result page based on the selected suggestion
 	
-	console.log("you select " + suggestion["value"])
-	var url = suggestion["data"]["category"] + "-hero" + "?id=" + suggestion["data"]["heroID"]
-	console.log(url)
+	console.log("you select " + suggestion["value"]);
+	var url = suggestion["data"]["category"] + ".html" +"?id=" + suggestion["data"]["movie_id"]
+	console.log(url);
+	window.location.replace(url);
 }
 
 
@@ -81,7 +89,7 @@ $('#autocomplete').autocomplete({
     		handleSelectSuggestion(suggestion)
     },
     // set the minimum character is 3
-    minLength: 1,
+    minLength: 3,
     // set the groupby name in the response json data field
     groupBy: "movies",
     // set delay time
@@ -97,6 +105,9 @@ $('#autocomplete').autocomplete({
 function handleNormalSearch(query) {
 	console.log("doing normal search with query: " + query);
 	// TODO: you should do normal search here
+	url = "movieList.html?movie_title=" + query +"&s=yes";
+	window.location.replace(url);
+	
 }
 
 // bind pressing enter key to a handler function

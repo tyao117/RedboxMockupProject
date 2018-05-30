@@ -35,17 +35,18 @@ public class MovieAutoComplete extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	PrintWriter out = response.getWriter();
     	String term = request.getParameter("term");
+    	System.out.println(term);
     	JsonArray jarray = null;
     	try {
     		// System.out.println("Going here");
     		jarray = getSuggestions(term);
-    		out.println(jarray.toString());
-    		out.close();
     	}
     	catch (Exception e)
     	{
     		e.printStackTrace();
     	}
+    	out.println(jarray.toString());
+    	out.close();
     	
     }
     
@@ -58,6 +59,7 @@ public class MovieAutoComplete extends HttpServlet {
          StringTokenizer tokenizer = new StringTokenizer(term);
          String firstToken = tokenizer.nextToken();
          term.replaceAll("\\s","%");
+         System.out.println("term=" + term);
 
          PreparedStatement prepStmnt = dbcon.prepareStatement(query);
          prepStmnt.setString(1, firstToken+'%');
@@ -71,9 +73,11 @@ public class MovieAutoComplete extends HttpServlet {
              String id = rs.getString("id");
              String title = rs.getString("title");
              JsonObject jsonObject = new JsonObject();
-             suggestions.add(generateJsonObject(id, title, "movies"));
+             suggestions.add(generateJsonObject(id, title, "single-movie"));
          }
-
+         rs.close();
+         prepStmnt.close();
+         dbcon.close();
          return suggestions;
     	
     }
@@ -81,7 +85,7 @@ public class MovieAutoComplete extends HttpServlet {
 	 * Generate the JSON Object from hero and category to be like this format:
 	 * {
 	 *   "value": "Iron Man",
-	 *   "data": { "category": "marvel", "heroID": 11 }
+	 *   "data": { "category": "movies", "movie_id": nm000011 }
 	 * }
 	 * 
 	 */
