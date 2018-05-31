@@ -107,7 +107,6 @@ function handleNormalSearch(query) {
 	// TODO: you should do normal search here
 	url = "movieList.html?movie_title=" + query +"&s=yes";
 	window.location.replace(url);
-	
 }
 
 // bind pressing enter key to a handler function
