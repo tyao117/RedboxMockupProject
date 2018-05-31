@@ -36,6 +36,11 @@ public class MovieAutoComplete extends HttpServlet {
     	PrintWriter out = response.getWriter();
     	String term = request.getParameter("term");
     	System.out.println(term);
+    	if (term.length() < 3) {
+    		out.println(new JsonArray().toString());
+    		out.close();
+    		return;
+    	}
     	JsonArray jarray = null;
     	try {
     		// System.out.println("Going here");

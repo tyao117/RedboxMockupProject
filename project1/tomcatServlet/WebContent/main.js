@@ -5,8 +5,9 @@ function handleLookup(query, doneCallback) {
 	console.log("sending AJAX request to backend Java Servlet");
 	
 	// TODO: if you want to check past query results first, you can do it here
-	console.log("query=" + query);
+	console.log(movieCache);
 	if (query in movieCache) {
+		console.log("From the cache!!!")
 		doneCallback({ suggestions: movieCache[query]});
 		return;
 	}
@@ -88,10 +89,12 @@ $('#autocomplete').autocomplete({
     onSelect: function(suggestion) {
     		handleSelectSuggestion(suggestion)
     },
+    // highlight is true on first
+    autoFocus: "true",
     // set the minimum character is 3
-    minLength: 3,
+    minChars: 3,
     // set the groupby name in the response json data field
-    groupBy: "movies",
+    groupBy: "single-movie",
     // set delay time
     deferRequestBy: 300,
     // there are some other parameters that you might want to use to satisfy all the requirements
