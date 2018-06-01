@@ -1,8 +1,10 @@
 package ics.uci.edu.fabflixmobile;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,6 +37,9 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("Movie List");
+
         listView = findViewById(R.id.listView);
         modelList = new ArrayList<SearchModel>();
         adapter = new SearchViewAdapter(this, modelList);
@@ -57,7 +62,7 @@ public class SearchActivity extends AppCompatActivity {
                 // Post request form data
                 final Map<String, String> params = new HashMap<>();
                 params.put("movie_title", query);
-                String url = "https://10.0.2.2:8443/project/api/android-movielist?s=yes&movie_title=" + query;
+                String url = "http://10.0.2.2:8080/project/api/android-movielist?s=yes&movie_title=" + query;
 
                 Log.e("wtf", query);
                 final JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.POST, url, null,
@@ -108,7 +113,10 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                return false;
+                if(TextUtils.isEmpty(newText)) {
+                    listView.clearTextFilter();
+                }
+                return true ;
             }
         });
 
