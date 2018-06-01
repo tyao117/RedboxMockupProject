@@ -63,7 +63,7 @@ public class AndroidMovieList extends HttpServlet {
 					"WHERE m.id = sim.movieid AND s.id = sim.starId AND g.id = gim.genreId AND m.id = gim.movieId AND m.id = r.movieId \r\n" + 
 					"AND ( m.title LIKE ? or match (m.title) against ( ? in boolean mode)) \r\n" + 
 					"GROUP BY m.id, m.title, m.year, m.director, r.rating \r\n" + 
-					"LIMIT 1000"); 
+					"LIMIT 250"); 
 
 			// Declare our statement
 			PreparedStatement statement = dbcon.prepareStatement(query);
