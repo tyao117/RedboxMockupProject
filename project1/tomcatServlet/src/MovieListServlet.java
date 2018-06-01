@@ -45,7 +45,7 @@ public class MovieListServlet extends HttpServlet {
 		String orderBy = request.getParameter("order_by");
 		String frmSearch = request.getParameter("s");
 		
-		
+		String terms = returnQueryString(title);
 		if (title != null && frmSearch != null)
 			title = "%" + title;
 		title = (title != null) ? title : "";
@@ -77,7 +77,7 @@ public class MovieListServlet extends HttpServlet {
                 query = ("SELECT m.id, m.title, m.year, m.director, GROUP_CONCAT(DISTINCT g.name separator ',') AS genres, GROUP_CONCAT(DISTINCT s.name, ',', s.id separator ',') AS starNameID, r.rating\r\n" + 
                 		"	FROM movies m, stars_in_movies sim, stars s, genres g, genres_in_movies gim, ratings r\r\n" + 
                 		"	WHERE m.id = sim.movieid AND s.id = sim.starId AND g.id = gim.genreId AND m.id = gim.movieId AND m.id = r.movieId\r\n" + 
-                		"	AND m.title LIKE ? AND m.director LIKE ? AND m.year LIKE ? \r\n" + 
+                		"	AND (match (m.title) against ( ? in boolean mode) OR ( ? LIKE m.title)) AND m.director LIKE ? AND m.year LIKE ? \r\n" + 
                 		"	AND s.name LIKE ? \r\n" + 
                 		"	GROUP BY m.id, m.title, m.year, m.director, r.rating \r\n" +
                 		"	LIMIT 1000"); 
@@ -95,10 +95,11 @@ public class MovieListServlet extends HttpServlet {
 				director = "%" + director +"%";
 				year = "%" + year + "%";
 				star_name = "%" + star_name + "%";
-				statement.setString(1, title);
-				statement.setString(2, director);
-				statement.setString(3, year);
-				statement.setString(4, star_name);
+				statement.setString(1, terms);
+				statement.setString(2, title);
+				statement.setString(3, director);
+				statement.setString(4, year);
+				statement.setString(5, star_name);
 			}
 
 			// Set the parameter represented by "?" in the query to the id we get from url,
@@ -169,6 +170,30 @@ public class MovieListServlet extends HttpServlet {
 	
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	doGet(request, response);
+    }
+	
+	private String returnQueryString (String term) {
+    	String queryString = "";
+    	String[] keywordArray = term.split(" ");
+    	//if keyword has more than one word
+    	if (keywordArray.length != 1) {
+    		for (String s: keywordArray) {
+    			String newString = "";
+    			if (!s.substring(0).equals("-") && !s.substring(0).equals("+")) {
+    				newString += "+" + s;
+    			} else {
+    				newString += s;
+    			}
+
+    			if (!s.substring(s.length()-1).equals("*")) {
+    				newString += "*";
+    			}
+    			queryString += newString + " ";	
+    		}
+    	} else {
+    		queryString += term.trim() + "*";
+    	}
+    	return queryString;
     }
 
 }

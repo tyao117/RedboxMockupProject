@@ -58,11 +58,11 @@ public class AndroidMovieList extends HttpServlet {
 			// Get a connection from dataSource
 			Connection dbcon = dataSource.getConnection();
 			String query = "";
-			query = ("SELECT m.id, m.title, m.year, m.director, GROUP_CONCAT(DISTINCT g.name separator ',') AS genres, GROUP_CONCAT(DISTINCT s.name, ',', s.id separator ',') AS starNameID, r.rating\n" + 
-					"FROM movies m, stars_in_movies sim, stars s, genres g, genres_in_movies gim, ratings r\n" + 
-					"WHERE m.id = sim.movieid AND s.id = sim.starId AND g.id = gim.genreId AND m.id = gim.movieId AND m.id = r.movieId\n" + 
-					"AND ( m.title LIKE ? or match (m.title) against ( ? in boolean mode))\n" + 
-					"GROUP BY m.id, m.title, m.year, m.director, r.rating \n" + 
+			query = ("SELECT m.id, m.title, m.year, m.director, GROUP_CONCAT(DISTINCT g.name separator ',') AS genres, GROUP_CONCAT(DISTINCT s.name, ',', s.id separator ',') AS starNameID, r.rating \r\n" + 
+					"FROM movies m, stars_in_movies sim, stars s, genres g, genres_in_movies gim, ratings r \r\n" + 
+					"WHERE m.id = sim.movieid AND s.id = sim.starId AND g.id = gim.genreId AND m.id = gim.movieId AND m.id = r.movieId \r\n" + 
+					"AND ( m.title LIKE ? or match (m.title) against ( ? in boolean mode)) \r\n" + 
+					"GROUP BY m.id, m.title, m.year, m.director, r.rating \r\n" + 
 					"LIMIT 1000"); 
 
 			// Declare our statement
