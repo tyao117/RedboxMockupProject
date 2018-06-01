@@ -1,5 +1,6 @@
 package ics.uci.edu.fabflixmobile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -8,8 +9,11 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -26,11 +30,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity implements OnItemClickListener{
 
     ListView listView;
     SearchViewAdapter adapter;
     List<SearchModel> modelList;
+
+    public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+        Log.i("position", "clicked on position" + position);
+        SearchModel clicked_movie = modelList.get(position);
+        Intent movie_intent = new Intent(getApplicationContext(), null);
+        movie_intent.putExtra("info", clicked_movie.toString());
+        movie_intent.putExtra("position", position);
+        Log.i("position", "clicked on position" + position);
+        startActivity(movie_intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +57,9 @@ public class SearchActivity extends AppCompatActivity {
         listView = findViewById(R.id.listView);
         modelList = new ArrayList<SearchModel>();
         adapter = new SearchViewAdapter(this, modelList);
-
+        listView.setOnItemClickListener(this);
         listView.setAdapter(adapter);
+
     }
 
     @Override
