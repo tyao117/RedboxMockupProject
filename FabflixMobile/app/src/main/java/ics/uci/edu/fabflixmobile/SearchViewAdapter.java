@@ -157,10 +157,9 @@ public class SearchViewAdapter extends BaseAdapter {
 
     //filter
     public void filter(List<SearchModel> modelList) {
+        Log.d("incoming size", Integer.toString(modelList.size()));
         this.modelList.clear();
-        for(SearchModel model : modelList) {
-                this.modelList.add(model);
-        }
+        this.modelList.addAll(modelList);
         notifyDataSetChanged();
     }
 

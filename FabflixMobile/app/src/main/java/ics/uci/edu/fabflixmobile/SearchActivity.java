@@ -54,8 +54,8 @@ public class SearchActivity extends AppCompatActivity {
         adapter = new SearchViewAdapter(this, modelViewList);
 
         initIndex = 0;
-        max = 0;
         display = 10;
+        max = 0;
 
         prev = (Button)findViewById(R.id.prev);
         next = (Button)findViewById(R.id.next);
@@ -113,7 +113,9 @@ public class SearchActivity extends AppCompatActivity {
                                         }
                                         fullModelList.add(model);
                                     }
+                                    adapter.filter(modelViewList);
                                     max = fullModelList.size();
+                                    setButtons(initIndex, modelViewList.size());
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -149,12 +151,16 @@ public class SearchActivity extends AppCompatActivity {
 
         int start = initIndex-display;
         start = (start > 0) ? start : 0;
+
         int end = initIndex;
         end = (end < max) ? end : max;
+
+        initIndex = start;
 
         for(int i = start; i < display; ++i) {
             modelViewList.add(fullModelList.get(i));
         }
+
 
         setButtons(start, end);
         adapter.filter(modelViewList);
@@ -163,10 +169,12 @@ public class SearchActivity extends AppCompatActivity {
     public void goToNext(View view) {
         modelViewList.clear();
 
-        int start = initIndex;
+        int start = initIndex+display;
         start = (start > 0) ? start : 0;
-        int end = initIndex+display;
+
+        int end = start+display;
         end = (end < max) ? end : max;
+        initIndex = end;
 
         for(int i = start; i < end; ++i) {
             modelViewList.add(fullModelList.get(i));
@@ -177,6 +185,11 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void setButtons(int start, int end) {
+        Log.d("change", "buttons");
+        Log.d("start", Integer.toString(start));
+        Log.d("end", Integer.toString(end));
+        Log.d("max", Integer.toString(max));
+
         if(start == 0) {
             prev.setVisibility(View.INVISIBLE);
             prev.setClickable(false);
@@ -185,12 +198,12 @@ public class SearchActivity extends AppCompatActivity {
             prev.setClickable(true);
         }
 
-        if(end <= max) {
-            next.setVisibility(View.INVISIBLE);
-            next.setClickable(false);
-        } else {
+        if(end < max) {
             next.setVisibility(View.VISIBLE);
             next.setClickable(true);
+        } else {
+            next.setVisibility(View.INVISIBLE);
+            next.setClickable(false);
         }
     }
 }
