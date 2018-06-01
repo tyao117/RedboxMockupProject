@@ -46,6 +46,9 @@ public class MovieAutoComplete extends HttpServlet {
     		// System.out.println("Going here");
     		jarray = getSuggestions(term);
     	}
+    	catch (SQLException s) {
+    		s.printStackTrace();
+    	}
     	catch (Exception e)
     	{
     		e.printStackTrace();
@@ -54,37 +57,71 @@ public class MovieAutoComplete extends HttpServlet {
     	out.close();
     	
     }
+    private String returnQueryString (String term)
+    {
+    	String queryString = "";
+    	String[] keywordArray = term.split(" ");
+    	//if keyword has more than one word
+    	if (keywordArray.length != 1)
+    	{
+    		for (String s: keywordArray)
+    		{
+    			String newString = "";
+    			if (!s.substring(0).equals("-") && !s.substring(0).equals("+"))
+    			{
+    				newString += "+" + s;
+    			} else {
+    				newString += s;
+    			}
+
+    			if (!s.substring(s.length()-1).equals("*"))
+    			{
+    				newString += "*";
+    			}
+
+    			queryString += newString + " ";	
+    		}
+    	} else {
+    		queryString += term.trim() + "*";
+    	}
+    	return queryString;
+    }
     
     private JsonArray getSuggestions(String term) throws SQLException, NamingException
     {
     	Connection dbcon = dataSource.getConnection();
     	JsonArray suggestions = new JsonArray();
-    	String query = "SELECT title, id FROM movies WHERE (title LIKE ? AND title LIKE ?) OR title = ? ORDER BY title LIMIT 10";
-        //replace whitespace
-         StringTokenizer tokenizer = new StringTokenizer(term);
-         String firstToken = tokenizer.nextToken();
-         term.replaceAll("\\s","%");
-         System.out.println("term=" + term);
+//    	String query = "SELECT title, id FROM movies WHERE (title LIKE ? AND title LIKE ?) OR title = ? ORDER BY title LIMIT 10";
+//        //replace whitespace
+//         StringTokenizer tokenizer = new StringTokenizer(term);
+//         String firstToken = tokenizer.nextToken();
+//         term.replaceAll("\\s","%");
+//         System.out.println("term=" + term);
+//
+//         PreparedStatement prepStmnt = dbcon.prepareStatement(query);
+//         prepStmnt.setString(1, firstToken+'%');
+//         prepStmnt.setString(2, term+'%');
+//         prepStmnt.setString(3, term);
+    	String queryString = returnQueryString(term);
+    	term = "%" + term + "%";
+//    	String query = "Select * from movies where match (title) against (? in boolean mode) limit 10;";
+    	String query = "select id, title from movies where (match (title) against (? in boolean mode)) OR (title LIKE ?) LIMIT 10";
+		PreparedStatement statement = dbcon.prepareStatement(query);
+		statement.setString(1, queryString);
+		statement.setString(2, term);
+    	ResultSet rs = statement.executeQuery();
 
-         PreparedStatement prepStmnt = dbcon.prepareStatement(query);
-         prepStmnt.setString(1, firstToken+'%');
-         prepStmnt.setString(2, term+'%');
-         prepStmnt.setString(3, term);
+    	while(rs.next())
+    	{
+    		String id = rs.getString("id");
+    		String title = rs.getString("title");
+    		suggestions.add(generateJsonObject(id, title, "single-movie"));
+    	}
+    	rs.close();
+    	statement.close();
+    	dbcon.close();
+    	return suggestions;
 
-         ResultSet rs = prepStmnt.executeQuery();
-
-         while(rs.next())
-         {
-             String id = rs.getString("id");
-             String title = rs.getString("title");
-             JsonObject jsonObject = new JsonObject();
-             suggestions.add(generateJsonObject(id, title, "single-movie"));
-         }
-         rs.close();
-         prepStmnt.close();
-         dbcon.close();
-         return suggestions;
-    	
     }
     /*
 	 * Generate the JSON Object from hero and category to be like this format:

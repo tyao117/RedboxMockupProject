@@ -60,7 +60,7 @@ public class SearchActivity extends AppCompatActivity {
                 String url = "https://10.0.2.2:8443/project/api/android-movielist?s=yes&movie_title=" + query;
 
                 Log.e("wtf", query);
-                final JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.POST, url, null,
+                final JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.GET, url, null,
                         new Response.Listener<JSONArray>() {
                             @Override
                             public void onResponse(JSONArray response) {
