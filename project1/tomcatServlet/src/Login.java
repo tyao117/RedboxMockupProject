@@ -50,7 +50,7 @@ public class Login extends HttpServlet {
         	RecaptchaVerifyUtils.verify(gRecaptchaResponse);
         } catch (Exception e) {
         	JsonObject responseJsonObject = new JsonObject();
-        	responseJsonObject.addProperty("status", "success");
+        	responseJsonObject.addProperty("status", "fail");
         	responseJsonObject.addProperty("message", e.getMessage());
         	out.write(responseJsonObject.toString());
         	out.close();
@@ -59,7 +59,7 @@ public class Login extends HttpServlet {
         if (gRecaptchaResponse == null)
         {
         	JsonObject responseJsonObject = new JsonObject();
-        	responseJsonObject.addProperty("status", "success");
+        	responseJsonObject.addProperty("status", "fail");
         	responseJsonObject.addProperty("message", "must click on Recaptcha");
         	out.write(responseJsonObject.toString());
         	out.close();
@@ -131,9 +131,7 @@ public class Login extends HttpServlet {
 
         } catch (Exception ex) {
         	
-            // Output Error Massage to html
-            out.println("name = " +  request.getParameter("email"));
-            out.println("password = " + request.getParameter("password"));
+           System.out.println(ex.toString());
             return;
         }
         out.close();
