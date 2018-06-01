@@ -59,6 +59,10 @@ public class SearchActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+
+                modelList.clear();
+//                listView.clearChoices();
+
                 // Post request form data
                 final Map<String, String> params = new HashMap<>();
                 params.put("movie_title", query);
@@ -113,10 +117,7 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if(TextUtils.isEmpty(newText)) {
-                    listView.clearTextFilter();
-                }
-                return true ;
+                return false ;
             }
         });
 
