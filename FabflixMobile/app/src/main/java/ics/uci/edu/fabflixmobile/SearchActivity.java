@@ -59,7 +59,7 @@ public class SearchActivity extends AppCompatActivity {
 
         prev = (Button)findViewById(R.id.prev);
         next = (Button)findViewById(R.id.next);
-        setButtons(initIndex, display);
+        setButtons(initIndex, initIndex);
 
         listView.setAdapter(adapter);
     }
@@ -185,7 +185,7 @@ public class SearchActivity extends AppCompatActivity {
             prev.setClickable(true);
         }
 
-        if(end < max) {
+        if(end <= max) {
             next.setVisibility(View.INVISIBLE);
             next.setClickable(false);
         } else {

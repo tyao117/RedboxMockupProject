@@ -32,7 +32,6 @@ public class SearchViewAdapter extends BaseAdapter {
     Context mContext;
     LayoutInflater inflater;
     List<SearchModel> modelList;
-    Vector<SearchModel> vector;
     final RequestQueue queue;
 
     //constructor
@@ -40,8 +39,6 @@ public class SearchViewAdapter extends BaseAdapter {
         mContext = context;
         this.modelList = modelList;
         inflater = LayoutInflater.from(mContext);
-        this.vector = new Vector<SearchModel>();
-        this.vector.addAll(modelList);
         queue = NetworkManager.sharedManager(context).queue;
     }
 
@@ -161,10 +158,8 @@ public class SearchViewAdapter extends BaseAdapter {
     //filter
     public void filter(List<SearchModel> modelList) {
         this.modelList.clear();
-        vector.clear();
-        vector.addAll(modelList);
-        for(SearchModel model : vector) {
-                modelList.add(model);
+        for(SearchModel model : modelList) {
+                this.modelList.add(model);
         }
         notifyDataSetChanged();
     }
