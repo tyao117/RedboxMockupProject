@@ -62,22 +62,19 @@ public class LoginActivity extends AppCompatActivity {
         Log.d("myTag", "Button Pressed");
 
         // Using 10.0.2.2 when running android emulator
-        final JsonObjectRequest loginRequest = new JsonObjectRequest(Request.Method.POST, "http://10.0.2.2:8080/project/api/android-login", null,
-                new Response.Listener<JSONObject>() {
+        final StringRequest loginRequest = new StringRequest(Request.Method.POST, "http://10.0.2.2:8080/project/api/android-login",
+                new Response.Listener<String>() {
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(String response) {
 
-                        try {
-                            String status = response.getString("status");
+                        String status = response;
+                        System.out.println(status);
 
-                            if(status.equalsIgnoreCase("sucess")) {
-                                Intent goToIntent = new Intent(LoginActivity.this, SearchActivity.class);
-                                startActivity(goToIntent);
+                        if(status.contains("success")) {
+                            Intent goToIntent = new Intent(LoginActivity.this, SearchActivity.class);
+                            startActivity(goToIntent);
 
-                                Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
                         }
                         Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_LONG).show();
                     }
