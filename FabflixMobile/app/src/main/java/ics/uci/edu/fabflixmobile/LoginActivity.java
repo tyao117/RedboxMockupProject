@@ -66,15 +66,17 @@ public class LoginActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        try {
+                            JSONObject object = new JSONObject(response);
+                            if(object.get("status").equals("success")) {
 
-                        String status = response;
-                        System.out.println(status);
+                                Intent goToIntent = new Intent(LoginActivity.this, SearchActivity.class);
+                                startActivity(goToIntent);
 
-                        if(status.contains("success")) {
-                            Intent goToIntent = new Intent(LoginActivity.this, SearchActivity.class);
-                            startActivity(goToIntent);
-
-                            Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
                         Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_LONG).show();
                     }

@@ -13,4 +13,6 @@
     <string name="stars">Stars</string>
     <string name="genres">genres</string>
     <string name="id">ID</string>
+    <string name="next">Next</string>
+    <string name="prev">Prev</string>
 </resources>
