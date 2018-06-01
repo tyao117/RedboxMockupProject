@@ -32,11 +32,12 @@ public class AndroidLogin extends HttpServlet{
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     	System.out.println("Received android request");
-    	
+    	Connection dbCon;
+    	ResultSet rs;
     	try {
     		response.setContentType("application/json"); 	
     		// Create a new connection to database
-    		Connection dbCon = dataSource.getConnection();
+    		dbCon = dataSource.getConnection();
 
     		// Declare a new statement
 
@@ -57,7 +58,7 @@ public class AndroidLogin extends HttpServlet{
 
 
     		// Perform the query
-    		ResultSet rs = statement.executeQuery();
+    		rs = statement.executeQuery();
     		while(rs.next()) {
             	dbName = rs.getString("email");
             	dbPassword = rs.getString("password");
@@ -79,7 +80,6 @@ public class AndroidLogin extends HttpServlet{
                 if (!name.equals(dbName)) {
                     responseJsonObject.addProperty("message", "user " + name + " doesn't exist");
                 } else if (!passwordSuccess) {
-                	
                     responseJsonObject.addProperty("message", "incorrect password");
                 }
                 response.getWriter().write(responseJsonObject.toString());
@@ -89,8 +89,18 @@ public class AndroidLogin extends HttpServlet{
             statement.close();
             dbCon.close();
 
-        }catch(Exception ex){
-            response.getWriter().println("Error!!!!!!");
+            
+        } catch (SQLException e) {
+        	JsonObject responseJsonObject = new JsonObject();
+            responseJsonObject.addProperty("status", "fail");
+            responseJsonObject.addProperty("message", e.toString());
+            response.getWriter().write(responseJsonObject.toString());
+        	
+        } catch(Exception ex){
+        	JsonObject responseJsonObject = new JsonObject();
+            responseJsonObject.addProperty("status", "fail");
+            responseJsonObject.addProperty("message", ex.toString());
+            response.getWriter().write(responseJsonObject.toString());
         }
     }
 
