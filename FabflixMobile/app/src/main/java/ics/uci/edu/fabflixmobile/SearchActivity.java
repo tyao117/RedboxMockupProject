@@ -10,7 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
@@ -33,8 +33,14 @@ import java.util.Map;
 public class SearchActivity extends AppCompatActivity implements OnItemClickListener{
 
     ListView listView;
+    Button next;
+    Button prev;
     SearchViewAdapter adapter;
-    List<SearchModel> modelList;
+    List<SearchModel> modelViewList;
+    List<SearchModel> fullModelList;
+    private int initIndex;
+    private int max;
+    private int display;
 
     public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
         Log.i("position", "clicked on position" + position);
@@ -57,9 +63,8 @@ public class SearchActivity extends AppCompatActivity implements OnItemClickList
         listView = findViewById(R.id.listView);
         modelList = new ArrayList<SearchModel>();
         adapter = new SearchViewAdapter(this, modelList);
-        listView.setOnItemClickListener(this);
-        listView.setAdapter(adapter);
 
+        listView.setAdapter(adapter);
     }
 
     @Override
@@ -75,8 +80,7 @@ public class SearchActivity extends AppCompatActivity implements OnItemClickList
             @Override
             public boolean onQueryTextSubmit(String query) {
 
-                modelList.clear();
-//                listView.clearChoices();
+                modelViewList.clear();
 
                 // Post request form data
                 final Map<String, String> params = new HashMap<>();
@@ -107,8 +111,12 @@ public class SearchActivity extends AppCompatActivity implements OnItemClickList
                                         }
 
                                         SearchModel model = new SearchModel(id, title, director, year, genre, stars);
-                                        modelList.add(model);
+                                        if(i < display) {
+                                            modelViewList.add(model);
+                                        }
+                                        fullModelList.add(model);
                                     }
+                                    max = fullModelList.size();
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -137,5 +145,55 @@ public class SearchActivity extends AppCompatActivity implements OnItemClickList
         });
 
         return true;
+    }
+
+    public void goToPrev(View view) {
+        modelViewList.clear();
+
+        int start = initIndex-display;
+        start = (start > 0) ? start : 0;
+        int end = initIndex;
+        end = (end < max) ? end : max;
+
+        for(int i = start; i < display; ++i) {
+            modelViewList.add(fullModelList.get(i));
+        }
+
+        setButtons(start, end);
+        adapter.filter(modelViewList);
+    }
+
+    public void goToNext(View view) {
+        modelViewList.clear();
+
+        int start = initIndex;
+        start = (start > 0) ? start : 0;
+        int end = initIndex+display;
+        end = (end < max) ? end : max;
+
+        for(int i = start; i < end; ++i) {
+            modelViewList.add(fullModelList.get(i));
+        }
+
+        setButtons(start, end);
+        adapter.filter(modelViewList);
+    }
+
+    private void setButtons(int start, int end) {
+        if(start == 0) {
+            prev.setVisibility(View.INVISIBLE);
+            prev.setClickable(false);
+        } else {
+            prev.setVisibility(View.VISIBLE);
+            prev.setClickable(true);
+        }
+
+        if(end < max) {
+            next.setVisibility(View.INVISIBLE);
+            next.setClickable(false);
+        } else {
+            next.setVisibility(View.VISIBLE);
+            next.setClickable(true);
+        }
     }
 }
