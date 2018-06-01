@@ -164,7 +164,7 @@ public class SearchViewAdapter extends BaseAdapter {
         vector.clear();
         vector.addAll(modelList);
         for(SearchModel model : vector) {
-                modelList.add(model);
+                this.modelList.add(model);
         }
         notifyDataSetChanged();
     }
