@@ -156,10 +156,25 @@ public class SearchViewAdapter extends BaseAdapter {
     }
 
     //filter
-    public void filter(List<SearchModel> modelList) {
-        Log.d("incoming size", Integer.toString(modelList.size()));
-        this.modelList.clear();
-        this.modelList.addAll(modelList);
+    public void filter(List<SearchModel> models) {
+        int size = models.size();
+        Log.d("incoming size", Integer.toString(size));
+        for(int i = 0; i < size; ++i) {
+            Log.d("model", models.get(i).title);
+        }
+
+        Log.d("status", "finish print models");
+
+        if(!modelList.isEmpty()) {
+            modelList.clear();
+        }
+
+        Log.d("status", "adding models");
+
+        for(int i = 0; i < size-1; ++i) {
+            Log.d("modelList", "adding "+models.get(i));
+            modelList.add(models.get(i));
+        }
         notifyDataSetChanged();
     }
 

@@ -113,13 +113,15 @@ public class SearchActivity extends AppCompatActivity {
                                         }
                                         fullModelList.add(model);
                                     }
-                                    adapter.filter(modelViewList);
                                     max = fullModelList.size();
                                     setButtons(initIndex, modelViewList.size());
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+
+                                Log.d("enter","filter");
+                                adapter.filter(modelViewList);
                             }
                         },
                         new Response.ErrorListener() {
@@ -181,6 +183,7 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         setButtons(start, end);
+        Log.d("movieViewList", modelViewList.toArray().toString());
         adapter.filter(modelViewList);
     }
 
