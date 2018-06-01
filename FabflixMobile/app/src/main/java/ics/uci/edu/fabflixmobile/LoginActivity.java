@@ -12,7 +12,11 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,8 +46,12 @@ public class LoginActivity extends AppCompatActivity {
     public void connectToTomcat(View view) {
         // Post request form data
         final Map<String, String> params = new HashMap<>();
-        params.put("email", mEmailView.getText().toString());
-        params.put("password", mPasswordView.getText().toString());
+        String email = mEmailView.getText().toString();
+        String pass = mPasswordView.getText().toString();
+        System.out.println("email "+email);
+        System.out.println("pass "+pass);
+        params.put("email", email);
+        params.put("password", pass);
 
 
         // no user is logged in, so we must connect to the server
@@ -54,18 +62,24 @@ public class LoginActivity extends AppCompatActivity {
         Log.d("myTag", "Button Pressed");
 
         // Using 10.0.2.2 when running android emulator
-        final StringRequest loginRequest = new StringRequest(Request.Method.POST, "https://10.0.2.2:8443/project/api/android-login",
-                new Response.Listener<String>() {
+        final JsonObjectRequest loginRequest = new JsonObjectRequest(Request.Method.POST, "http://10.0.2.2:8080/project/api/android-login", null,
+                new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(String response) {
+                    public void onResponse(JSONObject response) {
 
-                        Log.d("response", response);
+                        try {
+                            String status = response.getString("status");
 
-                        Intent goToIntent = new Intent(LoginActivity.this, SearchActivity.class);
-                        startActivity(goToIntent);
+                            if(status.equalsIgnoreCase("sucess")) {
+                                Intent goToIntent = new Intent(LoginActivity.this, SearchActivity.class);
+                                startActivity(goToIntent);
 
-                        Toast.makeText(LoginActivity.this,"Login Successful", Toast.LENGTH_LONG).show();
-
+                                Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_LONG).show();
                     }
                 },
                 new Response.ErrorListener() {
@@ -74,7 +88,7 @@ public class LoginActivity extends AppCompatActivity {
                         // error
                         Log.d("security.error", error.toString());
 
-                        Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this, "Error", Toast.LENGTH_LONG).show();
                     }
                 }
         ) {

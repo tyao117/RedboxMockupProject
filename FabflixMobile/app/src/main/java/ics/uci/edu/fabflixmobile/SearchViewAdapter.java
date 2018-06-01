@@ -7,8 +7,16 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonArrayRequest;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
+
+import static ics.uci.edu.fabflixmobile.R.id.movieId;
 
 public class SearchViewAdapter extends BaseAdapter {
 
@@ -17,6 +25,7 @@ public class SearchViewAdapter extends BaseAdapter {
     LayoutInflater inflater;
     List<SearchModel> modelList;
     Vector<SearchModel> vector;
+    final RequestQueue queue;
 
     //constructor
     public SearchViewAdapter(Context context, List<SearchModel> modelList) {
@@ -25,6 +34,7 @@ public class SearchViewAdapter extends BaseAdapter {
         inflater = LayoutInflater.from(mContext);
         this.vector = new Vector<SearchModel>();
         this.vector.addAll(modelList);
+        queue = NetworkManager.sharedManager(context).queue;
     }
 
     public class ViewHolder {
@@ -47,14 +57,14 @@ public class SearchViewAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View view, ViewGroup parent) {
+    public View getView(final int position, View view, ViewGroup parent) {
         ViewHolder holder;
         if(view == null) {
             holder = new ViewHolder();
             view = inflater.inflate(R.layout.search_row, null);
 
             //locate the views
-            holder.mIDTv = view.findViewById(R.id.movieId);
+            holder.mIDTv = view.findViewById(movieId);
             holder.mTitleTv = view.findViewById(R.id.movieTitle);
             holder.mDirTv = view.findViewById(R.id.movieDirector);
             holder.mYearTv = view.findViewById(R.id.movieYear);
@@ -76,28 +86,25 @@ public class SearchViewAdapter extends BaseAdapter {
 
         //listview itemm clicks
         view.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                //TODO
+                String id = modelList.get(position).getId();
+
+                // Post request form data
+                final Map<String, String> params = new HashMap<>();
+                params.put("id", id);
+
+//                JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, )
+
+//                queue.add(jsonArrayRequest);
             }
         });
 
         return view;
     }
 
+    public void destroyView() {
 
-    //filter
-    public void filter(String charText) {
-        modelList.clear();
-        if(charText.length() == 0) {
-            //do nothing
-        } else {
-            for(SearchModel model : vector) {
-                if(model.getTitle().equals(charText)) {
-                    modelList.add(model);
-                }
-            }
-        }
-        notifyDataSetChanged();
     }
 }
