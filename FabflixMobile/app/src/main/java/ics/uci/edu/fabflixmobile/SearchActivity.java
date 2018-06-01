@@ -56,9 +56,10 @@ public class SearchActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 // Post request form data
                 final Map<String, String> params = new HashMap<>();
-                String url = "https://10.0.2.2:8443/project/api/android-movielist?s=yes";
                 params.put("movie_title", query);
-                Log.e("wtf", url);
+                String url = "https://10.0.2.2:8443/project/api/android-movielist?s=yes&movie_title=" + query;
+
+                Log.e("wtf", query);
                 final JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.POST, url, null,
                         new Response.Listener<JSONArray>() {
                             @Override
