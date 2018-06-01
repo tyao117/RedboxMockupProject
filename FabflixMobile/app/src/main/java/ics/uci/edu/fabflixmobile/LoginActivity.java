@@ -69,14 +69,21 @@ public class LoginActivity extends AppCompatActivity {
 
                         String status = response;
                         System.out.println(status);
+                        try {
+                            JSONObject object = new JSONObject(response);
+                            System.out.println("status = " + object.get("status").toString());
+                            if (object.get("status").equals("success")) {
 
-                        if(status.contains("success")) {
-                            Intent goToIntent = new Intent(LoginActivity.this, SearchActivity.class);
-                            startActivity(goToIntent);
-
-                            Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                                Intent goToIntent = new Intent(LoginActivity.this, SearchActivity.class);
+                                startActivity(goToIntent);
+                                Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_LONG).show();
+                            }
+                        } catch (Throwable t) {
+                            Log.e("My App", "Could not parse malformed JSON: \"" + response + "\"");
                         }
-                        Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_LONG).show();
                     }
                 },
                 new Response.ErrorListener() {
