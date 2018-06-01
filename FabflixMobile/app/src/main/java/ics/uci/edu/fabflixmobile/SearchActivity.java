@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +36,7 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
 
         listView = findViewById(R.id.listView);
-
+        modelList = new ArrayList<SearchModel>();
         adapter = new SearchViewAdapter(this, modelList);
 
         listView.setAdapter(adapter);
@@ -55,9 +56,10 @@ public class SearchActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 // Post request form data
                 final Map<String, String> params = new HashMap<>();
+                String url = "https://10.0.2.2:8443/project/api/android-movielist?s=yes";
                 params.put("movie_title", query);
-
-                final JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.GET, "http://10.0.2.2:8080/project/api/android-login", null,
+                Log.e("wtf", url);
+                final JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.POST, url, null,
                         new Response.Listener<JSONArray>() {
                             @Override
                             public void onResponse(JSONArray response) {

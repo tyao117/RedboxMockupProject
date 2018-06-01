@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         Log.d("myTag", "Button Pressed");
 
         // Using 10.0.2.2 when running android emulator
-        final StringRequest loginRequest = new StringRequest(Request.Method.POST, "http://10.0.2.2:8080/project/api/android-login",
+        final StringRequest loginRequest = new StringRequest(Request.Method.POST, "https://10.0.2.2:8443/project/api/android-login",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

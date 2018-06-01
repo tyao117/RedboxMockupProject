@@ -19,8 +19,8 @@ import java.util.Arrays;
 import java.util.List;
 
 // Declaring a WebServlet called SingleStarServlet, which maps to url "/api/single-star"
-@WebServlet(name = "MovieServlet", urlPatterns = "/api/movielist")
-public class MovieListServlet extends HttpServlet {
+@WebServlet(name = "AndroidMovieServlet", urlPatterns = "/api/android-movielist")
+public class AndroidMovieList extends HttpServlet {
 	private static final long serialVersionUID = 2L;
 
 	// Create a dataSource which registered in web.xml
@@ -50,12 +50,12 @@ public class MovieListServlet extends HttpServlet {
 			title = "%" + title;
 		title = (title != null) ? title : "";
 		
-		System.out.println("TitleTemp = "+ title);
+		System.out.println("AndroidTitleTemp = "+ title);
 		year = (year != null) ? year : "";
 		director = (director != null) ? director : "";
 		star_name = (star_name != null) ? star_name : "";
 
-		System.out.println("going to movieServlet");
+		System.out.println("going to AndroidmovieServlet");
 		
 		// Output stream to STDOUT
 		PrintWriter out = response.getWriter();
@@ -64,24 +64,13 @@ public class MovieListServlet extends HttpServlet {
 			// Get a connection from dataSource
 			Connection dbcon = dataSource.getConnection();
 			String query = "";
-			if (genre != null) {
-				System.out.println("going into Genre!!!!!");
-                query = ("SELECT m.id, m.title, m.year, m.director, GROUP_CONCAT(DISTINCT g.name separator ',') AS genres, GROUP_CONCAT(DISTINCT s.name, ',', s.id separator ',') AS starNameID, r.rating\r\n" + 
-                		"	FROM movies m, stars_in_movies sim, stars s, genres g, genres_in_movies gim, ratings r\r\n" + 
-                		"   WHERE m.id = sim.movieid AND s.id = sim.starId AND g.id = gim.genreId AND m.id = gim.movieId AND m.id = r.movieId\r\n" + 
-                		"   AND g.name LIKE ? \r\n" + 
-                		"   GROUP BY m.id, m.title, m.year, m.director, r.rating \r\n" + 
-                		"	LIMIT 1000");        
-         
-			} else {
-                query = ("SELECT m.id, m.title, m.year, m.director, GROUP_CONCAT(DISTINCT g.name separator ',') AS genres, GROUP_CONCAT(DISTINCT s.name, ',', s.id separator ',') AS starNameID, r.rating\r\n" + 
-                		"	FROM movies m, stars_in_movies sim, stars s, genres g, genres_in_movies gim, ratings r\r\n" + 
-                		"	WHERE m.id = sim.movieid AND s.id = sim.starId AND g.id = gim.genreId AND m.id = gim.movieId AND m.id = r.movieId\r\n" + 
-                		"	AND m.title LIKE ? AND m.director LIKE ? AND m.year LIKE ? \r\n" + 
-                		"	AND s.name LIKE ? \r\n" + 
-                		"	GROUP BY m.id, m.title, m.year, m.director, r.rating \r\n" +
-                		"	LIMIT 1000"); 
-			}
+			query = ("SELECT m.id, m.title, m.year, m.director, GROUP_CONCAT(DISTINCT g.name separator ',') AS genres, GROUP_CONCAT(DISTINCT s.name, ',', s.id separator ',') AS starNameID, r.rating\r\n" + 
+					"	FROM movies m, stars_in_movies sim, stars s, genres g, genres_in_movies gim, ratings r\r\n" + 
+					"	WHERE m.id = sim.movieid AND s.id = sim.starId AND g.id = gim.genreId AND m.id = gim.movieId AND m.id = r.movieId\r\n" + 
+					"	AND m.title LIKE ? \r\n" + 
+					"	GROUP BY m.id, m.title, m.year, m.director, r.rating \r\n" +
+					"	LIMIT 1000"); 
+
 			// Declare our statement
 			PreparedStatement statement = dbcon.prepareStatement(query);
 
@@ -96,9 +85,7 @@ public class MovieListServlet extends HttpServlet {
 				year = "%" + year + "%";
 				star_name = "%" + star_name + "%";
 				statement.setString(1, title);
-				statement.setString(2, director);
-				statement.setString(3, year);
-				statement.setString(4, star_name);
+
 			}
 
 			// Set the parameter represented by "?" in the query to the id we get from url,

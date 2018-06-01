@@ -46,7 +46,8 @@ public class AndroidLogin extends HttpServlet{
     		// Make new variables for the result
     		String dbName = null;
     		String dbPassword = null;
-
+    		System.out.println("name" + name);
+    		System.out.println("password" + password);
     		// Generate a SQL query
 
     		String query = String.format("SELECT email, password, ccId, id from customers where email=? or password=? limit 20");
@@ -64,10 +65,12 @@ public class AndroidLogin extends HttpServlet{
             boolean passwordSuccess = new StrongPasswordEncryptor().checkPassword(password,dbPassword);
             // Give a result status
             if (name.equals(dbName) && passwordSuccess) {
-            	
+            	request.getSession().setAttribute("user", new User(name));
+            	System.out.println("user is here" + request.getSession().getAttribute("user"));
             	JsonObject responseJsonObject = new JsonObject();
                 responseJsonObject.addProperty("status", "success");
                 responseJsonObject.addProperty("message", "success");
+                System.out.println("it works!!!");
                 response.getWriter().write(responseJsonObject.toString());
             } else {
             	// Login fail

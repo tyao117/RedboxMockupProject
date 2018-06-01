@@ -28,7 +28,9 @@ public class LoginFilter implements Filter {
 
         // Redirect to login page if the "user" attribute doesn't exist in session
         if (httpRequest.getSession().getAttribute("user") == null) {
-            httpResponse.sendRedirect("index.html");
+        	
+        	String projectRootPath = httpRequest.getContextPath();
+            httpResponse.sendRedirect(projectRootPath + "/index.html");
         // add Recaptcha when you have the chance
         } else {
             chain.doFilter(request, response);
@@ -44,11 +46,8 @@ public class LoginFilter implements Filter {
         return requestURI.endsWith("login.html") || requestURI.endsWith("login.js")
                 || requestURI.endsWith("api/login") || requestURI.endsWith("index.html") 
                 || requestURI.endsWith("_dashboard.html") || requestURI.endsWith("_dashboard.js") 
-<<<<<<< HEAD
-                || requestURI.endsWith("api/employee_login") || requestURI.endsWith("/api/android-login");
-=======
-                || requestURI.endsWith("api/employee_login") || requestURI.endsWith("api/android-login");
->>>>>>> jimi-feature2
+                || requestURI.endsWith("api/employee_login") || requestURI.endsWith("api/android-login")
+                || requestURI.endsWith("api/android-movielist") || requestURI.endsWith("api/movielist");
     }
 
     /**
