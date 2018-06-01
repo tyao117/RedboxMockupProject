@@ -38,22 +38,16 @@ public class AndroidMovieList extends HttpServlet {
 		//response.setContentType("text/html");
 		// Retrieve parameter id from url request.
 		String title = request.getParameter("movie_title");
-		String year = request.getParameter("movie_year");
-		String director = request.getParameter("director");
-		String star_name = request.getParameter("star_name");
 		String genre = request.getParameter("genre");
 		String orderBy = request.getParameter("order_by");
 		String frmSearch = request.getParameter("s");
 		
-		
+		String terms = returnQueryString(title);
 		if (title != null && frmSearch != null)
 			title = "%" + title;
 		title = (title != null) ? title : "";
 		
-		System.out.println("AndroidTitleTemp = "+ title);
-		year = (year != null) ? year : "";
-		director = (director != null) ? director : "";
-		star_name = (star_name != null) ? star_name : "";
+		System.out.println("AndroidTitleTemp = "+ title +", terms = " + terms);
 
 		System.out.println("going to AndroidmovieServlet");
 		
@@ -64,29 +58,21 @@ public class AndroidMovieList extends HttpServlet {
 			// Get a connection from dataSource
 			Connection dbcon = dataSource.getConnection();
 			String query = "";
-			query = ("SELECT m.id, m.title, m.year, m.director, GROUP_CONCAT(DISTINCT g.name separator ',') AS genres, GROUP_CONCAT(DISTINCT s.name, ',', s.id separator ',') AS starNameID, r.rating\r\n" + 
-					"	FROM movies m, stars_in_movies sim, stars s, genres g, genres_in_movies gim, ratings r\r\n" + 
-					"	WHERE m.id = sim.movieid AND s.id = sim.starId AND g.id = gim.genreId AND m.id = gim.movieId AND m.id = r.movieId\r\n" + 
-					"	AND m.title LIKE ? \r\n" + 
-					"	GROUP BY m.id, m.title, m.year, m.director, r.rating \r\n" +
-					"	LIMIT 1000"); 
+			query = ("SELECT m.id, m.title, m.year, m.director, GROUP_CONCAT(DISTINCT g.name separator ',') AS genres, GROUP_CONCAT(DISTINCT s.name, ',', s.id separator ',') AS starNameID, r.rating\n" + 
+					"FROM movies m, stars_in_movies sim, stars s, genres g, genres_in_movies gim, ratings r\n" + 
+					"WHERE m.id = sim.movieid AND s.id = sim.starId AND g.id = gim.genreId AND m.id = gim.movieId AND m.id = r.movieId\n" + 
+					"AND ( m.title LIKE ? or match (m.title) against ( ? in boolean mode))\n" + 
+					"GROUP BY m.id, m.title, m.year, m.director, r.rating \n" + 
+					"LIMIT 1000"); 
 
 			// Declare our statement
 			PreparedStatement statement = dbcon.prepareStatement(query);
 
 						// Set the parameter represented by "?" in the query to the id we get from url,
 						// num 1 indicates the first "?" in the query
-			if (genre != null) {
-				genre = "%" + genre + "%";
-				statement.setString(1, genre);
-			} else {
-				title = title + "%";
-				director = "%" + director +"%";
-				year = "%" + year + "%";
-				star_name = "%" + star_name + "%";
-				statement.setString(1, title);
-
-			}
+			title = title + "%";
+			statement.setString(1, title);
+			statement.setString(2, terms);
 
 			// Set the parameter represented by "?" in the query to the id we get from url,
 			// num 1 indicates the first "?" in the query
@@ -140,7 +126,7 @@ public class AndroidMovieList extends HttpServlet {
 			JsonObject jsonObject = new JsonObject();
 			jsonObject.addProperty("errorMessage", ex.getMessage());
 			out.write(jsonObject.toString());
-			// set reponse status to 500 (Internal Server Error)
+			// set response status to 500 (Internal Server Error)
 			response.setStatus(500);
 		} catch (Exception e) {
 			// write error message JSON object to output
@@ -148,7 +134,7 @@ public class AndroidMovieList extends HttpServlet {
 			JsonObject jsonObject = new JsonObject();
 			jsonObject.addProperty("errorMessage", e.getMessage());
 			out.write(jsonObject.toString());
-			// set reponse status to 500 (Internal Server Error)
+			// set response status to 500 (Internal Server Error)
 			response.setStatus(500);
 		}
 		out.close();
@@ -156,6 +142,31 @@ public class AndroidMovieList extends HttpServlet {
 	
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	doGet(request, response);
+    }
+	
+	private String returnQueryString (String term)
+    {
+    	String queryString = "";
+    	String[] keywordArray = term.split(" ");
+    	//if keyword has more than one word
+    	if (keywordArray.length != 1) {
+    		for (String s: keywordArray) {
+    			String newString = "";
+    			if (!s.substring(0).equals("-") && !s.substring(0).equals("+")) {
+    				newString += "+" + s;
+    			} else {
+    				newString += s;
+    			}
+
+    			if (!s.substring(s.length()-1).equals("*")) {
+    				newString += "*";
+    			}
+    			queryString += newString + " ";	
+    		}
+    	} else {
+    		queryString += term.trim() + "*";
+    	}
+    	return queryString;
     }
 
 }

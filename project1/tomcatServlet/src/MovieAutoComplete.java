@@ -64,21 +64,16 @@ public class MovieAutoComplete extends HttpServlet {
     	//if keyword has more than one word
     	if (keywordArray.length != 1)
     	{
-    		for (String s: keywordArray)
-    		{
+    		for (String s: keywordArray) {
     			String newString = "";
-    			if (!s.substring(0).equals("-") && !s.substring(0).equals("+"))
-    			{
+    			if (!s.substring(0).equals("-") && !s.substring(0).equals("+")) {
     				newString += "+" + s;
     			} else {
     				newString += s;
     			}
-
-    			if (!s.substring(s.length()-1).equals("*"))
-    			{
+    			if (!s.substring(s.length()-1).equals("*")) {
     				newString += "*";
     			}
-
     			queryString += newString + " ";	
     		}
     	} else {
