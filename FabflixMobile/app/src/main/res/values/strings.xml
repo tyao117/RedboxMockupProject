@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">FabflixMobile</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="listView">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="action_sign_in">Sign In</string>
+    <string name="title">Title</string>
+    <string name="director">Director</string>
+    <string name="year">Year</string>
+    <string name="stars">Stars</string>
+    <string name="genres">genres</string>
+    <string name="id">ID</string>
+</resources>
