@@ -39,6 +39,8 @@ public class SearchActivity extends AppCompatActivity {
     private int initIndex;
     private int max;
     private int display;
+    int start;
+    int end;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,8 @@ public class SearchActivity extends AppCompatActivity {
         initIndex = 0;
         display = 10;
         max = 0;
+        start = 0;
+        end = 0;
 
         prev = (Button)findViewById(R.id.prev);
         next = (Button)findViewById(R.id.next);
@@ -77,19 +81,24 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
 
-                modelViewList.clear();
 
                 // Post request form data
                 final Map<String, String> params = new HashMap<>();
                 params.put("movie_title", query);
                 String url = "http://10.0.2.2:8080/project/api/android-movielist?s=yes&movie_title=" + query;
 
+                modelViewList.clear();
+                fullModelList.clear();
+
                 Log.e("wtf", query);
                 final JsonArrayRequest jsonRequest = new JsonArrayRequest(Request.Method.POST, url, null,
                         new Response.Listener<JSONArray>() {
                             @Override
                             public void onResponse(JSONArray response) {
+                                modelViewList.clear();
+                                fullModelList.clear();
                                 String title = "";
+
                                 try {
                                     for(int i = 0; i < response.length(); ++i) {
                                         JSONObject jsonObject = response.getJSONObject(i);
@@ -115,13 +124,14 @@ public class SearchActivity extends AppCompatActivity {
                                     }
                                     max = fullModelList.size();
                                     setButtons(initIndex, modelViewList.size());
+                                    start = 0;
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
 
                                 Log.d("enter","filter");
-                                adapter.filter(modelViewList);
+                                adapter.filter();
                             }
                         },
                         new Response.ErrorListener() {
@@ -151,40 +161,39 @@ public class SearchActivity extends AppCompatActivity {
     public void goToPrev(View view) {
         modelViewList.clear();
 
-        int start = initIndex-display;
+        start = initIndex-display;
         start = (start > 0) ? start : 0;
 
-        int end = initIndex;
+        end = start+display;
         end = (end < max) ? end : max;
 
-        initIndex = start;
+        initIndex = initIndex-display;
 
-        for(int i = start; i < display; ++i) {
+        for(int i = start; i < end; ++i) {
             modelViewList.add(fullModelList.get(i));
         }
 
 
         setButtons(start, end);
-        adapter.filter(modelViewList);
+        adapter.filter();
     }
 
     public void goToNext(View view) {
         modelViewList.clear();
 
-        int start = initIndex+display;
+        start = initIndex+display;
         start = (start > 0) ? start : 0;
 
-        int end = start+display;
+        end = start+display;
         end = (end < max) ? end : max;
-        initIndex = end;
+        initIndex += display;
 
         for(int i = start; i < end; ++i) {
             modelViewList.add(fullModelList.get(i));
         }
 
         setButtons(start, end);
-        Log.d("movieViewList", modelViewList.toArray().toString());
-        adapter.filter(modelViewList);
+        adapter.filter();
     }
 
     private void setButtons(int start, int end) {
