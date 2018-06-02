@@ -74,13 +74,14 @@ public class MovieListServlet extends HttpServlet {
                 		"	LIMIT 1000");        
          
 			} else {
-                query = ("SELECT m.id, m.title, m.year, m.director, GROUP_CONCAT(DISTINCT g.name separator ',') AS genres, GROUP_CONCAT(DISTINCT s.name, ',', s.id separator ',') AS starNameID, r.rating\r\n" + 
-                		"	FROM movies m, stars_in_movies sim, stars s, genres g, genres_in_movies gim, ratings r\r\n" + 
-                		"	WHERE m.id = sim.movieid AND s.id = sim.starId AND g.id = gim.genreId AND m.id = gim.movieId AND m.id = r.movieId\r\n" + 
-                		"	AND (match (m.title) against ( ? in boolean mode) OR ( ? LIKE m.title)) AND m.director LIKE ? AND m.year LIKE ? \r\n" + 
-                		"	AND s.name LIKE ? \r\n" + 
-                		"	GROUP BY m.id, m.title, m.year, m.director, r.rating \r\n" +
-                		"	LIMIT 1000"); 
+                query = ("SELECT m.id, m.title, m.year, m.director, GROUP_CONCAT(DISTINCT g.name separator ',') AS genres, GROUP_CONCAT(DISTINCT s.name, ',', s.id separator ',') AS starNameID, r.rating \n" + 
+                		"FROM movies m, stars_in_movies sim, stars s, genres g, genres_in_movies gim, ratings r\n" + 
+                		"WHERE m.id = sim.movieid AND s.id = sim.starId AND g.id = gim.genreId AND m.id = gim.movieId AND m.id = r.movieId \n" + 
+                		"AND (match (m.title) against ( ? in boolean mode) OR ( ? LIKE m.title) OR ed(m.title, ?) <= 3) AND m.director LIKE ? AND m.year LIKE ?\n" + 
+                		"AND s.name LIKE ? \n" + 
+                		"GROUP BY m.id, m.title, m.year, m.director, r.rating\n" + 
+                		"order by (ed('star',m.title)) asc\n" + 
+                		"LIMIT 1000"); 
 			}
 			// Declare our statement
 			PreparedStatement statement = dbcon.prepareStatement(query);
@@ -97,9 +98,10 @@ public class MovieListServlet extends HttpServlet {
 				star_name = "%" + star_name + "%";
 				statement.setString(1, terms);
 				statement.setString(2, title);
-				statement.setString(3, director);
-				statement.setString(4, year);
-				statement.setString(5, star_name);
+				statement.setString(3, title);
+				statement.setString(4, director);
+				statement.setString(5, year);
+				statement.setString(6, star_name);
 			}
 
 			// Set the parameter represented by "?" in the query to the id we get from url,
