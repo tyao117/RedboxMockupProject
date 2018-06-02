@@ -108,7 +108,7 @@ public class SearchViewAdapter extends BaseAdapter {
                     final Map<String, String> params = new HashMap<>();
                     params.put("id", id);
 
-                    String url = "http://10.0.2.2:8080/project/api/single-movie?id=" + id;
+                    String url = "https://18.216.228.119:8443/project/api/single-movie?id=" + id;
 
                     final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
                             new Response.Listener<JSONArray>() {

@@ -85,7 +85,9 @@ public class SearchActivity extends AppCompatActivity {
                 // Post request form data
                 final Map<String, String> params = new HashMap<>();
                 params.put("movie_title", query);
-                String url = "http://10.0.2.2:8080/project/api/android-movielist?s=yes&movie_title=" + query;
+                //String url = "http://10.0.2.2:8080/project/api/android-movielist?s=yes&movie_title=" + query;
+                String url = "https://18.216.228.119:8443/project/api/android-movielist?s=yes&movie_title=" + query;
+
 
                 modelViewList.clear();
                 fullModelList.clear();
