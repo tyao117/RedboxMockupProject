@@ -61,8 +61,9 @@ public class AndroidMovieList extends HttpServlet {
 			query = ("SELECT m.id, m.title, m.year, m.director, GROUP_CONCAT(DISTINCT g.name separator ',') AS genres, GROUP_CONCAT(DISTINCT s.name, ',', s.id separator ',') AS starNameID, r.rating \r\n" + 
 					"FROM movies m, stars_in_movies sim, stars s, genres g, genres_in_movies gim, ratings r \r\n" + 
 					"WHERE m.id = sim.movieid AND s.id = sim.starId AND g.id = gim.genreId AND m.id = gim.movieId AND m.id = r.movieId \r\n" + 
-					"AND ( m.title LIKE ? or match (m.title) against ( ? in boolean mode)) \r\n" + 
+					"AND ( m.title LIKE ? or match (m.title) against ( ? in boolean mode) or ed(m.title, ?) <= 3) \r\n" + 
 					"GROUP BY m.id, m.title, m.year, m.director, r.rating \r\n" + 
+					"order by (ed(?, m.title)) asc \r\n" +
 					"LIMIT 250"); 
 
 			// Declare our statement
@@ -73,6 +74,8 @@ public class AndroidMovieList extends HttpServlet {
 			title = title + "%";
 			statement.setString(1, title);
 			statement.setString(2, terms);
+			statement.setString(3, title);
+			statement.setString(4, title);
 
 			// Set the parameter represented by "?" in the query to the id we get from url,
 			// num 1 indicates the first "?" in the query

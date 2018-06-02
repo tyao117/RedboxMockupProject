@@ -80,7 +80,7 @@ public class MovieListServlet extends HttpServlet {
                 		"AND (match (m.title) against ( ? in boolean mode) OR ( ? LIKE m.title) OR ed(m.title, ?) <= 3) AND m.director LIKE ? AND m.year LIKE ?\n" + 
                 		"AND s.name LIKE ? \n" + 
                 		"GROUP BY m.id, m.title, m.year, m.director, r.rating\n" + 
-                		"order by (ed('star',m.title)) asc\n" + 
+                		"order by (ed( ? ,m.title)) asc\n" + 
                 		"LIMIT 1000"); 
 			}
 			// Declare our statement
@@ -102,6 +102,8 @@ public class MovieListServlet extends HttpServlet {
 				statement.setString(4, director);
 				statement.setString(5, year);
 				statement.setString(6, star_name);
+				statement.setString(7, title);
+				System.out.println(statement.toString());
 			}
 
 			// Set the parameter represented by "?" in the query to the id we get from url,
