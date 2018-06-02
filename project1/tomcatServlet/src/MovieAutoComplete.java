@@ -100,10 +100,12 @@ public class MovieAutoComplete extends HttpServlet {
     	String queryString = returnQueryString(term);
     	term = "%" + term + "%";
 //    	String query = "Select * from movies where match (title) against (? in boolean mode) limit 10;";
-    	String query = "select id, title from movies where (match (title) against (? in boolean mode)) OR (title LIKE ?) LIMIT 10";
-		PreparedStatement statement = dbcon.prepareStatement(query);
+    	String query = "select id, title from movies where match (title) against (? in boolean mode) OR (title LIKE ?) OR ed(title, ?) <= 3  order by (ed(?, title)) asc LIMIT 10 ";
+    	PreparedStatement statement = dbcon.prepareStatement(query);
 		statement.setString(1, queryString);
 		statement.setString(2, term);
+		statement.setString(3, term);
+		statement.setString(4, term);
     	ResultSet rs = statement.executeQuery();
 
     	while(rs.next())
