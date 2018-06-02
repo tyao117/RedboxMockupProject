@@ -40,6 +40,7 @@ public class SearchViewAdapter extends BaseAdapter {
         this.modelList = modelList;
         inflater = LayoutInflater.from(mContext);
         queue = NetworkManager.sharedManager(context).queue;
+        Log.d("modelList size", Integer.toString(modelList.size()));
     }
 
     public class ViewHolder {
@@ -64,6 +65,9 @@ public class SearchViewAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View view, ViewGroup parent) {
         ViewHolder holder;
+
+        Log.d("modelList size", Integer.toString(modelList.size()));
+
         if(view == null) {
             holder = new ViewHolder();
             view = inflater.inflate(R.layout.search_row, null);
@@ -81,100 +85,86 @@ public class SearchViewAdapter extends BaseAdapter {
             holder = (ViewHolder)view.getTag();
         }
 
-        //set results into view
-        holder.mIDTv.setText(modelList.get(position).getId());
-        holder.mTitleTv.setText(modelList.get(position).getTitle());
-        holder.mDirTv.setText(modelList.get(position).getDirector());
-        holder.mYearTv.setText(modelList.get(position).getYear());
-        holder.mGenresTv.setText(modelList.get(position).getGenres());
-        holder.mStarsTv.setText(modelList.get(position).getStars());
+        Log.d("modelList size", Integer.toString(modelList.size()));
 
-        //listview item clicks
-        view.setOnClickListener(new View.OnClickListener() {
+            //set results into view
+            holder.mIDTv.setText(modelList.get(position).getId());
+            holder.mTitleTv.setText(modelList.get(position).getTitle());
+            holder.mDirTv.setText(modelList.get(position).getDirector());
+            holder.mYearTv.setText(modelList.get(position).getYear());
+            holder.mGenresTv.setText(modelList.get(position).getGenres());
+            holder.mStarsTv.setText(modelList.get(position).getStars());
 
-            @Override
-            public void onClick(View v) {
-                String id = modelList.get(position).getId();
+            //listview item clicks
+            view.setOnClickListener(new View.OnClickListener() {
 
-                Log.e("click", id);
+                @Override
+                public void onClick(View v) {
+                    String id = modelList.get(position).getId();
 
-                // Post request form data
-                final Map<String, String> params = new HashMap<>();
-                params.put("id", id);
+                    Log.e("click", id);
 
-                String url = "http://10.0.2.2:8080/project/api/single-movie?id="+id;
+                    // Post request form data
+                    final Map<String, String> params = new HashMap<>();
+                    params.put("id", id);
 
-                final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-                        new Response.Listener<JSONArray>() {
-                            @Override
-                            public void onResponse(JSONArray response) {
-                                try {
-                                    String id="", title="", director="", year="", genre="";
-                                    String stars = "";
-                                    for(int i = 0; i < response.length(); ++i) {
-                                        JSONObject jsonObject = response.getJSONObject(i);
-                                        id = jsonObject.getString("movie_id");
-                                        title = jsonObject.getString("movie_title");
-                                        director = jsonObject.getString("movie_director");
-                                        year = jsonObject.getString("movie_year");
-                                        genre = jsonObject.getString("movie_genre");
-                                        if(!stars.equalsIgnoreCase("")) {
-                                            stars += ", ";
+                    String url = "http://10.0.2.2:8080/project/api/single-movie?id=" + id;
+
+                    final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                            new Response.Listener<JSONArray>() {
+                                @Override
+                                public void onResponse(JSONArray response) {
+                                    try {
+                                        String id = "", title = "", director = "", year = "", genre = "";
+                                        String stars = "";
+                                        for (int i = 0; i < response.length(); ++i) {
+                                            JSONObject jsonObject = response.getJSONObject(i);
+                                            id = jsonObject.getString("movie_id");
+                                            title = jsonObject.getString("movie_title");
+                                            director = jsonObject.getString("movie_director");
+                                            year = jsonObject.getString("movie_year");
+                                            genre = jsonObject.getString("movie_genre");
+                                            if (!stars.equalsIgnoreCase("")) {
+                                                stars += ", ";
+                                            }
+                                            stars += jsonObject.getString("star_name");
+
+                                            //SearchModel model = new SearchModel(id, title, director, year, genre, stars);
                                         }
-                                        stars += jsonObject.getString("star_name");
 
-                                        //SearchModel model = new SearchModel(id, title, director, year, genre, stars);
+                                        Intent goToIntent = new Intent(mContext, MovieActivity.class);
+                                        goToIntent.putExtra("id", id);
+                                        goToIntent.putExtra("title", title);
+                                        goToIntent.putExtra("director", director);
+                                        goToIntent.putExtra("year", year);
+                                        goToIntent.putExtra("genre", genre);
+                                        goToIntent.putExtra("stars", stars);
+
+                                        mContext.startActivity(goToIntent);
+
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
-
-                                    Intent goToIntent = new Intent(mContext, MovieActivity.class);
-                                    goToIntent.putExtra("id", id);
-                                    goToIntent.putExtra("title", title);
-                                    goToIntent.putExtra("director", director);
-                                    goToIntent.putExtra("year", year);
-                                    goToIntent.putExtra("genre", genre);
-                                    goToIntent.putExtra("stars", stars);
-
-                                    mContext.startActivity(goToIntent);
-
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
                                 }
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
 
-                            }
-                        });
+                                }
+                            });
 
-                queue.add(jsonArrayRequest);
-            }
-        });
+                    queue.add(jsonArrayRequest);
+                }
+            });
 
         return view;
+
     }
 
     //filter
-    public void filter(List<SearchModel> models) {
-        int size = models.size();
-        Log.d("incoming size", Integer.toString(size));
-        for(int i = 0; i < size; ++i) {
-            Log.d("model", models.get(i).title);
-        }
+    public void filter() {
 
-        Log.d("status", "finish print models");
-
-        if(!modelList.isEmpty()) {
-            modelList.clear();
-        }
-
-        Log.d("status", "adding models");
-
-        for(int i = 0; i < size-1; ++i) {
-            Log.d("modelList", "adding "+models.get(i));
-            modelList.add(models.get(i));
-        }
         notifyDataSetChanged();
     }
 
