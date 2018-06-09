@@ -13,7 +13,7 @@
 	<Resource name="jdbc/TestDB" auth="Container" type="javax.sql.DataSource"
               maxTotal="100" maxIdle="30" maxWaitMillis="10000" username="mytestuser"
               password="mypassword" driverClassName="com.mysql.jdbc.Driver"
-              url="jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&amp;useSSL=false;cachePrepStmts=true"/>
+              url="jdbc:mysql:replication://52.14.183.147:3306,18.188.5.190:3306/moviedb?autoReconnect=true&amp;useSSL=false&amp;cachePrepStmts=true"/>
     <!-- 		^ change this to master and slave 
     		url="jdbc:mysql:replication://172.31.34.82:3306,172.31.34.23:3306/moviedb"
     		link here:https://stackoverflow.com/questions/19432724/application-level-use-of-mysql-single-master-single-replica
@@ -21,6 +21,6 @@
     <Resource name="jdbc/WriteDB" auth="Container" type="javax.sql.DataSource"
               maxTotal="100" maxIdle="30" maxWaitMillis="10000" username="mytestuser"
               password="mypassword" driverClassName="com.mysql.jdbc.Driver"
-              url="jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&amp;useSSL=false;cachePrepStmts=true"/>
+              url="jdbc:mysql://53.14.183.147:3306/moviedb?autoReconnect=true&amp;useSSL=false&amp;cachePrepStmts=true"/>
     <!--       ^ change this to only the master-->          
 </Context>

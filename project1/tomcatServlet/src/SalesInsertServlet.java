@@ -1,4 +1,6 @@
 import javax.annotation.Resource;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -54,6 +56,12 @@ public class SalesInsertServlet extends HttpServlet {
         PreparedStatement statement = null;
         // Output stream to STDOUT
         try {
+        	Context initCtx = new InitialContext();
+			Context envCtx = (Context) initCtx.lookup("java:comp/env");
+			// Look up our data source
+			if (envCtx == null)
+				throw new Exception("envCtx is NULL");
+			dataSource = (DataSource) envCtx.lookup("jdbc/TestDB");
         	dbCon = dataSource.getConnection();
         	String query = "";
         	HashMap<String, Integer> cart = (HashMap<String, Integer>) session.getAttribute("previousItems");
