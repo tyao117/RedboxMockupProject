@@ -2,6 +2,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import javax.annotation.Resource;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -61,8 +63,14 @@ public class MovieListServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 
 		try {
+			Context initCtx = new InitialContext();
+			Context envCtx = (Context) initCtx.lookup("java:comp/env");
+			// Look up our data source
+			if (envCtx == null)
+				throw new Exception("envCtx is NULL");
+			DataSource ds = (DataSource) envCtx.lookup("jdbc/TestDB");
 			// Get a connection from dataSource
-			Connection dbcon = dataSource.getConnection();
+			Connection dbcon = ds.getConnection();
 			String query = "";
 			if (genre != null) {
 				System.out.println("going into Genre!!!!!");

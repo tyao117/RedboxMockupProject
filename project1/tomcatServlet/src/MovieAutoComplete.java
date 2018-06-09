@@ -2,6 +2,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import javax.annotation.Resource;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -82,9 +84,18 @@ public class MovieAutoComplete extends HttpServlet {
     	return queryString;
     }
     
-    private JsonArray getSuggestions(String term) throws SQLException, NamingException
+    private JsonArray getSuggestions(String term) throws Exception
     {
-    	Connection dbcon = dataSource.getConnection();
+    	Context initCtx = new InitialContext();
+		
+		Context envCtx = (Context) initCtx.lookup("java:comp/env");
+		// Look up our data source
+		if (envCtx == null)
+			throw new Exception("envCtx is NULL");
+		DataSource ds = (DataSource) envCtx.lookup("jdbc/TestDB");
+		
+		// Get a connection from dataSource
+		Connection dbcon = ds.getConnection();
     	JsonArray suggestions = new JsonArray();
 //    	String query = "SELECT title, id FROM movies WHERE (title LIKE ? AND title LIKE ?) OR title = ? ORDER BY title LIMIT 10";
 //        //replace whitespace
