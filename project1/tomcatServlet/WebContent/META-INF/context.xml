@@ -15,7 +15,7 @@
               password="mypassword" driverClassName="com.mysql.jdbc.Driver"
               url="jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&amp;useSSL=false;cachePrepStmts=true"/>
     <!-- 		^ change this to master and slave 
-    		url="jdbc:mysql:replication://192.168.100.51:3306,192.168.100.52:3306/moviedb"
+    		url="jdbc:mysql:replication://172.31.34.82:3306,172.31.34.23:3306/moviedb"
     		link here:https://stackoverflow.com/questions/19432724/application-level-use-of-mysql-single-master-single-replica
     -->
     <Resource name="jdbc/WriteDB" auth="Container" type="javax.sql.DataSource"
