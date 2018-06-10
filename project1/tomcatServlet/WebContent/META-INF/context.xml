@@ -21,6 +21,6 @@
     <Resource name="jdbc/WriteDB" auth="Container" type="javax.sql.DataSource"
               maxTotal="100" maxIdle="30" maxWaitMillis="10000" username="mytestuser"
               password="mypassword" driverClassName="com.mysql.jdbc.Driver"
-              url="jdbc:mysql://53.14.183.147:3306/moviedb?autoReconnect=true&amp;useSSL=false&amp;cachePrepStmts=true"/>
+              url="jdbc:mysql://52.14.183.147:3306/moviedb?autoReconnect=true&amp;useSSL=false&amp;cachePrepStmts=true"/>
     <!--       ^ change this to only the master-->          
 </Context>

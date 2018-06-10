@@ -2,6 +2,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import javax.annotation.Resource;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -39,8 +41,14 @@ public class SingleStarServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 
 		try {
+			Context initCtx = new InitialContext();
+			Context envCtx = (Context) initCtx.lookup("java:comp/env");
+			// Look up our data source
+			if (envCtx == null)
+				throw new Exception("envCtx is NULL");
+			DataSource ds = (DataSource) envCtx.lookup("jdbc/TestDB");
 			// Get a connection from dataSource
-			Connection dbcon = dataSource.getConnection();
+			Connection dbcon = ds.getConnection();
 
 			// Construct a query with parameter represented by "?"
 			String query = "SELECT * from stars as s, stars_in_movies as sim, movies as m, ratings as r where m.id = sim.movieId and sim.starId = s.id and r.movieId=m.id and s.id = ?";

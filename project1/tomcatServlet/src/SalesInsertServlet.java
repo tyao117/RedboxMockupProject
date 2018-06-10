@@ -61,7 +61,7 @@ public class SalesInsertServlet extends HttpServlet {
 			// Look up our data source
 			if (envCtx == null)
 				throw new Exception("envCtx is NULL");
-			dataSource = (DataSource) envCtx.lookup("jdbc/TestDB");
+			dataSource = (DataSource) envCtx.lookup("jdbc/WriteDB");
         	dbCon = dataSource.getConnection();
         	String query = "";
         	HashMap<String, Integer> cart = (HashMap<String, Integer>) session.getAttribute("previousItems");
