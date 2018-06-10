@@ -1,4 +1,6 @@
 import javax.annotation.Resource;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -67,9 +69,14 @@ public class LoginEmployees extends HttpServlet {
         }
         
         try {
-        	
+        	Context initCtx = new InitialContext();
+			Context envCtx = (Context) initCtx.lookup("java:comp/env");
+			// Look up our data source
+			if (envCtx == null)
+				throw new Exception("envCtx is NULL");
+			DataSource ds = (DataSource) envCtx.lookup("jdbc/TestDB");
             // Create a new connection to database
-            Connection dbCon = dataSource.getConnection();
+            Connection dbCon = ds.getConnection();
 
             // Declare a new statement
 

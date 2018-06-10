@@ -2,6 +2,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import javax.annotation.Resource;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -41,8 +43,14 @@ public class SingleMovieServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 
 		try {
+			Context initCtx = new InitialContext();
+			Context envCtx = (Context) initCtx.lookup("java:comp/env");
+			// Look up our data source
+			if (envCtx == null)
+				throw new Exception("envCtx is NULL");
+			DataSource ds = (DataSource) envCtx.lookup("jdbc/TestDB");
 			// Get a connection from dataSource
-			Connection dbcon = dataSource.getConnection();
+			Connection dbcon = ds.getConnection();
 
 			// Construct a query with parameter represented by "?"
 			String query = "SELECT distinct s.name as star_name, s.id as star_id, group_concat(distinct g.name separator', ') as genre, m.id as movie_id, m.title as movie_title, m.year as movie_year, m.director as movie_director, r.rating from stars as s, stars_in_movies as sim, movies as m, ratings as r, genres as g, genres_in_movies as gm where m.id = sim.movieId and sim.starId = s.id and r.movieId=m.id and g.id=gm.genreid and gm.movieId=m.id and m.id = ? group by star_name, star_id, m.id, m.title, m.year, m.director, r.rating";

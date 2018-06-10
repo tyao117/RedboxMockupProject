@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.util.Objects;
 
 import javax.annotation.Resource;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -63,6 +65,12 @@ public class AddMovieServlet extends HttpServlet {
 				out.close();
 				return;
 			}
+			Context initCtx = new InitialContext();
+			Context envCtx = (Context) initCtx.lookup("java:comp/env");
+			// Look up our data source
+			if (envCtx == null)
+				throw new Exception("envCtx is NULL");
+			dataSource = (DataSource) envCtx.lookup("jdbc/WriteDB");
 			Connection dbCon = dataSource.getConnection();
 
 			String query = "call add_movie(?, ?, ?, ?, ?, ?);";        
