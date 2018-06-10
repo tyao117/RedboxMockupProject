@@ -135,7 +135,9 @@ public class MovieListServletNoPool extends HttpServlet {
 			//statement.setString(1, id);
 
 			// Perform the query
+			startJDBC = System.nanoTime();
 			ResultSet rs = statement.executeQuery();
+			endJDBC = System.nanoTime();
 			JsonArray jsonArray = new JsonArray();
 			// Iterate through each row of rs
 			while (rs.next()) {
