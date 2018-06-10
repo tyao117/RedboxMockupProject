@@ -29,8 +29,8 @@ import java.util.Arrays;
 import java.util.List;
 
 // Declaring a WebServlet called SingleStarServlet, which maps to url "/api/single-star"
-@WebServlet(name = "MovieServlet", urlPatterns = "/api/movielist")
-public class MovieListServlet extends HttpServlet {
+@WebServlet(name = "MovieServletNoPool", urlPatterns = "/api/movielistnopool")
+public class MovieListServletNoPool extends HttpServlet {
 	private static final long serialVersionUID = 2L;
 
 	// Create a dataSource which registered in web.xml
@@ -40,7 +40,6 @@ public class MovieListServlet extends HttpServlet {
 	long endSearch;
 	long startJDBC;
 	long endJDBC;
-	
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -48,12 +47,11 @@ public class MovieListServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		String SearchServlet = getServletContext().getRealPath("/WEB-INF") + "/SearchServletMLNoPool.txt";
+		String JDBCTime = getServletContext().getRealPath("/WEB-INF") + "/JDBCMLNoPool.txt";	
 		
-		String SearchServlet = getServletContext().getRealPath("/WEB-INF") + "/SearchServletML.txt";
-		String JDBCTime = getServletContext().getRealPath("/WEB-INF") + "/JDBCML.txt";	
-		// start the clock
 		startSearch = System.nanoTime();
-		
+	
 		response.setContentType("application/json"); // Response mime type
 		//response.setContentType("text/html");
 		// Retrieve parameter id from url request.
@@ -86,7 +84,7 @@ public class MovieListServlet extends HttpServlet {
 			// Look up our data source
 			if (envCtx == null)
 				throw new Exception("envCtx is NULL");
-			DataSource ds = (DataSource) envCtx.lookup("jdbc/TestDB");
+			DataSource ds = (DataSource) envCtx.lookup("jdbc/moviedb");
 			// Get a connection from dataSource
 			Connection dbcon = ds.getConnection();
 			String query = "";
@@ -129,6 +127,7 @@ public class MovieListServlet extends HttpServlet {
 				statement.setString(5, year);
 				statement.setString(6, star_name);
 				statement.setString(7, title);
+				System.out.println(statement.toString());
 			}
 
 			// Set the parameter represented by "?" in the query to the id we get from url,
@@ -136,11 +135,7 @@ public class MovieListServlet extends HttpServlet {
 			//statement.setString(1, id);
 
 			// Perform the query
-			startJDBC = System.nanoTime();
 			ResultSet rs = statement.executeQuery();
-			endJDBC = System.nanoTime();
-			
-     		// get the results
 			JsonArray jsonArray = new JsonArray();
 			// Iterate through each row of rs
 			while (rs.next()) {
@@ -194,7 +189,6 @@ public class MovieListServlet extends HttpServlet {
 	 		BufferedWriter searchWriter = new BufferedWriter(new FileWriter(SearchServlet, true));
 			searchWriter.append(String.valueOf(endSearch - startSearch) + "\n");
      		searchWriter.close();
-     		
 			
 		} catch (SQLException ex) {
 			ex.printStackTrace();
