@@ -39,7 +39,7 @@
           </elementProp>
           <stringProp name="HTTPSampler.domain">18.216.228.119</stringProp>
           <stringProp name="HTTPSampler.port">8080</stringProp>
-          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path">project/api/movielist?s=yes&amp;</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
