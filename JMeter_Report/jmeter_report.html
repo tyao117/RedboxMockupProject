@@ -81,7 +81,7 @@ td {
     <td>113</td>
     <td>23.57</td>
     <td>22.62</td>
-    <td>Throughput is bad. The throughput is only a little faster than 1 thread</td>
+    <td>Throughput is bad. The throughput is only a little faster than 1 thread without load balancing.</td>
   </tr>
   <tr>
     <td>Case 2: HTTP/10 threads</td>
@@ -89,7 +89,7 @@ td {
     <td>252</td>
     <td>46.33</td>
     <td>59.46</td>
-    <td>It is pretty fast; not as fast as expected. It was 5206 before.</td>
+    <td>It is pretty fast; not as fast as expected. Load balancing didn't seem to make it that much fast</td>
   </tr>
   <tr>
     <td>Case 3: HTTP/10 threads/No prepared statements</td>
@@ -97,7 +97,7 @@ td {
     <td>225</td>
     <td>47.92</td>
     <td>61.16</td>
-    <td>The throughput is fast, but very unsafe. I'm suprised how fast it is.</td>
+    <td>The throughput is fast, but very unsafe. Load Balancing seem to not help the performance.</td>
   </tr>
   <tr>
     <td>Case 4: HTTP/10 threads/No connection pooling</td>
@@ -105,7 +105,7 @@ td {
     <td>157</td>
     <td>32.31</td>
     <td>31.36</td>
-    <td>It is very fast but still works well</td>
+    <td>It is very fast. This result is really suprising since this seem to be the fastest query. This graph may be an outlier.</td>
   </tr>
 
 </table> 
