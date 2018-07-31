@@ -33,13 +33,10 @@ public class Login extends HttpServlet {
     @Resource(name = "jdbc/moviedb")
     private DataSource dataSource;
 
-
     // Use http GET
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
-
         response.setContentType("application/json");    // Response mime type
-
         // Output stream to STDOUT
         PrintWriter out = response.getWriter();
         
@@ -67,14 +64,13 @@ public class Login extends HttpServlet {
         	out.close();
         	return;
         }
-        
         try {
         	Context initCtx = new InitialContext();
 			Context envCtx = (Context) initCtx.lookup("java:comp/env");
 			// Look up our data source
 			if (envCtx == null)
 				throw new Exception("envCtx is NULL");
-			DataSource ds = (DataSource) envCtx.lookup("jdbc/TestDB");
+			DataSource ds = (DataSource) envCtx.lookup("jdbc/moviedb");
             // Create a new connection to database
             Connection dbCon = ds.getConnection();
 
@@ -95,7 +91,6 @@ public class Login extends HttpServlet {
             statement.setString(1, name);
             statement.setString(2, password);
             
-            
             // Perform the query
             ResultSet rs = statement.executeQuery();
             //Check if you have a login
@@ -109,8 +104,6 @@ public class Login extends HttpServlet {
             // Give a result status
             if (name.equals(dbName) && passwordSuccess) {
             	// Login success:
-
-                // set this user into the session
                 request.getSession().setAttribute("user", new User(name));
                 request.getSession().setAttribute("customerId", dbID);
                 request.getSession().setAttribute("CCID", dbccid);
@@ -125,19 +118,15 @@ public class Login extends HttpServlet {
                 if (!name.equals(dbName)) {
                     responseJsonObject.addProperty("message", "user " + name + " doesn't exist");
                 } else if (!passwordSuccess) {
-                	
                     responseJsonObject.addProperty("message", "incorrect password");
                 }
                 response.getWriter().write(responseJsonObject.toString());
             }
-
             // Close all structures
             rs.close();
             statement.close();
             dbCon.close();
-
         } catch (Exception ex) {
-        	
            System.out.println(ex.toString());
             return;
         }
